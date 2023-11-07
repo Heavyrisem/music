@@ -3,14 +3,22 @@ import tw, { css } from 'twin.macro';
 
 import { randomNumber } from '@/utils/random';
 
-import Circle from './Circle';
+import { Circle } from './Circle';
 
-interface TestProps {
+interface DynamicGradientProps extends React.HTMLAttributes<HTMLDivElement> {
   colors: string[];
+  circleAmount?: number;
   fps?: number;
 }
 
-const Test: React.FC<TestProps> = ({ colors, fps = 60 }) => {
+// TODO: pause animation
+export const DynamicGradient: React.FC<DynamicGradientProps> = ({
+  colors,
+  circleAmount = 40,
+  fps = 60,
+  children,
+  ...props
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const reqAnimRef = useRef<number>();
   const lastAnimateTimeRef = useRef<number>();
@@ -22,7 +30,7 @@ const Test: React.FC<TestProps> = ({ colors, fps = 60 }) => {
     if (!containerRef.current) return;
     const newCircles = [];
 
-    for (let i = 1; i <= 40; i++) {
+    for (let i = 1; i <= circleAmount; i++) {
       // const colors = ["#00f", "#00a", "#00b", "#00c", "#00d", "#00e"];
       newCircles.push(
         new Circle(
@@ -40,7 +48,7 @@ const Test: React.FC<TestProps> = ({ colors, fps = 60 }) => {
 
     setCircles(newCircles);
     lastAnimateTimeRef.current = Date.now();
-  }, [colors]);
+  }, [circleAmount, colors]);
 
   const animate = useCallback(() => {
     const { current: lastAnimateTime } = lastAnimateTimeRef;
@@ -96,31 +104,39 @@ const Test: React.FC<TestProps> = ({ colors, fps = 60 }) => {
   }, [circles]);
 
   return (
-    <div
-      ref={containerRef}
-      onResize={(e) => console.log(e)}
-      css={[
-        tw`w-full h-full absolute overflow-hidden`,
-        css`
-          filter: url(#circle);
-        `,
-      ]}
-    >
-      {renderedCircles}
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-          <filter id="circle">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="100" result="blur" />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 40 -10"
-            />
-          </filter>
-        </defs>
-      </svg>
+    <div ref={containerRef} css={[tw`w-full h-full`]} {...props}>
+      {children}
+      <div
+        css={[
+          tw`absolute w-full h-full -z-50 top-0`,
+          css`
+            background-color: ${colors[0]};
+          `,
+        ]}
+      />
+      <div
+        css={[
+          tw`absolute overflow-hidden w-full h-full -z-40 top-0`,
+          css`
+            background-color: ${colors[0]};
+            filter: url(#circle);
+          `,
+        ]}
+      >
+        {renderedCircles}
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+          <defs>
+            <filter id="circle">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="100" result="blur" />
+              <feColorMatrix
+                in="blur"
+                mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 40 -10"
+              />
+            </filter>
+          </defs>
+        </svg>
+      </div>
     </div>
   );
 };
-
-export default Test;

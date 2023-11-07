@@ -12,10 +12,11 @@ module.exports = {
     React: true,
     JSX: true,
   },
-  ignorePatterns: ['node_modules/', 'dist/'],
+  ignorePatterns: ['node_modules/', 'dist/', 'withTwin.js'],
   rules: {
     'import/no-default-export': 'off',
     'react/function-component-definition': 'off',
     'react/no-unknown-property': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
 };

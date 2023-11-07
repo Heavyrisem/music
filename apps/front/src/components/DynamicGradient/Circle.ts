@@ -1,4 +1,4 @@
-class Circle {
+export class Circle {
   constructor(
     private _x: number,
     private _y: number,
@@ -7,7 +7,7 @@ class Circle {
     private _r: number,
     private _color: string,
     private _xmax: number,
-    private _ymax: number
+    private _ymax: number,
   ) {
     console.log(_xmax, _ymax);
   }
@@ -80,5 +80,3 @@ class Circle {
     this._xmax = value;
   }
 }
-
-export default Circle;

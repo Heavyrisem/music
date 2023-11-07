@@ -1,13 +1,22 @@
 import tw from 'twin.macro';
 
-import Test from '@/components/Test/Test';
+import { Card } from '@/components/Card';
+import { DynamicGradient } from '@/components/DynamicGradient';
+import { DefaultLayout } from '@/components/Layout/DefaultLayout';
 
-const Home = () => {
+const HomePage: React.FC = () => {
   return (
-    <div css={[tw`w-screen h-screen`, tw`bg-black`]}>
-      <Test colors={['#3D30A2', '#B15EFF', '#FFA33C', '#FFFB73']} />
-    </div>
+    <DefaultLayout>
+      <DynamicGradient
+        colors={['#313866', '#504099', '#974EC3', '#FE7BE5']}
+        css={[tw`flex items-center justify-center`]}
+      >
+        <Card>
+          <div css={[tw`font-bold text-xl`]}>Home</div>
+        </Card>
+      </DynamicGradient>
+    </DefaultLayout>
   );
 };
 
-export default Home;
+export default HomePage;

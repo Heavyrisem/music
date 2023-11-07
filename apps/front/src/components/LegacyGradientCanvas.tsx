@@ -1,14 +1,8 @@
-import useEffectOnce from "@/hooks/useEffectOnce";
-import { randomBool, randomNumber } from "@/utils/random";
-import React, {
-  HTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef } from 'react';
+import tw from 'twin.macro';
 
-import tw from "twin.macro";
+import useEffectOnce from '@/hooks/useEffectOnce';
+import { randomBool, randomNumber } from '@/utils/random';
 
 export interface Color {
   r: number;
@@ -73,16 +67,10 @@ const GradientCanvas: React.FC<GradientCanvasProps> = ({
           particle.size * 0.01,
           particle.pos.x,
           particle.pos.y,
-          particle.size
+          particle.size,
         );
-        g.addColorStop(
-          0,
-          `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`
-        );
-        g.addColorStop(
-          1,
-          `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`
-        );
+        g.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`);
+        g.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
         ctx.fillStyle = g;
         // ctx.fillStyle = `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`;
         ctx.arc(particle.pos.x, particle.pos.y, particle.size, 0, PI2, false);
@@ -92,7 +80,7 @@ const GradientCanvas: React.FC<GradientCanvasProps> = ({
       });
       return undefined;
     },
-    [PI2]
+    [PI2],
   );
 
   const animate = useCallback(() => {
@@ -137,7 +125,7 @@ const GradientCanvas: React.FC<GradientCanvasProps> = ({
 
   const destory = useCallback(() => {
     if (requestRef.current) {
-      console.log("Destory GradientCanvas");
+      console.log('Destory GradientCanvas');
       window.cancelAnimationFrame(requestRef.current);
     }
   }, []);
@@ -152,7 +140,7 @@ const GradientCanvas: React.FC<GradientCanvasProps> = ({
     canvas.width = ((document.body.clientWidth / 2) * pixelRatio) / 2;
     canvas.height = (document.body.clientHeight * pixelRatio) / 2;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return undefined;
     ctx.scale(pixelRatio / 1, pixelRatio / 1);
     // ctx.globalCompositeOperation = 'saturation';

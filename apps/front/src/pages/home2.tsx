@@ -1,6 +1,6 @@
-import GradientCanvas from "@/components/GradientCanvas";
-import Test from "@/components/Test/Test";
-import tw from "twin.macro";
+import tw from 'twin.macro';
+
+import GradientCanvas from '@/components/LegacyGradientCanvas';
 
 const HomePage: React.FC = () => {
   return (
