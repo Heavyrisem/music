@@ -9,13 +9,15 @@ interface DynamicGradientProps extends React.HTMLAttributes<HTMLDivElement> {
   colors: string[];
   circleAmount?: number;
   fps?: number;
+  speed?: number;
 }
 
 // TODO: pause animation
 export const DynamicGradient: React.FC<DynamicGradientProps> = ({
   colors,
-  circleAmount = 40,
+  circleAmount = 10,
   fps = 60,
+  speed = 1,
   children,
   ...props
 }) => {
@@ -36,19 +38,19 @@ export const DynamicGradient: React.FC<DynamicGradientProps> = ({
         new Circle(
           randomNumber(0, 100),
           randomNumber(0, 100),
-          randomNumber(-0.005, 0.005),
-          randomNumber(-0.005, 0.005),
-          randomNumber(45, 65),
+          randomNumber(-0.005, 0.005) * speed,
+          randomNumber(-0.005, 0.005) * speed,
+          randomNumber(150, 200),
           colors[Math.round(randomNumber(0, colors.length - 1))],
-          100,
-          100,
+          200,
+          200,
         ),
       );
     }
 
     setCircles(newCircles);
     lastAnimateTimeRef.current = Date.now();
-  }, [circleAmount, colors]);
+  }, [circleAmount, colors, speed]);
 
   const animate = useCallback(() => {
     const { current: lastAnimateTime } = lastAnimateTimeRef;
@@ -104,7 +106,7 @@ export const DynamicGradient: React.FC<DynamicGradientProps> = ({
   }, [circles]);
 
   return (
-    <div ref={containerRef} css={[tw`w-full h-full`]} {...props}>
+    <div ref={containerRef} {...props}>
       {children}
       <div
         css={[
@@ -127,7 +129,7 @@ export const DynamicGradient: React.FC<DynamicGradientProps> = ({
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
           <defs>
             <filter id="circle">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="100" result="blur" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="25" result="blur" />
               <feColorMatrix
                 in="blur"
                 mode="matrix"

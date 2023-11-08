@@ -1,20 +1,18 @@
 import tw from 'twin.macro';
 
-import { Card } from '@/components/Card';
 import { DynamicGradient } from '@/components/DynamicGradient';
 import { DefaultLayout } from '@/components/Layout/DefaultLayout';
+import { MusicLayout } from '@/components/Layout/MusicLayout';
 
 const HomePage: React.FC = () => {
   return (
     <DefaultLayout>
-      <DynamicGradient
-        colors={['#313866', '#504099', '#974EC3', '#FE7BE5']}
-        css={[tw`flex items-center justify-center`]}
+      <div
+        // colors={['#313866', '#504099', '#974EC3']}
+        css={[tw`w-full h-full`, tw`flex items-center justify-center`, tw`bg-zinc-800`]}
       >
-        <Card>
-          <div css={[tw`font-bold text-xl`]}>Home</div>
-        </Card>
-      </DynamicGradient>
+        <MusicLayout css={[tw``]}>Home</MusicLayout>
+      </div>
     </DefaultLayout>
   );
 };

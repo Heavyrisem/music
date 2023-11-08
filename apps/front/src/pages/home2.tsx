@@ -1,13 +1,14 @@
 import tw from 'twin.macro';
 
+import { DefaultLayout } from '@/components/Layout/DefaultLayout';
+import { MusicLayout } from '@/components/Layout/MusicLayout';
 import GradientCanvas from '@/components/LegacyGradientCanvas';
 
 const HomePage: React.FC = () => {
   return (
-    <div css={[tw`w-screen h-screen`, tw`bg-black`]}>
-      {/* <Test colors={["#f00", "#a00", "#b00", "#c00", "#d00", "#e00"]} /> */}
-      {/* <Test colors={["#3D30A2", "#B15EFF", "#FFA33C", "#FFFB73"]} /> */}
+    <DefaultLayout css={[tw`flex items-center justify-center`]}>
       <GradientCanvas
+        css={[tw`absolute -z-10`]}
         colors={[
           { r: 61, g: 48, b: 162 },
           { r: 177, g: 94, b: 255 },
@@ -17,10 +18,9 @@ const HomePage: React.FC = () => {
         fps={60}
         speed={0.5}
         particleNumber={20}
-      >
-        123123
-      </GradientCanvas>
-    </div>
+      ></GradientCanvas>
+      <MusicLayout css={[tw``]}>Home2</MusicLayout>
+    </DefaultLayout>
   );
 };
 
