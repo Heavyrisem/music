@@ -24,6 +24,7 @@ export const Input: React.FC<InputProps> = ({ icon, ...props }) => {
         tw`flex items-center`,
         tw`bg-gray-200 bg-opacity-10`,
         tw`border-2 rounded-md border-gray-200 border-opacity-20`,
+        tw`transition-all`,
         focused && tw`border-2 border-gray-200 border-opacity-40`,
       ]}
     >

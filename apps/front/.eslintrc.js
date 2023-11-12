@@ -18,5 +18,6 @@ module.exports = {
     'react/function-component-definition': 'off',
     'react/no-unknown-property': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-var-requires': 'off',
   },
 };

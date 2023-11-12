@@ -8,6 +8,12 @@ interface ListMusicItemProps {
   duration: number;
 }
 
-export const ListMusicItem: React.FC<ListMusicItemProps> = () => {
+export const ListMusicItem: React.FC<ListMusicItemProps> = ({
+  thumbnailImageUrl,
+  title,
+  album,
+  author,
+  duration,
+}) => {
   return <div></div>;
 };

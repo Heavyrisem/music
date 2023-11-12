@@ -48,7 +48,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           <Button css={[tw`py-2 text-sm`]}>Login</Button>
         </div>
       </Card>
-      <Card css={[tw`flex w-full min-h-[50rem]`, tw`p-8`]}>
+      <Card css={[tw`flex w-full h-[50rem] overflow-y-hidden`, tw`p-8 pr-0`]}>
         <Sidebar
           css={[tw`gap-8`, tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`]}
           onClickItem={(value) => router.push(value)}
@@ -63,7 +63,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
               autoComplete="off"
             />
           </div>
-          <div css={[tw`flex flex-col gap-2`]}>
+          <div css={[tw`flex flex-col gap-1`]}>
             {sidebarMenu.map(({ value, label }) => (
               <Sidebar.Item key={value} value={value} active={value === router.pathname}>
                 {label}
@@ -77,7 +77,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             </Sidebar.Item> */}
           </div>
         </Sidebar>
-        <div css={[tw`px-4`]} {...rest}>
+        <div css={[tw`px-4 flex-1`]} {...rest}>
           {children}
         </div>
       </Card>
