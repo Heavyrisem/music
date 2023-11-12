@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from 'twin.macro';
 
-import { Button, ButtonProps } from '../../Button';
+import { Button, ButtonProps } from '../../../atoms/Button';
 import useSidebarContext from '../hooks/useSidebarContext';
 
 export interface ItemProps extends ButtonProps {

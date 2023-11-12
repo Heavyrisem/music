@@ -6,10 +6,10 @@ import tw from 'twin.macro';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';
 
-import { Button } from '../Button';
-import { Card } from '../Card';
-import { Input } from '../Input';
-import { Sidebar } from '../Sidebar';
+import { Button } from '../atoms/Button';
+import { Card } from '../atoms/Card';
+import { Input } from '../atoms/Input';
+import { Sidebar } from '../molecules/Sidebar';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -38,7 +38,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   );
 
   return (
-    <div css={[tw`flex flex-col gap-2`, tw`w-[70%] `]}>
+    <div css={[tw`flex flex-col gap-2`, tw`w-[80%] `]}>
       <Card css={[tw`flex justify-between items-center`, tw`px-6`]}>
         <div css={[tw`flex gap-1 items-center justify-start`]}>
           <MusicIcon css={[tw`w-9 h-9 fill-gray-200 opacity-75`]} />
@@ -50,7 +50,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
       </Card>
       <Card css={[tw`flex w-full min-h-[50rem]`, tw`p-8`]}>
         <Sidebar
-          css={[tw`gap-8`, tw`pr-4 border-r-2 border-gray-200 border-opacity-10`]}
+          css={[tw`gap-8`, tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`]}
           onClickItem={(value) => router.push(value)}
         >
           <div>
@@ -60,6 +60,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
               onKeyDown={handleSearchKeyDown}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="검색"
+              autoComplete="off"
             />
           </div>
           <div css={[tw`flex flex-col gap-2`]}>

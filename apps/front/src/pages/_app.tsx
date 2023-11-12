@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app';
 import tw from 'twin.macro';
 
-import { DynamicGradient } from '@/components/DynamicGradient';
 import { DefaultLayout } from '@/components/Layout/DefaultLayout';
+import { DynamicGradient } from '@/components/atoms/DynamicGradient';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { useTheme } from '@/store/themeStore';
 import '@/styles/globals.css';

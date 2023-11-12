@@ -1,7 +1,7 @@
 import tw from 'twin.macro';
 
-import { Card } from '@/components/Card';
 import { MusicLayout } from '@/components/Layout/MusicLayout';
+import { Card } from '@/components/atoms/Card';
 
 const HomePage: React.FC = () => {
   return (

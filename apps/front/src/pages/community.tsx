@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import tw from 'twin.macro';
 
-import { Button } from '@/components/Button';
-import { DynamicGradient } from '@/components/DynamicGradient';
 import { DefaultLayout } from '@/components/Layout/DefaultLayout';
 import { MusicLayout } from '@/components/Layout/MusicLayout';
+import { Button } from '@/components/atoms/Button';
+import { DynamicGradient } from '@/components/atoms/DynamicGradient';
 import { useTheme } from '@/store/themeStore';
 import { darkenHexColor } from '@/utils/color';
 
