@@ -1,20 +1,25 @@
+import { useCallback, useState } from 'react';
 import tw from 'twin.macro';
 
+import { Button } from '@/components/Button';
 import { DynamicGradient } from '@/components/DynamicGradient';
 import { DefaultLayout } from '@/components/Layout/DefaultLayout';
 import { MusicLayout } from '@/components/Layout/MusicLayout';
+import { useTheme } from '@/store/themeStore';
+import { darkenHexColor } from '@/utils/color';
 
 const Community: React.FC = () => {
+  const { theme, setTheme } = useTheme();
+
+  const handleClickButton = useCallback(() => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  }, [setTheme, theme]);
+
   return (
-    <DefaultLayout>
-      <DynamicGradient
-        colors={['#212129', '#323949', '#4c5265']}
-        css={[tw`w-full h-full`, tw`flex items-center justify-center`]}
-        speed={0.5}
-      >
-        <MusicLayout css={[tw``]}>Community</MusicLayout>
-      </DynamicGradient>
-    </DefaultLayout>
+    <MusicLayout css={[tw``]}>
+      Community
+      <Button onClick={handleClickButton}>Change</Button>
+    </MusicLayout>
   );
 };
 

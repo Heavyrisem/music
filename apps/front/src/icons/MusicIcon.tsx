@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from 'twin.macro';
 
-interface MusicIconProps extends React.HTMLAttributes<SVGElement> {}
+interface MusicIconProps extends React.SVGProps<SVGSVGElement> {}
 
 export const MusicIcon: React.FC<MusicIconProps> = (props) => {
   return (

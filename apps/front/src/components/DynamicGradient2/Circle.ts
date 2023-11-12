@@ -1,8 +1,4 @@
-import { hexToRgb, rgbToHex, safeRange } from '@/utils/color';
-
 export class Circle {
-  private _targetColor: string;
-
   constructor(
     private _x: number,
     private _y: number,
@@ -15,7 +11,7 @@ export class Circle {
     private _ymin: number,
     private _ymax: number,
   ) {
-    this._targetColor = _color;
+    console.log(_xmax, _ymax);
   }
 
   animate(delta: number) {
@@ -24,39 +20,11 @@ export class Circle {
 
     if (x > this.xmax || x < this.xmin) {
       this.vx = this.vx * -1;
+      x = this.x + this.vx * delta;
     }
     if (y > this.ymax || y < this.ymin) {
       this.vy = this.vy * -1;
-    }
-
-    x = this.x + this.vx * delta;
-    y = this.y + this.vy * delta;
-
-    x = safeRange(this._xmin, this._xmax, x);
-    y = safeRange(this._ymin, this._ymax, y);
-
-    // animate color
-    if (this._targetColor !== this._color) {
-      const endColor = hexToRgb(this._targetColor);
-      const currentColor = hexToRgb(this._color);
-      for (let i = 0; i < 3; i++) {
-        if (currentColor[i] < endColor[i]) {
-          currentColor[i] = safeRange(0, endColor[i], currentColor[i] + delta);
-        } else if (currentColor[i] > endColor[i]) {
-          currentColor[i] = safeRange(endColor[i], 255, currentColor[i] - delta);
-        }
-      }
-      // console.log(
-      //   'from:',
-      //   currentColor,
-      //   this._color,
-      //   'to:',
-      //   endColor,
-      //   this._targetColor,
-      //   'delta:',
-      //   delta,
-      // );
-      this.color = rgbToHex(currentColor);
+      y = this.y + this.vy * delta;
     }
 
     this.x = x;
@@ -64,11 +32,12 @@ export class Circle {
 
     return this;
   }
+
   public get color(): string {
     return this._color;
   }
   public set color(value: string) {
-    this._color = value.toUpperCase();
+    this._color = value;
   }
   public get r(): number {
     return this._r;
@@ -123,11 +92,5 @@ export class Circle {
   }
   public set xmin(value: number) {
     this._xmin = value;
-  }
-  public get targetColor(): string {
-    return this._targetColor;
-  }
-  public set targetColor(value: string) {
-    this._targetColor = value.toUpperCase();
   }
 }

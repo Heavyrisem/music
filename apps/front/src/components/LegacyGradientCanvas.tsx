@@ -4,11 +4,7 @@ import tw from 'twin.macro';
 import useEffectOnce from '@/hooks/useEffectOnce';
 import { randomBool, randomNumber } from '@/utils/random';
 
-export interface Color {
-  r: number;
-  g: number;
-  b: number;
-}
+export type Color = string;
 interface GradientCanvasProps extends HTMLAttributes<HTMLDivElement> {
   colors: Color[];
   fps?: number;
@@ -17,7 +13,7 @@ interface GradientCanvasProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 interface ParticleData {
-  color: { r: number; g: number; b: number };
+  color: Color;
   size: number;
   pos: {
     x: number;
@@ -32,11 +28,7 @@ interface ParticleData {
 
 // FIXME: 브라우저가 Focus를 잃은 상태로 시간이 흐르면, Canvas가 빈 상태로 멈춤
 const GradientCanvas: React.FC<GradientCanvasProps> = ({
-  colors = [
-    { r: 99, g: 227, b: 214 },
-    { r: 242, g: 69, b: 167 },
-    { r: 252, g: 118, b: 74 },
-  ],
+  colors,
   fps = 24,
   particleNumber = 10,
   speed = 1,
@@ -69,8 +61,8 @@ const GradientCanvas: React.FC<GradientCanvasProps> = ({
           particle.pos.y,
           particle.size,
         );
-        g.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`);
-        g.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
+        g.addColorStop(0, `${particle.color}`);
+        g.addColorStop(1, `${particle.color}00`);
         ctx.fillStyle = g;
         // ctx.fillStyle = `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`;
         ctx.arc(particle.pos.x, particle.pos.y, particle.size, 0, PI2, false);

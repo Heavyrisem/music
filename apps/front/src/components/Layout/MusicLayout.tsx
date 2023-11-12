@@ -1,8 +1,10 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 import { MusicIcon } from '@/icons/MusicIcon';
+import { SearchIcon } from '@/icons/SearchIcon';
 
 import { Button } from '../Button';
 import { Card } from '../Card';
@@ -14,13 +16,26 @@ interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) => {
   const router = useRouter();
 
+  const [searchInput, setSearchInput] = useState<string>();
+
   const sidebarMenu = useMemo(() => {
     return [
       { value: '/', label: 'Home' },
       { value: '/home2', label: 'Home2' },
       { value: '/community', label: 'Community' },
+      { value: '/test2', label: 'Test2' },
     ];
   }, []);
+
+  const handleSearchKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
+    (e) => {
+      if (!searchInput) return;
+      if (e.key !== 'Enter') return;
+
+      router.push(`/search?q=${searchInput}`);
+    },
+    [router, searchInput],
+  );
 
   return (
     <div css={[tw`flex flex-col gap-2`, tw`w-[70%] `]}>
@@ -35,11 +50,17 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
       </Card>
       <Card css={[tw`flex w-full min-h-[50rem]`, tw`p-8`]}>
         <Sidebar
-          css={[tw`gap-4`, tw`pr-4 border-r-2 border-gray-200 border-opacity-10`]}
+          css={[tw`gap-8`, tw`pr-4 border-r-2 border-gray-200 border-opacity-10`]}
           onClickItem={(value) => router.push(value)}
         >
           <div>
-            <Input css={[tw`w-fit px-2 py-1`, tw`text-sm`]} />
+            <Input
+              css={[tw`w-fit px-2 py-1`, tw`text-sm`]}
+              icon={<SearchIcon width={18} height={18} />}
+              onKeyDown={handleSearchKeyDown}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="검색"
+            />
           </div>
           <div css={[tw`flex flex-col gap-2`]}>
             {sidebarMenu.map(({ value, label }) => (
