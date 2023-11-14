@@ -5,9 +5,6 @@ export const tableDefaultStyle = [
     .rs-table-cell-content {
       ${tw`flex items-center`}
     }
-    .rs-table-row {
-      ${tw`rounded-lg`}
-    }
 
     .rs-table-cell-header .rs-table-cell:not(.rs-table-cell-last) .rs-table-cell-content {
       ${tw`justify-between`}
@@ -38,6 +35,7 @@ export const tableBgStyle = [
     }
     .rs-table-body-row-wrapper {
       .rs-table-row {
+        ${tw`rounded-md`}
         .rs-table-cell {
           ${tw`transition-colors`}
         }
