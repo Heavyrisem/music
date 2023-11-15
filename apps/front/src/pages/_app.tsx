@@ -1,5 +1,5 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import 'rsuite-table/dist/css/rsuite-table.css';
 import tw from 'twin.macro';
 
