@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import tw from 'twin.macro';
 
-import { DefaultLayout } from '@/components/Layout/DefaultLayout';
-import { MusicLayout } from '@/components/Layout/MusicLayout';
+import { DefaultLayout } from '@/Layout/DefaultLayout';
+import { MusicLayout } from '@/Layout/MusicLayout';
 import { Button } from '@/components/atoms/Button';
 import { DynamicGradient } from '@/components/atoms/DynamicGradient';
 import { useTheme } from '@/store/themeStore';

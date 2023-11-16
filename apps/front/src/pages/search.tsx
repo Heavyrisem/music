@@ -7,8 +7,8 @@ import React from 'react';
 import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
+import { MusicLayout } from '@/Layout/MusicLayout';
 import { getSearchMusic, getUserPlaylist } from '@/api/music';
-import { MusicLayout } from '@/components/Layout/MusicLayout';
 import { MusicAction } from '@/components/molecules/MusicAction';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';

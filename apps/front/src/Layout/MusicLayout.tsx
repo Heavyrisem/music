@@ -1,25 +1,39 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';
 import { usePlayerStore } from '@/store/playerStore';
 
-import { Button } from '../atoms/Button';
-import { Card } from '../atoms/Card';
-import { Input } from '../atoms/Input';
-import { Player } from '../molecules/Player';
-import { Sidebar } from '../molecules/Sidebar';
+import { Button } from '../components/atoms/Button';
+import { Card } from '../components/atoms/Card';
+import { Input } from '../components/atoms/Input';
+import { PlayController } from '../components/molecules/PlayController';
+import { Sidebar } from '../components/molecules/Sidebar';
+import { SliderInput } from '../components/molecules/SliderInput';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const MusicPlayer: React.FC = () => {
-  const { playing, setPlaying } = usePlayerStore();
+  const { playing, volume, setProgress, setVolume, setPaused, setPlaying } = usePlayerStore();
+
+  const handlePlayStateChange = useCallback(
+    (playing: boolean) => {
+      console.log(playing);
+      setPaused(!playing);
+    },
+    [setPaused],
+  );
+
   return (
-    <div css={[tw`flex justify-between items-center gap-10`]}>
-      <Player css={[tw`w-24`]} />
+    <div css={[tw`flex justify-between items-center gap-[8rem]`]}>
+      <PlayController
+        css={[tw`w-24`]}
+        playing={!playing?.paused}
+        onStateChange={handlePlayStateChange}
+      />
       <div css={[tw`w-[34rem] h-[3rem] bg-gray-200 bg-opacity-10 overflow-hidden`, tw`rounded-md`]}>
         {!playing && (
           <div css={[tw`w-full h-full flex justify-center items-center`]}>
@@ -28,17 +42,33 @@ const MusicPlayer: React.FC = () => {
         )}
         {playing && (
           <div css={[tw`w-full h-full flex`]}>
-            <Image src={playing.thumbnailURL} alt="" width={48} height={48} />
-            <div css={[tw`flex flex-col flex-1 items-center`, tw`text-xs`]}>
-              <div>{playing.title}</div>
+            <Image src={playing.audioData.thumbnailURL} alt="" width={48} height={48} />
+            <div css={[tw`flex flex-col flex-1 items-center justify-between pt-1`, tw`text-xs`]}>
+              <div>{playing.audioData.title}</div>
               <div>
-                {playing.artist} - {playing.album}
+                {playing.audioData.artist} - {playing.audioData.album}
               </div>
+              <SliderInput
+                css={[tw`mb-0`]}
+                value={playing.progress}
+                onChange={(v) => setProgress(v)}
+                min={0}
+                max={playing.audioData.duration}
+              />
             </div>
           </div>
         )}
       </div>
-      <div css={[tw`w-24`]}>input</div>
+      <div css={[tw`w-24 flex items-center`]}>
+        <SliderInput
+          value={volume}
+          onChange={setVolume}
+          min={0}
+          max={100}
+          cursorType="circle"
+          showCursor
+        />
+      </div>
     </div>
   );
 };
@@ -76,7 +106,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
         </div>
         <MusicPlayer />
         <div>
-          <Button css={[tw`py-2 text-sm`]}>Login</Button>
+          <Button css={[tw`py-2 text-sm`]}>로그인</Button>
         </div>
       </Card>
       <Card css={[tw`flex w-full h-[50rem] overflow-y-hidden`, tw`p-8 pr-0`]}>

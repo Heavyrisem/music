@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import tw from 'twin.macro';
 
-import { DefaultLayout } from '@/components/Layout/DefaultLayout';
-import { MusicLayout } from '@/components/Layout/MusicLayout';
+import { DefaultLayout } from '@/Layout/DefaultLayout';
+import { MusicLayout } from '@/Layout/MusicLayout';
 import GradientCanvas from '@/components/LegacyGradientCanvas';
 import { useBgColorStore } from '@/store/bgColorStore';
 

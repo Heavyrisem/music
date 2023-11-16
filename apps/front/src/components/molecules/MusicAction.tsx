@@ -57,7 +57,7 @@ export const MusicAction: React.FC<MusicActionProps> = ({ playlist, onClick }) =
   return (
     <Root>
       <Trigger asChild>
-        <Button hover={false} css={[tw`p-0`]}>
+        <Button hoverStyle={false} css={[tw`p-0`]}>
           <OptionIcon />
         </Button>
       </Trigger>

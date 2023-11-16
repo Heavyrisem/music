@@ -1,17 +1,14 @@
-import {
-  BackwardIcon,
-  ForwardIcon,
-  PauseIcon,
-  PlayIcon,
-  PlayPauseIcon,
-} from '@heroicons/react/24/solid';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { BackwardIcon, ForwardIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
+import React, { useCallback } from 'react';
 import tw from 'twin.macro';
+
+import { useControlled } from '@/hooks/useControlled';
 
 import { Button } from '../atoms/Button';
 
-interface PlayerProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PlayController extends React.HTMLAttributes<HTMLDivElement> {
   playing?: boolean;
+  defaultPlaying?: boolean;
   onStateChange?: (playing: boolean) => void;
   onNext?: () => void;
   onPrev?: () => void;
@@ -20,19 +17,20 @@ interface PlayerProps extends React.HTMLAttributes<HTMLDivElement> {
 const iconStyle = [tw`h-6 w-6`];
 const buttonStyle = [tw`p-1`];
 
-export const Player: React.FC<PlayerProps> = ({
-  playing = false,
+export const PlayController: React.FC<PlayController> = ({
+  playing,
+  defaultPlaying = false,
   onStateChange,
   onNext,
   onPrev,
   ...rest
 }) => {
-  const [isPlaying, setPlaying] = useState(playing);
+  const [isPlaying, setPlaying] = useControlled({ value: playing, defaultValue: defaultPlaying });
 
   const handleTogglePlay = useCallback(() => {
     setPlaying(!isPlaying);
-    onStateChange?.(isPlaying);
-  }, [isPlaying, onStateChange]);
+    onStateChange?.(!isPlaying);
+  }, [isPlaying, onStateChange, setPlaying]);
 
   return (
     <div css={[tw`flex justify-between items-center`]} {...rest}>
