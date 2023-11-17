@@ -9,6 +9,7 @@ interface SliderInputProps
   max?: number;
   value?: number;
   cursorType?: 'bar' | 'circle';
+  debounceDelayMils?: number;
   onChange?: (value: number) => void;
 }
 
@@ -19,6 +20,7 @@ export const SliderInput: React.FC<SliderInputProps> = ({
   showCursor,
   value,
   cursorType = 'bar',
+  debounceDelayMils = 100,
   onChange,
   ...rest
 }) => {
@@ -69,7 +71,10 @@ export const SliderInput: React.FC<SliderInputProps> = ({
     onChnageFn?.(value);
   };
 
-  const debouncedOnChange = useMemo(() => debounce(handleOnChange, 100), []);
+  const debouncedOnChange = useMemo(
+    () => debounce(handleOnChange, debounceDelayMils),
+    [debounceDelayMils],
+  );
 
   const handleValueChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

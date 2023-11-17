@@ -43,7 +43,7 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
       thumbnailURL:
         'https://lh3.googleusercontent.com/bm0WFPaXBYSnv9g0qNffrErNV8yn_9dkRneuKEjynUUjy9giC6E6zZZ7Op4jWLGDlkHRCk5M68aWlLp9=w60-h60-l90-rj',
     },
-    progress: 50,
+    progress: 0,
   },
   volume: 5,
   replay: 'none',

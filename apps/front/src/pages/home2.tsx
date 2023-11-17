@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import tw from 'twin.macro';
 
 import { DefaultLayout } from '@/Layout/DefaultLayout';
-import { MusicLayout } from '@/Layout/MusicLayout';
+import { MusicLayout } from '@/Layout/Music';
 import GradientCanvas from '@/components/LegacyGradientCanvas';
 import { useBgColorStore } from '@/store/bgColorStore';
 

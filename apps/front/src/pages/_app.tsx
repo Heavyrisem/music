@@ -5,7 +5,6 @@ import tw from 'twin.macro';
 
 import { DefaultLayout } from '@/Layout/DefaultLayout';
 import { DynamicGradient } from '@/components/atoms/DynamicGradient';
-import { AudioPlayer } from '@/container/AudioPlayer';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { useTheme } from '@/store/themeStore';
 import '@/styles/globals.css';
@@ -19,27 +18,23 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AudioPlayer>
-        <DefaultLayout>
-          {gradation && (
-            <DynamicGradient
-              colors={colors.map((color) =>
-                theme === 'light' ? color : darkenHexColor(color, 80),
-              )}
-              css={[tw`w-full h-full`, tw`flex items-center justify-center`]}
-              speed={1}
-            >
-              <Component {...pageProps} />
-            </DynamicGradient>
-          )}
+      <DefaultLayout>
+        {gradation && (
+          <DynamicGradient
+            colors={colors.map((color) => (theme === 'light' ? color : darkenHexColor(color, 80)))}
+            css={[tw`w-full h-full`, tw`flex items-center justify-center`]}
+            speed={1}
+          >
+            <Component {...pageProps} />
+          </DynamicGradient>
+        )}
 
-          {!gradation && (
-            <div css={[tw`w-full h-full`, tw`flex items-center justify-center`, tw`bg-zinc-800`]}>
-              <Component {...pageProps} />
-            </div>
-          )}
-        </DefaultLayout>
-      </AudioPlayer>
+        {!gradation && (
+          <div css={[tw`w-full h-full`, tw`flex items-center justify-center`, tw`bg-zinc-800`]}>
+            <Component {...pageProps} />
+          </div>
+        )}
+      </DefaultLayout>
     </QueryClientProvider>
   );
 }
