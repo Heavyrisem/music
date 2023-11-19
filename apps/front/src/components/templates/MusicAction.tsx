@@ -10,7 +10,13 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import React from 'react';
-import { HiBarsArrowDown, HiBarsArrowUp, HiListBullet, HiOutlineHeart } from 'react-icons/hi2';
+import {
+  HiBarsArrowDown,
+  HiBarsArrowUp,
+  HiListBullet,
+  HiMinus,
+  HiOutlineHeart,
+} from 'react-icons/hi2';
 import tw from 'twin.macro';
 
 import { OptionIcon } from '@/icons/OptionIcon';
@@ -18,12 +24,16 @@ import { OptionIcon } from '@/icons/OptionIcon';
 import { Button } from '../atoms/Button';
 
 interface ActionBaseInfo {
-  type: 'addToPlaylist' | 'prependQueue' | 'appendQueue' | 'like';
+  type: 'removeFromPlaylist' | 'addToPlaylist' | 'prependQueue' | 'appendQueue' | 'like';
+}
+
+interface RemoveFromPlaylistAction extends ActionBaseInfo {
+  type: 'removeFromPlaylist';
 }
 
 interface AddToPlaylistAction extends ActionBaseInfo {
   type: 'addToPlaylist';
-  playlist: Model.Playlist;
+  playlist: Model.PlaylistInfo;
 }
 
 interface PrependQueueAction extends ActionBaseInfo {
@@ -38,10 +48,16 @@ interface LikeAction extends ActionBaseInfo {
   type: 'like';
 }
 
-export type ActionInfo = AddToPlaylistAction | PrependQueueAction | AppendQueueAction | LikeAction;
+export type ActionInfo =
+  | RemoveFromPlaylistAction
+  | AddToPlaylistAction
+  | PrependQueueAction
+  | AppendQueueAction
+  | LikeAction;
 
 interface MusicActionProps {
-  playlist: Model.Playlist[];
+  isPlaylist?: boolean;
+  playlist: Model.PlaylistInfo[];
   onClick?: (action: ActionInfo) => void;
 }
 
@@ -53,7 +69,11 @@ const contentStyle = [
   tw`text-sm text-gray-200 text-opacity-75 text-left`,
 ];
 
-export const MusicAction: React.FC<MusicActionProps> = ({ playlist, onClick }) => {
+export const MusicAction: React.FC<MusicActionProps> = ({
+  isPlaylist = false,
+  playlist,
+  onClick,
+}) => {
   return (
     <Root>
       <Trigger asChild>
@@ -64,6 +84,13 @@ export const MusicAction: React.FC<MusicActionProps> = ({ playlist, onClick }) =
 
       <Portal>
         <Content align="start" css={[contentStyle]}>
+          {isPlaylist && (
+            <Item css={[tw`text-left`]} asChild>
+              <Button css={[buttonStyle]} onClick={() => onClick?.({ type: 'removeFromPlaylist' })}>
+                플레이리스트에서 제거
+              </Button>
+            </Item>
+          )}
           <Sub>
             <SubTrigger asChild>
               <Button css={[buttonStyle]}>

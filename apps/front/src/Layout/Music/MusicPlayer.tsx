@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef } from 'react';
 import tw from 'twin.macro';
 
-import { PlayController } from '@/components/molecules/PlayController';
-import { SliderInput } from '@/components/molecules/SliderInput';
+import { PlayController } from '@/components/organisms/PlayController';
+import { SliderInput } from '@/components/organisms/SliderInput';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { usePlayerStore } from '@/store/playerStore';
 

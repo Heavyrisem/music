@@ -9,7 +9,7 @@ import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
 import { getSearchMusic, getUserPlaylist } from '@/api/music';
-import { MusicAction } from '@/components/molecules/MusicAction';
+import { MusicAction } from '@/components/templates/MusicAction';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
@@ -57,7 +57,7 @@ const SearchPage: React.FC = () => {
             <HeaderCell>노래</HeaderCell>
             <Cell dataKey="title">
               {(rowData) => {
-                const data = rowData as Model.MusicSearchResult;
+                const data = rowData as Model.MusicInfo;
                 return (
                   <div css={[tw`flex justify-center items-center gap-2`]}>
                     <Image
@@ -85,7 +85,7 @@ const SearchPage: React.FC = () => {
             <HeaderCell>시간</HeaderCell>
             <Cell dataKey="duration">
               {(rowData) => {
-                const data = rowData as Model.MusicSearchResult;
+                const data = rowData as Model.MusicInfo;
                 return (
                   <div css={[tw`flex gap-1 items-center`]}>
                     <div>{formatSecondsToTime(data.duration)}</div>

@@ -1,9 +1,16 @@
-export interface Playlist {
+export interface PlaylistInfo {
   id: number;
   name: string;
 }
 
-export interface MusicSearchResult {
+export interface PlaylistDetail extends PlaylistInfo {
+  description: string;
+  thumbnailUrl: string;
+  musicList: MusicInfo[];
+  author: string;
+}
+
+export interface MusicInfo {
   title: string;
   artist: string;
   album: string;
