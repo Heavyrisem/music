@@ -5,7 +5,7 @@ export interface PlaylistInfo {
 
 export interface PlaylistDetail extends PlaylistInfo {
   description: string;
-  thumbnailUrl: string;
+  coverImageUrl: string;
   musicList: MusicInfo[];
   author: string;
 }

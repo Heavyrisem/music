@@ -5,7 +5,7 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   resize?: boolean;
 }
 
-export const Textarea: React.FC<TextareaProps> = ({ resize, ...props }) => {
+export const Textarea: React.FC<TextareaProps> = ({ resize, className, ...props }) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const [focused, setFocused] = useState<boolean>(false);
@@ -27,6 +27,7 @@ export const Textarea: React.FC<TextareaProps> = ({ resize, ...props }) => {
         tw`transition-all`,
         focused && tw`border-2 border-gray-200 border-opacity-40`,
       ]}
+      className={className}
     >
       <textarea
         onChange={(e) => e.target.value}

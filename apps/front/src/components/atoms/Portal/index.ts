@@ -15,8 +15,11 @@ export const ReactPortal: React.FC<ReactPortalProps> = ({
 
   useEffect(() => {
     const elem = document.getElementById(wrapperId);
+
     if (!elem) {
       setElement(createWrapperAndAppendToBody(wrapperId));
+    } else {
+      setElement(elem);
     }
   }, [wrapperId]);
 

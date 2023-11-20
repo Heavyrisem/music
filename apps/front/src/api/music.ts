@@ -1,4 +1,4 @@
-import { Model, Music } from '@music/types';
+import { Model, MusicService, UpdatePlaylistDetailRequest } from '@music/types';
 
 const thumbnailUrl =
   'https://lh3.googleusercontent.com/bm0WFPaXBYSnv9g0qNffrErNV8yn_9dkRneuKEjynUUjy9giC6E6zZZ7Op4jWLGDlkHRCk5M68aWlLp9=w60-h60-l90-rj';
@@ -50,7 +50,7 @@ export const getPlaylistDetail = async (id: number): Promise<Model.PlaylistDetai
         musicList: [
           { title: '제목-1', artist: '가수', album: '앨범', thumbnailUrl, duration: 120 + 44 },
         ],
-        thumbnailUrl: '/fh5.jpg',
+        coverImageUrl: '/fh5.jpg',
         author: 'Heavyrisem',
         description: '🏁',
       });
@@ -58,15 +58,10 @@ export const getPlaylistDetail = async (id: number): Promise<Model.PlaylistDetai
   });
 };
 
-export const updatePlaylistDetail = async ({
-  id,
-  name,
-  description,
-  thumbnailUrl,
-}: Music.UpdatePlaylistDetailRequest) => {
+export const updatePlaylistDetail = async (asdf: UpdatePlaylistDetailRequest) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('update PlaylistDetail', { id, name, description, thumbnailUrl });
+      console.log('update PlaylistDetail', asdf);
       resolve(undefined);
     }, 1000);
   });

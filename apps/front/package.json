@@ -28,14 +28,14 @@
     "rsuite-table": "^5.16.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^4.4.6"
+    "zustand": "^4.4.6",
+    "@music/types": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.23.2",
     "@emotion/babel-plugin": "^11.11.0",
-    "@music/types": "workspace:*",
     "@types/lodash-es": "^4.17.11",
     "@types/node": "^20",
     "@types/react": "^18",

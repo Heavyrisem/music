@@ -1,16 +1,17 @@
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { Model } from '@music/types';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaShuffle } from 'react-icons/fa6';
 import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
+import { uploadImage } from '@/api/image';
 import { getPlaylistDetail, getUserPlaylist, updatePlaylistDetail } from '@/api/music';
 import { Button } from '@/components/atoms/Button';
+import { Image } from '@/components/organisms/Image';
 import { MusicAction } from '@/components/templates/MusicAction';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
@@ -34,8 +35,15 @@ const PlayListPage = () => {
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const handleSubmitEdit = useCallback(async (editData: Model.PlaylistDetail) => {
-    await updatePlaylistDetail(editData);
+  const handleSubmitEdit = useCallback(async (editData: Model.PlaylistDetail, image?: File) => {
+    const editedPlaylistDetail = { ...editData };
+    if (image) {
+      const coverImage = await uploadImage({ file: image });
+      console.log(coverImage);
+      editedPlaylistDetail.coverImageUrl = coverImage.url;
+    }
+
+    await updatePlaylistDetail(editedPlaylistDetail);
     setEditModalOpen(false);
   }, []);
 
@@ -45,7 +53,7 @@ const PlayListPage = () => {
         <>
           <div css={[tw`flex w-full`]}>
             <Image
-              src={playlistDetail.thumbnailUrl}
+              src={playlistDetail.coverImageUrl}
               width={256}
               height={256}
               alt=""
