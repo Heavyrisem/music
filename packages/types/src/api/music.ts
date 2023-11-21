@@ -1,4 +1,4 @@
-import { Model } from "index";
+import { Model } from "../..";
 import { IBaseResponse } from "./common";
 
 export namespace MusicService {
@@ -21,9 +21,3 @@ export namespace MusicService {
     extends Omit<Model.PlaylistDetail, "musicList" | "author"> {}
   export interface UpdatePlaylistDetailResponse {}
 }
-
-// FIXME: 타이핑안됨
-export type UpdatePlaylistDetailRequest = Omit<
-  Model.PlaylistDetail,
-  "musicList" | "author"
->;

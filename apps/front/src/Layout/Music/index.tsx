@@ -5,6 +5,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 
 import { getUserPlaylist } from '@/api/music';
+import { LoginModal } from '@/components/templates/LoginModal';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';
 
@@ -24,6 +25,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
     queryFn: () => getUserPlaylist(),
   });
 
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState<string>();
 
   const sidebarMenu = useMemo(() => {
@@ -55,7 +57,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
         </div>
         <MusicPlayer />
         <div>
-          <Button bgStyle css={[tw`py-2 text-sm`]}>
+          <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setLoginModalOpen(true)}>
             로그인
           </Button>
         </div>
@@ -112,6 +114,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           {children}
         </div>
       </Card>
+      <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
     </div>
   );
 };

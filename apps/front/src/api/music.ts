@@ -1,4 +1,4 @@
-import { Model, MusicService, UpdatePlaylistDetailRequest } from '@music/types';
+import { Model, MusicService } from '@music/types';
 
 const thumbnailUrl =
   'https://lh3.googleusercontent.com/bm0WFPaXBYSnv9g0qNffrErNV8yn_9dkRneuKEjynUUjy9giC6E6zZZ7Op4jWLGDlkHRCk5M68aWlLp9=w60-h60-l90-rj';
@@ -58,10 +58,12 @@ export const getPlaylistDetail = async (id: number): Promise<Model.PlaylistDetai
   });
 };
 
-export const updatePlaylistDetail = async (asdf: UpdatePlaylistDetailRequest) => {
+export const updatePlaylistDetail = async (
+  playlistDetail: MusicService.UpdatePlaylistDetailRequest,
+) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('update PlaylistDetail', asdf);
+      console.log('update PlaylistDetail', playlistDetail);
       resolve(undefined);
     }, 1000);
   });

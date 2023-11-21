@@ -1,4 +1,4 @@
-import { Model } from "index";
+import { Model } from "../..";
 import { IBaseResponse } from "./common";
 
 export namespace ImageService {

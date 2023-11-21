@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 import { PlayController } from '@/components/organisms/PlayController';
