@@ -12,9 +12,11 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
+    "@music/types": "workspace:*",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-popover": "^1.0.7",
     "@tanstack/react-query": "^5.8.4",
+    "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lodash-es": "^4.17.21",
@@ -28,8 +30,7 @@
     "rsuite-table": "^5.16.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^4.4.6",
-    "@music/types": "workspace:*"
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",

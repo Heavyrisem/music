@@ -1,4 +1,3 @@
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import React from 'react';
 import tw from 'twin.macro';
@@ -17,15 +16,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ ...rest }) => {
       <div css={[tw`flex flex-col gap-4`]}>
         <div css={[tw`text-lg font-bold`, tw`flex justify-center items-center`]}>로그인</div>
         <div css={[tw`w-full h-[1px]`, tw`bg-gray-200 bg-opacity-10`]} />
-        <Button
-          bgStyle
-          css={[
-            tw`flex gap-2 items-center`,
-            tw`py-2`,
-            // tw`bg-white hover:bg-gray-200`,
-            // tw`text-base text-zinc-600`,
-          ]}
-        >
+        <Button bgStyle css={[tw`flex gap-2 items-center`, tw`py-2`]}>
           <Image src={'/google.svg'} width={24} height={24} alt="" />
           Continue with Google
         </Button>
