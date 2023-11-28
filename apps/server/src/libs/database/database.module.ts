@@ -1,19 +1,23 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { DataSource } from 'typeorm';
+
+import { ConfigurationModule } from '../config/config.module';
+import { options } from './typeorm.datasource';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      synchronize: true,
-      // logging: process.env.NODE_ENV === 'production',
-      // dropSchema: process.env.NODE_ENV !== 'production',
-      //   entities: [],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigurationModule],
+      useFactory: () => options,
+      dataSourceFactory: async (opt) => {
+        const logger = new Logger('DataBaseModule');
+        logger.log('♺ Connecting to DataBase');
+        const dataSource = await new DataSource(opt).initialize();
+        logger.log('✔ DataBase connect Success ');
+        return dataSource;
+      },
     }),
   ],
 })

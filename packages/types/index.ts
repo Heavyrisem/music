@@ -1,2 +1,2 @@
-export * as Model from "./model";
-export * from "./api";
+export * as Model from "./src/model";
+export * from "./src/api";

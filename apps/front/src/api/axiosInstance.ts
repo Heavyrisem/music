@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+import { refetchToken } from './auth';
 
 export const axiosInstance = axios.create();
 
@@ -21,10 +23,30 @@ function parseCookies() {
 }
 
 axiosInstance.interceptors.request.use((config) => {
-  const { accessToken } = parseCookies();
-  if (typeof accessToken === 'string') {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const { access_token } = parseCookies();
+  if (typeof access_token === 'string') {
+    config.headers.Authorization = `Bearer ${access_token}`;
   }
 
   return config;
 });
+
+axiosInstance.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    if (err instanceof AxiosError) {
+      console.log(err.response?.status, err.config?.url);
+      if (err?.response?.status === 401 && err.config?.url !== '/api/auth/refresh') {
+        await refetchToken().catch((e) => {
+          console.log('E', e);
+          throw err;
+        });
+
+        if (err.config) return axiosInstance.request(err.config);
+        throw err;
+      }
+    }
+
+    throw err;
+  },
+);

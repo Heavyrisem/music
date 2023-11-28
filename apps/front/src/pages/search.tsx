@@ -15,8 +15,8 @@ import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
 
 const SearchPage: React.FC = () => {
-  const { setGradation } = useBgColorStore();
-  const router = useRouter();
+  // const { setGradation } = useBgColorStore();
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('q');
 
@@ -26,7 +26,7 @@ const SearchPage: React.FC = () => {
 
   const { data: searchResult, isLoading: searchLoading } = useQuery({
     queryKey: [getSearchMusic.name, query],
-    queryFn: () => getSearchMusic(query as string),
+    queryFn: () => getSearchMusic({ query: query! }),
     enabled: typeof query === 'string',
   });
   const { data: userPlaylist, isLoading: playlistLoading } = useQuery({

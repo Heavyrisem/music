@@ -18,17 +18,6 @@ const HomePage: React.FC = () => {
         <div>내 플레이리스트</div>
       </div>
       <Button onClick={() => setOpen(true)}>열기</Button>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <div css={[tw`font-bold`, tw`flex justify-center items-center`, tw`w-96`]}>
-          플레이리스트 편집
-        </div>
-        <div css={[tw`flex justify-between items-center gap-2`]}>
-          <Modal.CloseButton css={[tw`p-0`]} hoverStyle={false}>
-            <XMarkIcon css={[tw`h-4 w-4`]} />
-          </Modal.CloseButton>
-          <Button bgStyle>확인</Button>
-        </div>
-      </Modal>
     </MusicLayout>
   );
 };
