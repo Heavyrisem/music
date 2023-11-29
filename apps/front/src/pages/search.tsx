@@ -75,7 +75,12 @@ const SearchPage: React.FC = () => {
           </Column>
           <Column flexGrow={0.3}>
             <HeaderCell>아티스트</HeaderCell>
-            <Cell dataKey="artist" />
+            <Cell dataKey="artist">
+              {(rowData) => {
+                const data = rowData as Model.MusicInfo;
+                return data.artist.join(', ');
+              }}
+            </Cell>
           </Column>
           <Column flexGrow={0.2}>
             <HeaderCell>앨범</HeaderCell>

@@ -10,7 +10,13 @@ import { useTheme } from '@/store/themeStore';
 import '@/styles/globals.css';
 import { darkenHexColor } from '@/utils/color';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   const { gradation, colors } = useBgColorStore();

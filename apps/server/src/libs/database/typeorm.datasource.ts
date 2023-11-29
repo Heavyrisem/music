@@ -6,7 +6,7 @@ config({
 });
 
 export const options: DataSourceOptions = {
-  type: 'mysql',
+  type: 'mongodb',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   username: process.env.DB_USER,
@@ -17,6 +17,7 @@ export const options: DataSourceOptions = {
   entities: ['dist/**/*.entity.{js,ts}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
   migrationsRun: false,
+  authSource: 'admin',
 };
 
 const AppDataSource = new DataSource(options);

@@ -11,9 +11,11 @@ export interface PlaylistDetail extends PlaylistInfo {
 }
 
 export interface MusicInfo {
+  youtubeId: string;
   title: string;
-  artist: string;
+  artist: string[];
   album: string;
   thumbnailUrl: string;
   duration: number;
+  isExplicit: boolean;
 }
