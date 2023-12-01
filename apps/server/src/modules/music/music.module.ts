@@ -9,6 +9,7 @@ import { MusicService } from './music.service';
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([MusicMeta])],
   providers: [MusicService],
+  exports: [MusicService],
   controllers: [MusicController],
 })
 export class MusicModule {}

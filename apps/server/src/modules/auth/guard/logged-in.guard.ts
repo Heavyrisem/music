@@ -31,7 +31,7 @@ export class LoggedInGuard implements CanActivate {
 
     this.logger.debug(request[REQUEST_USER]);
 
-    if (request[REQUEST_USER] === undefined) throw new UnauthorizedException('Not Logged In');
+    if (!request[REQUEST_USER]) throw new UnauthorizedException('Not Logged In');
     return true;
   }
 }

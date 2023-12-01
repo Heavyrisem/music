@@ -74,8 +74,8 @@ export class AuthService {
     const accessToken = req.headers['authorization']?.split(' ')?.[1];
 
     return {
-      accessToken: accessToken || null,
-      refreshToken: req.cookies?.[REFRESH_TOKEN_KEY] || null,
+      accessToken: accessToken ?? null,
+      refreshToken: (req.cookies?.[REFRESH_TOKEN_KEY] as string) ?? null,
     };
   }
 

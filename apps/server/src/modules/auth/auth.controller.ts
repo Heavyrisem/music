@@ -81,8 +81,8 @@ export class AuthController {
     // localhost:3000/auth?redirect=http://localhost:3000/auth/test&callback=http://localhost:3000/auth/callback/google&provider=google
   }
 
-  @UseGuards(RefreshGuard)
   @Get('/refresh')
+  @UseGuards(RefreshGuard)
   async refresh(@Res() res: Response, @GetUser() user: Model.UserInfo) {
     this.logger.debug(`Refresh Token For User: ${user?.name}`);
     const { accessToken, refreshToken } = await this.authService.generateToken(user);

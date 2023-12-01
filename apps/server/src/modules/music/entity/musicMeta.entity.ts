@@ -11,7 +11,7 @@ export class MusicMeta extends CoreEntity implements Model.MusicInfo {
   @Column({ nullable: false })
   title: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'json' })
   artist: string[];
 
   @Column({ nullable: false })
@@ -26,7 +26,7 @@ export class MusicMeta extends CoreEntity implements Model.MusicInfo {
   @Column({ nullable: false })
   isExplicit: boolean;
 
-  public update(musicInfo: Model.MusicInfo) {
+  public update(musicInfo: Model.MusicInfoWithoutId) {
     this.youtubeId = musicInfo.youtubeId;
     this.title = musicInfo.title;
     this.artist = musicInfo.artist;

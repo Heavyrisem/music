@@ -1,5 +1,6 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
+import { UserJwtPayload } from '@music/types/src/model';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from 'src/modules/user/user.service';
 
@@ -18,11 +19,19 @@ export class JwtMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const { accessToken, refreshToken } = this.authService.getTokenFromRequest(req);
-      if (accessToken || refreshToken) {
-        const payload = this.authService.getPayload(accessToken || refreshToken);
 
+      if (accessToken || refreshToken) {
+        let payload: UserJwtPayload;
+
+        if (this.authService.verifyToken(accessToken)) {
+          payload = this.authService.getPayload(accessToken);
+        } else if (this.authService.verifyToken(refreshToken)) {
+          payload = this.authService.getPayload(refreshToken);
+        }
+
+        this.logger.debug(typeof payload === 'object' && payload['id']);
         if (typeof payload === 'object' && payload['id']) {
-          const user = await this.userService.findUser({ id: payload.id });
+          const user = await this.userService.findUserById(payload.id);
 
           req[REQUEST_USER] = user;
         }

@@ -10,8 +10,8 @@ import { User } from './entity/user.entity';
 export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-  async findUser(condition: Partial<Model.UserInfo>): Promise<User> {
-    return this.userRepository.findOne({ where: condition });
+  async findUserById(id: Model.UserInfo['id']): Promise<User> {
+    return this.userRepository.findOneBy({ id });
   }
 
   async saveUser(user: Model.BaseUserInfo): Promise<User> {

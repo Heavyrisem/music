@@ -65,7 +65,7 @@ const PlayListPage = () => {
                   {playlistDetail.name}
                 </div>
                 <div css={[[tw`text-gray-200 text-opacity-40 text-2xl`]]}>
-                  {playlistDetail.author}
+                  {playlistDetail.author.name}
                 </div>
               </div>
               <div>{playlistDetail.description}</div>

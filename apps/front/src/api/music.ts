@@ -1,4 +1,4 @@
-import { Model, MusicService } from '@music/types';
+import { Model, MusicService, PlaylistService } from '@music/types';
 
 import { axiosInstance } from './axiosInstance';
 
@@ -11,21 +11,9 @@ export const getSearchMusic = async ({ query }: MusicService.GetSearchMusicReque
 };
 
 export const getUserPlaylist = async (): Promise<Model.PlaylistInfo[]> => {
-  return new Promise((resolve) => {
-    const mockData: Model.PlaylistInfo[] = [
-      {
-        id: 1,
-        name: 'Forza Horizon Pulse',
-      },
-      {
-        id: 2,
-        name: 'Forza Horizon 4',
-      },
-    ];
-    setTimeout(() => {
-      resolve(mockData);
-    }, 1000);
-  });
+  return axiosInstance
+    .get<PlaylistService.GetUserPlaylistResponse>('/api/playlist')
+    .then((res) => res.data.data);
 };
 
 export const getPlaylistDetail = async (id: number): Promise<Model.PlaylistDetail> => {

@@ -1,7 +1,7 @@
-import { CreateDateColumn, ObjectIdColumn } from 'typeorm';
+import { CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export class CoreEntity {
-  @ObjectIdColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @CreateDateColumn()

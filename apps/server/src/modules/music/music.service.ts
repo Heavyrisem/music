@@ -39,7 +39,7 @@ export class MusicService {
           if (music.duration === undefined)
             throw new InternalServerErrorException(`duration 값이 비었습니다. ${music.duration}`);
 
-          const result: Model.MusicInfo = {
+          const result: Model.MusicInfoWithoutId = {
             youtubeId: music.youtubeId,
             title: music.title,
             thumbnailUrl: music.thumbnailUrl,
@@ -54,11 +54,15 @@ export class MusicService {
     );
   }
 
-  async saveMusicMeta(musicInfo: Model.MusicInfo) {
+  async saveMusicMeta(musicInfo: Model.MusicInfoWithoutId) {
     const existMeta = await this.musicMetaRepository.findOneBy({ youtubeId: musicInfo.youtubeId });
     if (existMeta) {
       existMeta.update(musicInfo);
       return await this.musicMetaRepository.save(existMeta);
     } else return this.musicMetaRepository.save(musicInfo);
+  }
+
+  async findMusicById(id: Model.MusicInfo['id']) {
+    return this.musicMetaRepository.findOneBy({ id });
   }
 }

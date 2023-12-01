@@ -1,18 +1,5 @@
-import { Model } from "../..";
-
-export interface PlaylistInfo {
-  id: number;
-  name: string;
-}
-
-export interface PlaylistDetail extends PlaylistInfo {
-  description: string;
-  coverImageUrl: string;
-  musicList: MusicInfo[];
-  author: Model.UserInfo;
-}
-
 export interface MusicInfo {
+  id: number;
   youtubeId: string;
   title: string;
   artist: string[];
@@ -21,3 +8,5 @@ export interface MusicInfo {
   duration: number;
   isExplicit: boolean;
 }
+
+export interface MusicInfoWithoutId extends Omit<MusicInfo, "id"> {}

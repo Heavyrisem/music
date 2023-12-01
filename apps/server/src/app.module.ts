@@ -8,8 +8,8 @@ import { HttpLoggerMiddleware } from './libs/logging/http-logger.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtMiddleware } from './modules/auth/middleware/jwt.middleware';
 import { MusicModule } from './modules/music/music.module';
-import { UserModule } from './modules/user/user.module';
 import { PlaylistModule } from './modules/playlist/playlist.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [ConfigurationModule, UserModule, AuthModule, MusicModule, PlaylistModule],
