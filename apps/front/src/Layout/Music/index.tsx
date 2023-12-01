@@ -5,9 +5,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 
 import { getUserPlaylist } from '@/api/music';
-import { LoginModal } from '@/components/templates/LoginModal';
+import { LoginModal, LoginType } from '@/components/templates/LoginModal';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';
+import { createQueryParameter } from '@/utils/url';
 
 import { Button } from '../../components/atoms/Button';
 import { Card } from '../../components/atoms/Card';
@@ -43,6 +44,16 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
       router.push(`/search?q=${searchInput}`);
     },
     [router, searchInput],
+  );
+
+  const handleLoginClick = useCallback(
+    (type: LoginType) => {
+      const params = {
+        redirect: location.origin,
+      };
+      router.push(`${location.origin}/api/auth/oauth/${type}?${createQueryParameter(params)}`);
+    },
+    [router],
   );
 
   return (
@@ -114,7 +125,11 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           {children}
         </div>
       </Card>
-      <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      <LoginModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        onLoginClick={handleLoginClick}
+      />
     </div>
   );
 };
