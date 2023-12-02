@@ -1,13 +1,16 @@
 import { PlaylistService } from '@music/types';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreatePlaylistDto implements PlaylistService.CreatePlaylistRequest {
+export class CreatePlaylistBodyDto implements PlaylistService.CreatePlaylistRequest {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsOptional()
   description: string;
 
   @IsString()
+  @IsOptional()
   coverImageUrl: string;
 }

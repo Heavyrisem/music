@@ -1,10 +1,14 @@
 import { PlaylistService } from '@music/types';
 import { IsNumber } from 'class-validator';
 
-export class AddMusicDto implements PlaylistService.AddMusicRequest {
+export class AddMusicParamDto
+  implements Pick<PlaylistService.AddMusicToPlaylistRequest, 'playlistId'>
+{
   @IsNumber()
-  playlistId: PlaylistService.AddMusicRequest['playlistId'];
+  playlistId: number;
+}
 
+export class AddMusicBodyDto implements Pick<PlaylistService.AddMusicToPlaylistRequest, 'musicId'> {
   @IsNumber()
-  musicId: PlaylistService.AddMusicRequest['musicId'];
+  musicId: PlaylistService.AddMusicToPlaylistRequest['musicId'];
 }

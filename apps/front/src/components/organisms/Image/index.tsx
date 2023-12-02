@@ -3,7 +3,8 @@ import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import tw, { css } from 'twin.macro';
 
-interface ImageProps extends NextImageProps {
+interface ImageProps extends Omit<NextImageProps, 'src'> {
+  src?: string | null;
   editable?: boolean;
   onImageChange?: (image: File) => void;
 }
@@ -70,12 +71,16 @@ export const Image: React.FC<ImageProps> = ({
           <PencilIcon css={[tw`w-10 h-10`]} />
         </div>
       )}
-      <NextImage
-        src={viewSrc}
-        alt={alt}
-        css={[tw`object-cover object-center`, tw`h-full w-full`]}
-        {...rest}
-      />
+      {viewSrc ? (
+        <NextImage
+          src={viewSrc}
+          alt={alt}
+          css={[tw`object-cover object-center`, tw`h-full w-full`]}
+          {...rest}
+        />
+      ) : (
+        <div css={[tw`h-full w-full`, tw`bg-gray-200 bg-opacity-70`]}></div>
+      )}
     </div>
   );
 };

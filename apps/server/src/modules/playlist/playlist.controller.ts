@@ -1,16 +1,29 @@
-import { Body, Controller, ForbiddenException, Get, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 
 import { BaseResponse } from 'src/libs/common/dto/response.dto';
 
 import { GetUser } from '../auth/decorator/get-user.decorator';
 import { LoggedInGuard } from '../auth/guard/logged-in.guard';
 import { User } from '../user/entity/user.entity';
-import { AddMusicDto } from './dto/addMusic.dto';
-import { CreatePlaylistDto } from './dto/createPlaylist.dto';
+import { AddMusicBodyDto, AddMusicParamDto } from './dto/addMusic.dto';
+import { CreatePlaylistBodyDto } from './dto/createPlaylist.dto';
+import { GetPlaylistParamDto } from './dto/getPlaylist.dto';
+import { UpdatePlaylistBodyDto, UpdatePlaylistParamDto } from './dto/updatePlaylist.dto';
 import { PlaylistService } from './playlist.service';
 
 @Controller('/api/playlist')
 export class PlaylistController {
+  logger = new Logger(PlaylistController.name);
   constructor(private readonly playlistService: PlaylistService) {}
 
   @Get()
@@ -20,21 +33,48 @@ export class PlaylistController {
     return BaseResponse.of(data);
   }
 
-  @Post()
-  @UseGuards(LoggedInGuard)
-  async createPlaylist(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: User) {
-    const data = this.playlistService.createPlaylist(user, createPlaylistDto);
-
+  @Get('/:id')
+  // @UseGuards(LoggedInGuard)
+  async getPlaylistById(@Param() getPlaylistParamDto: GetPlaylistParamDto) {
+    this.logger.debug(getPlaylistParamDto);
+    const data = await this.playlistService.findPlaylistById(getPlaylistParamDto.id);
     return BaseResponse.of(data);
   }
 
-  @Put()
+  @Post()
   @UseGuards(LoggedInGuard)
-  async addMusic(@Body() addMusicDto: AddMusicDto, @GetUser() user: User) {
-    const playlist = await this.playlistService.findPlaylistById(addMusicDto.playlistId);
+  async createPlaylist(
+    @Body() createPlaylistBodyDto: CreatePlaylistBodyDto,
+    @GetUser() user: User,
+  ) {
+    const data = await this.playlistService.createPlaylist(user, createPlaylistBodyDto);
+    return BaseResponse.of(data);
+  }
+
+  @Put('/:id')
+  @UseGuards(LoggedInGuard)
+  async updatePlaylist(
+    @Param() updatePlaylistParamDto: UpdatePlaylistParamDto,
+    @Body() updatePlaylistBodyDto: UpdatePlaylistBodyDto,
+  ) {
+    const data = await this.playlistService.updatePlaylist({
+      ...updatePlaylistParamDto,
+      ...updatePlaylistBodyDto,
+    });
+    return BaseResponse.of(data);
+  }
+
+  @Put('/:playlistId/music')
+  @UseGuards(LoggedInGuard)
+  async addMusic(
+    @Param() addMusicParamDto: AddMusicParamDto,
+    @Body() addMusicBodyDto: AddMusicBodyDto,
+    @GetUser() user: User,
+  ) {
+    const playlist = await this.playlistService.findPlaylistById(addMusicParamDto.playlistId);
     if (playlist.author.id !== user.id) throw new ForbiddenException();
 
-    const data = await this.playlistService.addMusic(addMusicDto);
+    const data = await this.playlistService.addMusic({ ...addMusicParamDto, ...addMusicBodyDto });
     return BaseResponse.of(data);
   }
 }

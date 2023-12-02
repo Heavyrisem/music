@@ -49,7 +49,7 @@ export class GoogleStrategy
     return {
       provider: Model.Provider.GOOGLE,
       providerId: profile.id,
-      name: profile.name.givenName,
+      name: [profile.name.familyName, profile.name.givenName].filter((v) => !!v).join(' '),
       email: profile?.emails?.[0]?.value ?? null,
       profileImage: profile?.photos?.[0]?.value ?? null,
     };

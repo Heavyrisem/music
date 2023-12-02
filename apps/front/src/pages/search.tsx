@@ -8,8 +8,12 @@ import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
-import { getSearchMusic, getUserPlaylist } from '@/api/music';
+import { getSearchMusic } from '@/api/music';
+import { getUserPlaylist } from '@/api/playlist';
 import { MusicAction } from '@/components/templates/MusicAction';
+import { MusicListTable } from '@/components/templates/MusicListTable';
+import { useCreatePlaylistMutation } from '@/hooks/api/useCreatePlaylistMutation';
+import { useMusicAction } from '@/hooks/useMusicAction';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
@@ -23,6 +27,8 @@ const SearchPage: React.FC = () => {
   //   useEffect(() => {
   //     if (!query) router.push('/');
   //   }, [query, router]);
+
+  const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
 
   const { data: searchResult, isLoading: searchLoading } = useQuery({
     queryKey: [getSearchMusic.name, query],
@@ -46,62 +52,14 @@ const SearchPage: React.FC = () => {
     <MusicLayout css={[tw`flex flex-col`]}>
       <div>{`"${query}"`}에 대한 검색 결과</div>
       <div css={[tw`flex-1`]}>
-        <Table
+        <MusicListTable
           data={searchResult}
-          css={[tableDefaultStyle, tableBgStyle, tw`text-sm`]}
-          rowHeight={60}
-          loading={searchLoading || playlistLoading}
-          fillHeight
-        >
-          <Column flexGrow={0.4}>
-            <HeaderCell>노래</HeaderCell>
-            <Cell dataKey="title">
-              {(rowData) => {
-                const data = rowData as Model.MusicInfo;
-                return (
-                  <div css={[tw`flex justify-center items-center gap-2`]}>
-                    <Image
-                      src={data.thumbnailUrl}
-                      width={42}
-                      height={42}
-                      alt=""
-                      css={[tw`rounded-md`]}
-                    />
-                    <div>{data.title}</div>
-                  </div>
-                );
-              }}
-            </Cell>
-          </Column>
-          <Column flexGrow={0.3}>
-            <HeaderCell>아티스트</HeaderCell>
-            <Cell dataKey="artist">
-              {(rowData) => {
-                const data = rowData as Model.MusicInfo;
-                return data.artist.join(', ');
-              }}
-            </Cell>
-          </Column>
-          <Column flexGrow={0.2}>
-            <HeaderCell>앨범</HeaderCell>
-            <Cell dataKey="album" />
-          </Column>
-          <Column flexGrow={0.1}>
-            <HeaderCell>시간</HeaderCell>
-            <Cell dataKey="duration">
-              {(rowData) => {
-                const data = rowData as Model.MusicInfo;
-                return (
-                  <div css={[tw`flex gap-1 items-center`]}>
-                    <div>{formatSecondsToTime(data.duration)}</div>
-                    {userPlaylist && <MusicAction playlist={userPlaylist} onClick={console.log} />}
-                  </div>
-                );
-              }}
-            </Cell>
-          </Column>
-        </Table>
+          isLoading={searchLoading || playlistLoading}
+          userPlaylist={userPlaylist}
+          onMusicAction={musicActionHandler}
+        />
       </div>
+      <MusicActionModalRenderer />
     </MusicLayout>
   );
 };

@@ -12,5 +12,6 @@ export interface BaseUserInfo {
 
 export interface UserInfo extends BaseUserInfo {
   id: number;
+  disaplyName: string;
   createdAt: Date;
 }

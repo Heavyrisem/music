@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 
-import { getUserPlaylist } from '@/api/music';
+import { getUserPlaylist } from '@/api/playlist';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';

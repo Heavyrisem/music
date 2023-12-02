@@ -23,42 +23,55 @@ import { OptionIcon } from '@/icons/OptionIcon';
 
 import { Button } from '../atoms/Button';
 
-interface ActionBaseInfo {
-  type: 'removeFromPlaylist' | 'addToPlaylist' | 'prependQueue' | 'appendQueue' | 'like';
-}
+// export type ActionType =
+//   | 'removeFromPlaylist'
+//   | 'addToPlaylist'
+//   | 'createPlaylist'
+//   | 'prependQueue'
+//   | 'appendQueue'
+//   | 'like';
 
-interface RemoveFromPlaylistAction extends ActionBaseInfo {
+// export type ActionBaseInfo = {
+//   type: ActionType;
+// };
+
+type RemoveFromPlaylistAction = {
   type: 'removeFromPlaylist';
-}
+};
 
-interface AddToPlaylistAction extends ActionBaseInfo {
+type AddToPlaylistAction = {
   type: 'addToPlaylist';
-  playlist: Model.PlaylistInfo;
-}
+  playlistId: Model.PlaylistInfo['id'];
+};
 
-interface PrependQueueAction extends ActionBaseInfo {
+type CreatePlaylistAction = {
+  type: 'createPlaylist';
+};
+
+type PrependQueueAction = {
   type: 'prependQueue';
-}
+};
 
-interface AppendQueueAction extends ActionBaseInfo {
+type AppendQueueAction = {
   type: 'appendQueue';
-}
+};
 
-interface LikeAction extends ActionBaseInfo {
+type LikeAction = {
   type: 'like';
-}
+};
 
-export type ActionInfo =
+export type MusicAction =
   | RemoveFromPlaylistAction
   | AddToPlaylistAction
+  | CreatePlaylistAction
   | PrependQueueAction
   | AppendQueueAction
   | LikeAction;
 
-interface MusicActionProps {
-  isPlaylist?: boolean;
-  playlist: Model.PlaylistInfo[];
-  onClick?: (action: ActionInfo) => void;
+export interface MusicActionProps {
+  showRemoveFromPlaylist?: boolean;
+  playlist?: Model.PlaylistInfo[];
+  onClick?: (action: MusicAction) => void;
 }
 
 const buttonStyle = [tw`flex gap-4 justify-between items-center text-left`, tw`rounded-sm`];
@@ -70,7 +83,7 @@ const contentStyle = [
 ];
 
 export const MusicAction: React.FC<MusicActionProps> = ({
-  isPlaylist = false,
+  showRemoveFromPlaylist = false,
   playlist,
   onClick,
 }) => {
@@ -84,7 +97,7 @@ export const MusicAction: React.FC<MusicActionProps> = ({
 
       <Portal>
         <Content align="start" css={[contentStyle]}>
-          {isPlaylist && (
+          {showRemoveFromPlaylist && (
             <Item css={[tw`text-left`]} asChild>
               <Button css={[buttonStyle]} onClick={() => onClick?.({ type: 'removeFromPlaylist' })}>
                 플레이리스트에서 제거
@@ -100,11 +113,16 @@ export const MusicAction: React.FC<MusicActionProps> = ({
             </SubTrigger>
             <Portal>
               <SubContent css={[contentStyle]}>
-                {playlist.map((item) => (
+                <Item asChild>
+                  <Button css={[buttonStyle]} onClick={() => onClick?.({ type: 'createPlaylist' })}>
+                    새 플레이리스트 생성
+                  </Button>
+                </Item>
+                {playlist?.map((item) => (
                   <Item key={item.id} asChild>
                     <Button
                       css={[buttonStyle]}
-                      onClick={() => onClick?.({ type: 'addToPlaylist', playlist: item })}
+                      onClick={() => onClick?.({ type: 'addToPlaylist', playlistId: item.id })}
                     >
                       {item.name}
                     </Button>

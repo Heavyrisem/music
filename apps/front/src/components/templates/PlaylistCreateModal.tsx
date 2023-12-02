@@ -10,17 +10,17 @@ import { Image } from '../organisms/Image';
 import { Modal } from '../organisms/Modal';
 import { ModalRootProps } from '../organisms/Modal/components/Modal';
 
-export interface PlaylistEditModalProps extends ModalRootProps {
-  playlistDetail: Model.PlaylistInfo;
-  onSubmit?: (data: Model.PlaylistInfo, image?: File) => void;
+export type CreatePlaylistType = Pick<Model.PlaylistInfo, 'name' | 'description'>;
+
+export interface PlaylistCreateModalProps extends ModalRootProps {
+  onSubmit?: (data: CreatePlaylistType, image?: File) => void;
 }
 
-export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
-  playlistDetail,
-  onSubmit,
-  ...rest
-}) => {
-  const [editingData, setEditingData] = useState(playlistDetail);
+export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubmit, ...rest }) => {
+  const [editingData, setEditingData] = useState<CreatePlaylistType>({
+    name: '',
+    description: '',
+  });
   const [coverImage, setCoverImage] = useState<File>();
 
   const handleInputName = useCallback<React.ChangeEventHandler<HTMLInputElement>>((e) => {
@@ -45,7 +45,7 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
     <Modal closeOnBackdropClick={false} {...rest}>
       <div css={[tw`flex flex-col gap-4`]}>
         <div css={[tw`font-bold`, tw`flex justify-between items-center`, tw`min-w-[34rem]`]}>
-          플레이리스트 편집
+          플레이리스트 생성
           <Modal.CloseButton css={[tw`p-0`]} hoverStyle={false}>
             <XMarkIcon css={[tw`w-4 h-4`]} />
           </Modal.CloseButton>
@@ -53,7 +53,7 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
         <div css={[tw`flex gap-4`]}>
           <Image
             editable
-            src={playlistDetail.coverImageUrl}
+            src={coverImage && URL.createObjectURL(coverImage)}
             width={200}
             height={200}
             alt=""
@@ -61,12 +61,8 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
             onImageChange={setCoverImage}
           />
           <div css={[tw`flex-1 flex flex-col justify-between gap-4`]}>
-            <Input defaultValue={playlistDetail.name} onChange={handleInputName} css={[tw`py-1`]} />
-            <Textarea
-              css={[tw`flex-1 p-1`]}
-              defaultValue={playlistDetail.description}
-              onChange={handleInputDescription}
-            />
+            <Input onChange={handleInputName} css={[tw`py-1`]} />
+            <Textarea css={[tw`flex-1 p-1`]} onChange={handleInputDescription} />
           </div>
         </div>
         <div css={[tw`flex justify-end gap-2`]}>
