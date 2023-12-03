@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import * as Joi from 'joi';
+import { Region } from 'oci-common';
 import path from 'path';
 
 @Module({
@@ -26,6 +27,19 @@ import path from 'path';
         // YOUTUBE_MUSIC_AUTHORIZATION: Joi.string().required(),
         // YOUTUBE_MUSIC_COOKIE: Joi.string().required(),
         YOUTUBE_TEMP_DIR: Joi.string().default(path.resolve('./temp')),
+        OCI_STORAGE_NAMESPACE: Joi.string().required(),
+        OCI_STORAGE_BUCKET: Joi.string().required(),
+        OCI_TENANCY: Joi.string().required(),
+        OCI_USER: Joi.string().required(),
+        OCI_FINGERPRINT: Joi.string().required(),
+        OCI_PRIVATEKEY: Joi.string().required(),
+        OCI_REGION: Joi.string()
+          .required()
+          .custom((value, helpers) => {
+            if (Region.fromRegionId(value) === undefined)
+              return helpers.message({ custom: 'Region Code is wrong' });
+            return value;
+          }),
       }),
     }),
   ],

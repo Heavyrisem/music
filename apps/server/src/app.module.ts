@@ -8,7 +8,9 @@ import { DatabaseModule } from './libs/database/database.module';
 import { HttpLoggerMiddleware } from './libs/logging/http-logger.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtMiddleware } from './modules/auth/middleware/jwt.middleware';
+import { ImageModule } from './modules/image/image.module';
 import { MusicModule } from './modules/music/music.module';
+import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
 import { PlaylistModule } from './modules/playlist/playlist.module';
 import { UserModule } from './modules/user/user.module';
 
@@ -20,6 +22,8 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     MusicModule,
     PlaylistModule,
+    ObjectStorageModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [
