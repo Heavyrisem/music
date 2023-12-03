@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Model } from '@music/types';
-import { NotFoundError } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import { User } from './entity/user.entity';
@@ -28,7 +27,7 @@ export class UserService {
 
   async updateUser(user: Pick<Model.UserInfo, 'id'> & Partial<Model.UserInfo>) {
     const existUser = await this.findUserById(user.id);
-    if (!existUser) throw new NotFoundError('유저가 없습니다.');
+    if (!existUser) throw new NotFoundException('유저가 없습니다.');
 
     const mergedUser = this.userRepository.merge(existUser, user);
     return this.userRepository.save(mergedUser);

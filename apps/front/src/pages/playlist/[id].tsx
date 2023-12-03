@@ -8,11 +8,12 @@ import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
 import { uploadImage } from '@/api/image';
-import { getPlaylistDetail, getUserPlaylist, updatePlaylistDetail } from '@/api/playlist';
+import { getPlaylistDetail, updatePlaylistDetail } from '@/api/playlist';
 import { Button } from '@/components/atoms/Button';
 import { Image } from '@/components/organisms/Image';
 import { MusicListTable } from '@/components/templates/MusicListTable';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
+import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 
 const playButtonStyle = [tw`flex items-center gap-2 text-sm`];
 
@@ -20,10 +21,7 @@ const PlayListPage = () => {
   const router = useRouter();
   const playlistId = useMemo(() => Number(router.query?.id), [router.query?.id]);
 
-  const { data: userPlaylist, isLoading: playlistLoading } = useQuery({
-    queryKey: [getUserPlaylist.name],
-    queryFn: () => getUserPlaylist(),
-  });
+  const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
   const { data: playlistDetail, isLoading: playlistDetailLoading } = useQuery({
     queryKey: [getPlaylistDetail.name, playlistId],
     queryFn: () => getPlaylistDetail({ id: playlistId! }),
@@ -62,7 +60,7 @@ const PlayListPage = () => {
                   {playlistDetail.name}
                 </div>
                 <div css={[[tw`text-gray-200 text-opacity-40 text-2xl`]]}>
-                  {playlistDetail.author.disaplyName}
+                  {playlistDetail.author.displayName}
                 </div>
               </div>
               <div>{playlistDetail.description}</div>

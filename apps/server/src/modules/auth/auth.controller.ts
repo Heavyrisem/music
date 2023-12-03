@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { Model } from '@music/types';
 import { Response } from 'express';
+import { BaseResponse } from 'src/libs/common/dto/response.dto';
 
 import { UserService } from '../user/user.service';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './auth.constant';
@@ -93,10 +94,10 @@ export class AuthController {
     return res.send();
   }
 
-  @UseGuards(LoggedInGuard)
   @Get('/me')
+  @UseGuards(LoggedInGuard)
   async getAuthedUser(@GetUser() user: Model.UserInfo) {
-    return user;
+    return BaseResponse.of(user);
   }
 
   private stringToProvider(providerString: string): Model.Provider {

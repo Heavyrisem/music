@@ -10,8 +10,11 @@ export interface BaseUserInfo {
   profileImage: string;
 }
 
-export interface UserInfo extends BaseUserInfo {
+export interface UserPreference {
+  displayName: string;
+}
+
+export interface UserInfo extends BaseUserInfo, UserPreference {
   id: number;
-  disaplyName: string;
   createdAt: Date;
 }

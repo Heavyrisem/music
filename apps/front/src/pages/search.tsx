@@ -1,22 +1,15 @@
-import { Model } from '@music/types';
-import { useQueries, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 import React from 'react';
-import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
 import { getSearchMusic } from '@/api/music';
 import { getUserPlaylist } from '@/api/playlist';
-import { MusicAction } from '@/components/templates/MusicAction';
 import { MusicListTable } from '@/components/templates/MusicListTable';
-import { useCreatePlaylistMutation } from '@/hooks/api/useCreatePlaylistMutation';
+import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
-import { useBgColorStore } from '@/store/bgColorStore';
-import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
-import { formatSecondsToTime } from '@/utils/time';
+import { useAuthStore } from '@/store/authStore';
 
 const SearchPage: React.FC = () => {
   // const { setGradation } = useBgColorStore();
@@ -35,10 +28,8 @@ const SearchPage: React.FC = () => {
     queryFn: () => getSearchMusic({ query: query! }),
     enabled: typeof query === 'string',
   });
-  const { data: userPlaylist, isLoading: playlistLoading } = useQuery({
-    queryKey: [getUserPlaylist.name],
-    queryFn: () => getUserPlaylist(),
-  });
+
+  const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
 
   // useEffect(() => {
   //   setGradation(true);

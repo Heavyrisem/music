@@ -6,8 +6,12 @@ import tw from 'twin.macro';
 
 import { getUserPlaylist } from '@/api/playlist';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
+import { UserPreferenceEditModal } from '@/components/templates/UserPreferenceEditModal';
+import { useEditUserPreferenceMutation } from '@/hooks/api/useEditUserPreferenceMutation';
+import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { SearchIcon } from '@/icons/SearchIcon';
+import { useAuthStore } from '@/store/authStore';
 import { createQueryParameter } from '@/utils/url';
 
 import { Button } from '../../components/atoms/Button';
@@ -18,16 +22,19 @@ import { MusicPlayer } from './MusicPlayer';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+type ModalType = 'none' | 'login' | 'userPreference';
+
 export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) => {
   const router = useRouter();
 
-  const { data: userPlaylist } = useQuery({
-    queryKey: [getUserPlaylist.name],
-    queryFn: () => getUserPlaylist(),
-  });
-
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<ModalType>('none');
   const [searchInput, setSearchInput] = useState<string>();
+
+  const { user } = useAuthStore();
+  const { data: userPlaylist } = useUserPlaylist();
+  const { mutate: editUserPreferenceMutation } = useEditUserPreferenceMutation({
+    onSuccess: () => setModalType('none'),
+  });
 
   const sidebarMenu = useMemo(() => {
     return [
@@ -68,9 +75,17 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
         </div>
         <MusicPlayer />
         <div>
-          <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setLoginModalOpen(true)}>
-            로그인
-          </Button>
+          {!user && (
+            <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('login')}>
+              로그인
+            </Button>
+          )}
+
+          {user !== null && (
+            <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('userPreference')}>
+              {user.displayName}
+            </Button>
+          )}
         </div>
       </Card>
       <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0`]}>
@@ -125,11 +140,22 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           {children}
         </div>
       </Card>
-      <LoginModal
-        open={loginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
-        onLoginClick={handleLoginClick}
-      />
+
+      {modalType === 'login' && (
+        <LoginModal
+          open={modalType === 'login'}
+          onClose={() => setModalType('none')}
+          onLoginClick={handleLoginClick}
+        />
+      )}
+      {modalType === 'userPreference' && user && (
+        <UserPreferenceEditModal
+          open={modalType === 'userPreference'}
+          userPreference={user}
+          onSubmit={editUserPreferenceMutation}
+          onClose={() => setModalType('none')}
+        />
+      )}
     </div>
   );
 };

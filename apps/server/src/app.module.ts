@@ -4,6 +4,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigurationModule } from './libs/config/config.module';
+import { DatabaseModule } from './libs/database/database.module';
 import { HttpLoggerMiddleware } from './libs/logging/http-logger.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtMiddleware } from './modules/auth/middleware/jwt.middleware';
@@ -12,7 +13,14 @@ import { PlaylistModule } from './modules/playlist/playlist.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [ConfigurationModule, UserModule, AuthModule, MusicModule, PlaylistModule],
+  imports: [
+    ConfigurationModule,
+    DatabaseModule,
+    UserModule,
+    AuthModule,
+    MusicModule,
+    PlaylistModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

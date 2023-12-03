@@ -14,7 +14,7 @@ export class User extends CoreEntity implements Model.UserInfo {
   name: string;
 
   @Column({ nullable: false })
-  disaplyName: string;
+  displayName: string;
 
   @Column({ nullable: false })
   email: string;
@@ -25,6 +25,6 @@ export class User extends CoreEntity implements Model.UserInfo {
   @BeforeUpdate()
   @BeforeInsert()
   beforeSave() {
-    if (!this.disaplyName) this.disaplyName = this.name;
+    if (!this.displayName) this.displayName = this.name;
   }
 }
