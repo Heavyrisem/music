@@ -19,7 +19,7 @@ export class UpdatePlaylistBodyDto
   @IsOptional()
   description?: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  coverImageUrl?: string;
+  thumbnailId: number;
 }

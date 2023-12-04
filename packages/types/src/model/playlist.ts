@@ -1,10 +1,11 @@
 import { Model } from "../..";
+import { ObjectMetaInfo } from "./object";
 
 export interface PlaylistInfo {
   id: number;
   name: string;
   description: string;
-  coverImageUrl: string | null | undefined;
+  thumbnail: null | ObjectMetaInfo;
   musicList: Model.MusicInfo[];
   author: Model.UserInfo;
 }
