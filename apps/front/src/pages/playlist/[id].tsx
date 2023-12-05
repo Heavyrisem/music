@@ -33,9 +33,8 @@ const PlayListPage = () => {
   const handleSubmitEdit = useCallback(async (editData: Model.PlaylistInfo, image?: File) => {
     const editedPlaylistDetail = { ...editData };
     if (image) {
-      const coverImage = await uploadImage({ file: image });
-      console.log(coverImage);
-      editedPlaylistDetail.coverImageUrl = coverImage.url;
+      const thumbnail = await uploadImage({ file: image });
+      editedPlaylistDetail.thumbnail = thumbnail.url;
     }
 
     await updatePlaylistDetail(editedPlaylistDetail);
@@ -48,11 +47,12 @@ const PlayListPage = () => {
         <>
           <div css={[tw`flex w-full`]}>
             <Image
-              src={playlistDetail.coverImageUrl}
+              src={playlistDetail.thumbnail}
               width={256}
               height={256}
               alt=""
               css={[tw`rounded-lg`, tw`w-64 h-64`]}
+              unoptimized
             />
             <div css={[tw`flex flex-col justify-between p-4 flex-1`]}>
               <div>

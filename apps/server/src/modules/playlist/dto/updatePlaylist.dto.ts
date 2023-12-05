@@ -19,7 +19,7 @@ export class UpdatePlaylistBodyDto
   @IsOptional()
   description?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  thumbnailId: number;
+  thumbnail?: string;
 }

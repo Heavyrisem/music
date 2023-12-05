@@ -36,10 +36,18 @@ export class ObjectStorageService {
     });
   }
 
-  async save(dataStream: Readable, name: string, type: string) {
+  async findObjectMetaById(id: number) {
+    return this.objectMetaRepository.findOneBy({ id });
+  }
+
+  async save(dataStream: Readable, name: string, type: string, isPublic = false) {
+    const bucketName = this.configService.getOrThrow(
+      isPublic ? 'OCI_STORAGE_PUBLIC_BUCKET' : 'OCI_STORAGE_PRIVATE_BUCKET',
+    );
+
     const putObjectRequest: PutObjectRequest = {
       namespaceName: this.configService.getOrThrow('OCI_STORAGE_NAMESPACE'),
-      bucketName: this.configService.getOrThrow('OCI_STORAGE_BUCKET'),
+      bucketName,
       objectName: name,
       contentType: type,
       putObjectBody: dataStream,
@@ -49,17 +57,32 @@ export class ObjectStorageService {
 
     const existObject = await this.objectMetaRepository.findOneBy({ name });
     if (existObject) {
-      const mergedObjcet = this.objectMetaRepository.merge(existObject, { name, type });
+      const mergedObjcet = this.objectMetaRepository.merge(existObject, {
+        name,
+        type,
+        isPublic,
+      });
       return this.objectMetaRepository.save(mergedObjcet);
     }
 
-    const object = this.objectMetaRepository.create({ name, type });
+    const object = this.objectMetaRepository.create({ name, type, isPublic });
     return this.objectMetaRepository.save(object);
   }
 
-  async getPreAuthedUrl(name: string, expiresInSec: number) {
+  async getObjectUrl(name: string, expiresInSec = 60) {
     const objectMeta = await this.objectMetaRepository.findOneBy({ name });
     if (!objectMeta) throw new NotFoundException('object를 찾을 수 없습니다.');
+
+    const bucketName = this.configService.getOrThrow(
+      objectMeta.isPublic ? 'OCI_STORAGE_PUBLIC_BUCKET' : 'OCI_STORAGE_PRIVATE_BUCKET',
+    );
+    const preAuthedUrl = await this.createPreAuthedUrl(name, bucketName, expiresInSec);
+
+    return preAuthedUrl;
+  }
+
+  private async createPreAuthedUrl(name: string, bucketName: string, expiresInSec: number) {
+    // const objectMeta = await this.objectMetaRepository.findOneBy({ name });
 
     const expires = new Date(Date.now() + expiresInSec * 1000);
     const uniqueRequestId = Date.now();
@@ -71,7 +94,7 @@ export class ObjectStorageService {
           accessType: CreatePreauthenticatedRequestDetails.AccessType.ObjectRead,
           timeExpires: expires,
         },
-        bucketName: this.configService.getOrThrow('OCI_STORAGE_BUCKET'),
+        bucketName,
         namespaceName: this.configService.getOrThrow('OCI_STORAGE_NAMESPACE'),
       });
 

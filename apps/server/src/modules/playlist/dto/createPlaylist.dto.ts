@@ -12,5 +12,5 @@ export class CreatePlaylistBodyDto implements PlaylistService.CreatePlaylistRequ
 
   @IsString()
   @IsOptional()
-  thumbnailId: number;
+  thumbnail?: string;
 }

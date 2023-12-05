@@ -12,17 +12,18 @@ export namespace PlaylistService {
     extends IBaseResponse<Model.PlaylistInfo> {}
 
   export interface UpdatePlaylistInfoRequest
-    extends Pick<Partial<Model.PlaylistInfo>, "name" | "description"> {
+    extends Pick<
+      Partial<Model.PlaylistInfo>,
+      "name" | "description" | "thumbnail"
+    > {
     id: Model.PlaylistInfo["id"];
-    thumbnailId: Model.ObjectMetaInfo["id"];
   }
   export interface UpdatePlaylistInfoResponse
     extends IBaseResponse<Model.PlaylistInfo> {}
 
   export interface CreatePlaylistRequest
-    extends Pick<Partial<Model.PlaylistInfo>, "description"> {
+    extends Pick<Partial<Model.PlaylistInfo>, "description" | "thumbnail"> {
     name: Model.PlaylistInfo["name"];
-    thumbnailId: Model.ObjectMetaInfo["id"];
   }
   export interface CreatePlaylistResponse
     extends IBaseResponse<Model.PlaylistInfo> {}

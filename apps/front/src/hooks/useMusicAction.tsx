@@ -38,9 +38,9 @@ export const useMusicAction = () => {
   const handleCreatePlaylistSubmit = useCallback(
     async (data: CreatePlaylistType, image?: File) => {
       let imgUrl;
-      if (image) imgUrl = await uploadImage({ file: image }).then((img) => img.url);
+      if (image) imgUrl = await uploadImage({ file: image }).then((img) => `/api/image/${img.id}`);
 
-      createPlaylistMutation({ ...data, coverImageUrl: imgUrl });
+      createPlaylistMutation({ ...data, thumbnail: imgUrl });
     },
     [createPlaylistMutation],
   );

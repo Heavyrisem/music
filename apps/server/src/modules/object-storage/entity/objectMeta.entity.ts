@@ -10,4 +10,7 @@ export class ObjectMeta extends CoreEntity implements Model.ObjectMetaInfo {
 
   @Column({ nullable: false })
   type: string;
+
+  @Column({ nullable: false })
+  isPublic: boolean;
 }

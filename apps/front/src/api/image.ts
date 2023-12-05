@@ -1,10 +1,8 @@
-import { ImageService, Model } from '@music/types';
+import { ImageService } from '@music/types';
 
 import { axiosInstance } from './axiosInstance';
 
-export const uploadImage = async ({
-  file,
-}: ImageService.UplaodImageRequest): Promise<Model.ImageInfo> => {
+export const uploadImage = async ({ file }: ImageService.UplaodImageRequest) => {
   const formData = new FormData();
   formData.append('file', file);
 
@@ -14,13 +12,14 @@ export const uploadImage = async ({
         'Content-Type': 'multipart/form-data',
       },
     })
-    .then(() => {
-      return {
-        name: file.name,
-        url: URL.createObjectURL(file),
-        created: new Date(),
-      };
-    });
+    .then((res) => ({ ...res.data.data, url: `/api/image/${res.data.data.id}` }));
+  // .then(() => {
+  //   return {
+  //     name: file.name,
+  //     url: URL.createObjectURL(file),
+  //     created: new Date(),
+  //   };
+  // });
   // return new Promise((resolve) => {
   //   setTimeout(() => {
   //     console.log('upload image', file.name);
