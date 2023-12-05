@@ -1,6 +1,7 @@
+import { Model } from '@music/types';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useCallback } from 'react';
 import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
@@ -10,8 +11,10 @@ import { MusicListTable } from '@/components/templates/MusicListTable';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
 import { useAuthStore } from '@/store/authStore';
+import { usePlayerStore } from '@/store/playerStore';
 
 const SearchPage: React.FC = () => {
+  const { setPlaying } = usePlayerStore();
   // const { setGradation } = useBgColorStore();
   // const router = useRouter();
   const searchParams = useSearchParams();
@@ -39,6 +42,17 @@ const SearchPage: React.FC = () => {
   //   };
   // }, [setGradation]);
 
+  const handleClickMusic = useCallback(
+    (music: Model.MusicInfo) => {
+      setPlaying({
+        progress: 0,
+        paused: false,
+        musicInfo: music,
+      });
+    },
+    [setPlaying],
+  );
+
   return (
     <MusicLayout css={[tw`flex flex-col`]}>
       <div>{`"${query}"`}에 대한 검색 결과</div>
@@ -48,6 +62,7 @@ const SearchPage: React.FC = () => {
           isLoading={searchLoading || playlistLoading}
           userPlaylist={userPlaylist}
           onMusicAction={musicActionHandler}
+          onMusicClick={handleClickMusic}
         />
       </div>
       <MusicActionModalRenderer />

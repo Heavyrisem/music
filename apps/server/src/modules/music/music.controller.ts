@@ -19,6 +19,13 @@ export class MusicController {
     private readonly objectStorageService: ObjectStorageService,
   ) {}
 
+  @Get('/search')
+  // @UseGuards(LoggedInGuard)
+  async searchMusic(@Query() getSearchMusicDto: GetSearchMusicDto) {
+    const data = await this.musicService.searchMusic(getSearchMusicDto);
+    return BaseResponse.of(data);
+  }
+
   @Get('/:id')
   async getMusicData(
     @Res() response: Response,
@@ -31,12 +38,5 @@ export class MusicController {
     );
 
     return response.redirect(preAuthedUrl);
-  }
-
-  @Get('/search')
-  // @UseGuards(LoggedInGuard)
-  async searchMusic(@Query() getSearchMusicDto: GetSearchMusicDto) {
-    const data = await this.musicService.searchMusic(getSearchMusicDto);
-    return BaseResponse.of(data);
   }
 }

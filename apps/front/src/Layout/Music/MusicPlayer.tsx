@@ -4,19 +4,21 @@ import tw from 'twin.macro';
 
 import { PlayController } from '@/components/organisms/PlayController';
 import { SliderInput } from '@/components/organisms/SliderInput';
+import { useMusicData } from '@/hooks/api/useMusicData';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { usePlayerStore } from '@/store/playerStore';
 
 export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const { playing, volume, setProgress, setVolume, setPaused, setPlaying } = usePlayerStore();
+  const { data: source } = useMusicData(playing?.musicInfo.id);
 
-  useEffect(() => {
-    const { current: audio } = audioRef;
-    if (!audio || !playing) return;
+  // useEffect(() => {
+  //   const { current: audio } = audioRef;
+  //   if (!audio || !playing) return;
 
-    if (audio.src !== playing.audioData.source) audio.src = playing.audioData.source;
-  }, [playing, playing?.audioData.source]);
+  // if (audio.src !== playing.musicInfo.source) audio.src = playing.musicInfo.source;
+  // }, [playing, playing?.musicInfo.source]);
 
   useEffect(() => {
     const { current: audio } = audioRef;
@@ -58,14 +60,15 @@ export const MusicPlayer: React.FC = () => {
     audio.pause();
     setPlaying({
       paused: true,
-      audioData: {
-        id: 'asdfasdf',
+      musicInfo: {
+        id: 78,
+        youtubeId: '',
+        isExplicit: false,
         title: 'rome',
         album: '사랑.zip EP',
-        artist: '볼빨간사춘기',
-        source: 'http://localhost:3000/rome.mp3',
+        artist: ['볼빨간사춘기'],
         duration: 120 + 44,
-        thumbnailURL:
+        thumbnailUrl:
           'https://lh3.googleusercontent.com/bm0WFPaXBYSnv9g0qNffrErNV8yn_9dkRneuKEjynUUjy9giC6E6zZZ7Op4jWLGDlkHRCk5M68aWlLp9=w60-h60-l90-rj',
       },
       progress: 0,
@@ -79,6 +82,7 @@ export const MusicPlayer: React.FC = () => {
         css={[tw`invisible`]}
         autoPlay={false}
         loop={false}
+        src={source}
         onTimeUpdateCapture={handleChangeTime}
         onEnded={handlePlayEnd}
       />
@@ -95,18 +99,18 @@ export const MusicPlayer: React.FC = () => {
         )}
         {playing && (
           <div css={[tw`w-full h-full flex`]}>
-            <Image src={playing.audioData.thumbnailURL} alt="" width={48} height={48} />
+            <Image src={playing.musicInfo.thumbnailUrl} alt="" width={48} height={48} />
             <div css={[tw`flex flex-col flex-1 items-center justify-between pt-1`, tw`text-xs`]}>
-              <div>{playing.audioData.title}</div>
+              <div>{playing.musicInfo.title}</div>
               <div>
-                {playing.audioData.artist} - {playing.audioData.album}
+                {playing.musicInfo.artist} - {playing.musicInfo.album}
               </div>
               <SliderInput
                 css={[tw`mb-0`]}
                 value={playing.progress}
                 onChange={handlePlayerProgressChange}
                 min={0}
-                max={playing.audioData.duration}
+                max={playing.musicInfo.duration}
                 debounceDelayMils={10}
               />
             </div>

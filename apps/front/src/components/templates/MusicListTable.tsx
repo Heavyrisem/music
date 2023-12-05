@@ -14,6 +14,7 @@ interface MusicListTableProps {
   userPlaylist?: Model.PlaylistInfo[];
   isLoading?: boolean;
   onMusicAction?: (musicInfo: Model.MusicInfo, action: MusicAction) => void;
+  onMusicClick?: (musicInfo: Model.MusicInfo) => void;
 }
 
 export const MusicListTable: React.FC<MusicListTableProps> = ({
@@ -21,6 +22,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
   isLoading,
   userPlaylist,
   onMusicAction,
+  onMusicClick,
 }) => {
   return (
     <>
@@ -37,7 +39,13 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
             {(rowData) => {
               const data = rowData as Model.MusicInfo;
               return (
-                <div css={[tw`flex justify-center items-center gap-2`]}>
+                <div
+                  css={[tw`flex justify-center items-center gap-2`]}
+                  onClick={() => {
+                    console.log(data);
+                    onMusicClick?.(data);
+                  }}
+                >
                   <Image
                     src={data.thumbnailUrl}
                     width={42}
