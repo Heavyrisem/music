@@ -1,10 +1,12 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import * as ytMusic from '@heavyrisem/ytmusic';
 import { Model } from '@music/types';
 import { Repository } from 'typeorm';
+import ytdl from 'ytdl-core';
 
+import { ObjectStorageService } from '../object-storage/object-storage.service';
 import { GetSearchMusicDto } from './dto/GetSearchMusic.dto';
 import { MusicMeta } from './entity/musicMeta.entity';
 
@@ -12,6 +14,7 @@ import { MusicMeta } from './entity/musicMeta.entity';
 export class MusicService {
   constructor(
     @InjectRepository(MusicMeta) private readonly musicMetaRepository: Repository<MusicMeta>,
+    private readonly objectStorageService: ObjectStorageService,
   ) {}
 
   async searchMusic(getSearchMusicDto: GetSearchMusicDto): Promise<Model.MusicInfo[]> {
@@ -64,5 +67,33 @@ export class MusicService {
 
   async findMusicById(id: Model.MusicInfo['id']) {
     return this.musicMetaRepository.findOneBy({ id });
+  }
+
+  async getMusicObjectMeta(id: Model.MusicInfo['id']) {
+    const existMeta = await this.findMusicById(id);
+    if (!existMeta) throw new NotFoundException('음악을 찾을 수 없습니다.');
+
+    const existObjectMeta = await this.objectStorageService.findObjectMetaByName(
+      existMeta.youtubeId,
+    );
+    if (existObjectMeta) return existObjectMeta;
+
+    const data = await this.getMusicData(existMeta.youtubeId);
+    const savedObjectMeta = await this.objectStorageService.save(
+      data.stream,
+      existMeta.youtubeId,
+      'mp3',
+      false,
+    );
+    return savedObjectMeta;
+  }
+
+  private async getMusicData(youtubeId: Model.MusicInfo['youtubeId']) {
+    const videoInfo = await ytdl.getInfo(youtubeId);
+    const format = ytdl.chooseFormat(videoInfo.formats, { filter: 'audioonly' });
+
+    const size = format.contentLength;
+    const stream = ytdl(youtubeId, { format });
+    return { stream, size };
   }
 }

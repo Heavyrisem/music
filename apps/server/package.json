@@ -42,7 +42,8 @@
     "passport-oauth2": "^1.7.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

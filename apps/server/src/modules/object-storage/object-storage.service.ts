@@ -40,6 +40,10 @@ export class ObjectStorageService {
     return this.objectMetaRepository.findOneBy({ id });
   }
 
+  async findObjectMetaByName(name: string) {
+    return this.objectMetaRepository.findOneBy({ name });
+  }
+
   async save(dataStream: Readable, name: string, type: string, isPublic = false) {
     const bucketName = this.configService.getOrThrow(
       isPublic ? 'OCI_STORAGE_PUBLIC_BUCKET' : 'OCI_STORAGE_PRIVATE_BUCKET',
@@ -55,7 +59,7 @@ export class ObjectStorageService {
     const putObjectResponse = await this.oracleObjectStorageClient.putObject(putObjectRequest);
     this.logger.debug('put finish', putObjectResponse);
 
-    const existObject = await this.objectMetaRepository.findOneBy({ name });
+    const existObject = await this.findObjectMetaByName(name);
     if (existObject) {
       const mergedObjcet = this.objectMetaRepository.merge(existObject, {
         name,
@@ -70,7 +74,7 @@ export class ObjectStorageService {
   }
 
   async getObjectUrl(name: string, expiresInSec = 60) {
-    const objectMeta = await this.objectMetaRepository.findOneBy({ name });
+    const objectMeta = await this.findObjectMetaByName(name);
     if (!objectMeta) throw new NotFoundException('object를 찾을 수 없습니다.');
 
     const bucketName = this.configService.getOrThrow(

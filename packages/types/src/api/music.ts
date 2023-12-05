@@ -7,4 +7,7 @@ export namespace MusicService {
   }
   export interface GetSearchMusicResponse
     extends IBaseResponse<Model.MusicInfo[]> {}
+
+  export interface GetMusicDataRequest extends Pick<Model.MusicInfo, "id"> {}
+  export interface GetMusicDataResponse extends IBaseResponse<{}> {}
 }
