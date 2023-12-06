@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine AS base
 WORKDIR /app
 RUN npm i -g turbo
 COPY . .
@@ -13,7 +13,7 @@ RUN npm i -g pnpm
 COPY --from=base /app/out/json/ .
 COPY --from=base /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=base /app/turbo.json ./turbo.json
-COPY --from=builder /app/.npmrc.build ./.npmrc
+COPY --from=base /app/.npmrc.build ./.npmrc
 RUN pnpm install --frozen-lockfile
 
 
