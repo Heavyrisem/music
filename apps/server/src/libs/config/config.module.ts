@@ -23,17 +23,23 @@ import path from 'path';
         JWT_SECRET: Joi.string().required(),
         GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
         GOOGLE_OAUTH_CLIENT_SECRET: Joi.string().required(),
-        YOUTUBE_API_KEY: Joi.string().required(),
+        // YOUTUBE_API_KEY: Joi.string().required(),
         // YOUTUBE_MUSIC_AUTHORIZATION: Joi.string().required(),
         // YOUTUBE_MUSIC_COOKIE: Joi.string().required(),
-        YOUTUBE_TEMP_DIR: Joi.string().default(path.resolve('./temp')),
+        // YOUTUBE_TEMP_DIR: Joi.string().default(path.resolve('./temp')),
         OCI_STORAGE_NAMESPACE: Joi.string().required(),
         OCI_STORAGE_PUBLIC_BUCKET: Joi.string().required(),
         OCI_STORAGE_PRIVATE_BUCKET: Joi.string().required(),
         OCI_TENANCY: Joi.string().required(),
         OCI_USER: Joi.string().required(),
         OCI_FINGERPRINT: Joi.string().required(),
-        OCI_PRIVATEKEY: Joi.string().required(),
+        OCI_PRIVATEKEY: Joi.string()
+          .required()
+          .custom((value) => {
+            const t = (value as string).replace(/\\n/g, '\n');
+            console.log('DEBUG::', t);
+            return t;
+          }),
         OCI_REGION: Joi.string()
           .required()
           .custom((value, helpers) => {
