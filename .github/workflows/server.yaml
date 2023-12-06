@@ -4,7 +4,7 @@ on:
     branches: [master, develop]
 
 env:
-  DOCKER_IMAGE: ghcr.io/heavyrisem/music2-server # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름
+  DOCKER_IMAGE: ghcr.io/heavyrisem/music2-server # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름 test
 
 jobs:
   node-build-test:
