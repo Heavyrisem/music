@@ -64,7 +64,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   );
 
   return (
-    <div css={[tw`flex flex-col gap-2`, tw`w-full h-full`]}>
+    <div css={[tw`flex flex-col gap-2`, tw`w-full h-full p-4`]}>
       <Card css={[tw`flex justify-between items-center`, tw`px-6 py-2`]}>
         <div
           css={[tw`flex gap-1 items-center justify-start`, tw`cursor-pointer`]}

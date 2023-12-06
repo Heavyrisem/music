@@ -98,13 +98,16 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
     [],
   );
 
-  const handleSetPaused = useCallback<PlayerContextState['setPaused']>((paused) => {
-    if (!audioRef.current) return;
+  const handleSetPaused = useCallback<PlayerContextState['setPaused']>(
+    (paused) => {
+      if (!audioRef.current) return;
 
-    if (paused) audioRef.current.pause();
-    else audioRef.current.play();
-    setPaused(paused);
-  }, []);
+      if (paused) audioRef.current.pause();
+      else if (musicInfo) audioRef.current.play();
+      setPaused(paused);
+    },
+    [musicInfo],
+  );
 
   const handleSetVolume = useCallback<PlayerContextState['setVolume']>(
     (volume) => {
@@ -136,6 +139,11 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
 
     setProgress(audioRef.current.currentTime);
   }, []);
+
+  const handleMusicEnd = useCallback(() => {
+    handleSetMusic(null);
+    handleSetPaused(true);
+  }, [handleSetMusic, handleSetPaused]);
 
   useEffectOnce(() => {
     const playerSetting = getSetting();
@@ -175,6 +183,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
         autoPlay={false}
         loop={false}
         onTimeUpdate={handleUpdateAudioTime}
+        onEnded={handleMusicEnd}
       />
     </PlayerContext.Provider>
   );
