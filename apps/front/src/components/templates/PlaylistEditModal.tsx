@@ -53,7 +53,7 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
         <div css={[tw`flex gap-4`]}>
           <Image
             editable
-            src={playlistDetail.coverImageUrl}
+            src={playlistDetail.thumbnail}
             width={200}
             height={200}
             alt=""
