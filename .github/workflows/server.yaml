@@ -46,20 +46,17 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lock
 
-      - name: Display Directores
-        run: ls -R
-
       - name: Build Node.js
         run: pnpm build --filter server
 
       - name: Check dist hash
-        run: echo ${{ hashFiles('dist/**/*') }}
+        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./dist
+          path: ./apps/server/dist
 
   docker-build-test:
     name: Docker Build Test
@@ -75,14 +72,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./dist
+          path: ./apps/server/dist
 
       - name: Check dist hash
-        run: echo ${{ hashFiles('dist/**/*') }}
+        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./dist
+        working-directory: ./apps/server/dist
 
       # tonistiigi/binfmt 이미지를 이용해 qemu 설치
       - name: Set up QEMU
