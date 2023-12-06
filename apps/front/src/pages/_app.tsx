@@ -6,6 +6,7 @@ import tw from 'twin.macro';
 
 import { DefaultLayout } from '@/Layout/DefaultLayout';
 import { DynamicGradient } from '@/components/atoms/DynamicGradient';
+import { PlayerContextProvider } from '@/context/PlayerContext';
 import { useAuthStore } from '@/store/authStore';
 import { useBgColorStore } from '@/store/bgColorStore';
 import { useTheme } from '@/store/themeStore';
@@ -58,7 +59,9 @@ const AppProvider: React.FC<AppProps> = (props) => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <App {...props} />
+        <PlayerContextProvider>
+          <App {...props} />
+        </PlayerContextProvider>
       </QueryClientProvider>
     </>
   );

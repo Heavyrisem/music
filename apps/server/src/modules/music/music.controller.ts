@@ -1,6 +1,5 @@
 import { Controller, Get, Logger, Param, Query, Res, UseGuards } from '@nestjs/common';
 
-import { Model } from '@music/types';
 import { Response } from 'express';
 import { BaseResponse } from 'src/libs/common/dto/response.dto';
 
@@ -20,13 +19,14 @@ export class MusicController {
   ) {}
 
   @Get('/search')
-  // @UseGuards(LoggedInGuard)
+  @UseGuards(LoggedInGuard)
   async searchMusic(@Query() getSearchMusicDto: GetSearchMusicDto) {
     const data = await this.musicService.searchMusic(getSearchMusicDto);
     return BaseResponse.of(data);
   }
 
   @Get('/:id')
+  @UseGuards(LoggedInGuard)
   async getMusicData(
     @Res() response: Response,
     @Param() getMusicDataParamDto: GetMusicDataParamDto,

@@ -8,13 +8,15 @@ import { MusicLayout } from '@/Layout/Music';
 import { getSearchMusic } from '@/api/music';
 import { getUserPlaylist } from '@/api/playlist';
 import { MusicListTable } from '@/components/templates/MusicListTable';
+import { usePlayerContext } from '@/context/PlayerContext';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
 import { useAuthStore } from '@/store/authStore';
 import { usePlayerStore } from '@/store/playerStore';
 
 const SearchPage: React.FC = () => {
-  const { setPlaying } = usePlayerStore();
+  const { setMusic } = usePlayerContext();
+  // const { setPlaying } = usePlayerStore();
   // const { setGradation } = useBgColorStore();
   // const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,16 +44,16 @@ const SearchPage: React.FC = () => {
   //   };
   // }, [setGradation]);
 
-  const handleClickMusic = useCallback(
-    (music: Model.MusicInfo) => {
-      setPlaying({
-        progress: 0,
-        paused: false,
-        musicInfo: music,
-      });
-    },
-    [setPlaying],
-  );
+  // const handleClickMusic = useCallback(
+  //   (music: Model.MusicInfo) => {
+  //     setPlaying({
+  //       progress: 0,
+  //       paused: false,
+  //       musicInfo: music,
+  //     });
+  //   },
+  //   [setPlaying],
+  // );
 
   return (
     <MusicLayout css={[tw`flex flex-col`]}>
@@ -62,7 +64,7 @@ const SearchPage: React.FC = () => {
           isLoading={searchLoading || playlistLoading}
           userPlaylist={userPlaylist}
           onMusicAction={musicActionHandler}
-          onMusicClick={handleClickMusic}
+          onMusicClick={setMusic}
         />
       </div>
       <MusicActionModalRenderer />

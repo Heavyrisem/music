@@ -32,21 +32,7 @@ interface PlayerStore {
   removePlaylist: (index: number) => void;
 }
 export const usePlayerStore = create<PlayerStore>((set) => ({
-  playing: {
-    paused: true,
-    musicInfo: {
-      id: 78,
-      youtubeId: '',
-      isExplicit: false,
-      title: 'rome',
-      album: '사랑.zip EP',
-      artist: ['볼빨간사춘기'],
-      duration: 120 + 44,
-      thumbnailUrl:
-        'https://lh3.googleusercontent.com/bm0WFPaXBYSnv9g0qNffrErNV8yn_9dkRneuKEjynUUjy9giC6E6zZZ7Op4jWLGDlkHRCk5M68aWlLp9=w60-h60-l90-rj',
-    },
-    progress: 0,
-  },
+  playing: null,
   volume: 5,
   replay: 'none',
   playList: [],

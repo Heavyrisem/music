@@ -13,7 +13,10 @@ import { Button } from '@/components/atoms/Button';
 import { Image } from '@/components/organisms/Image';
 import { MusicListTable } from '@/components/templates/MusicListTable';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
+import { usePlayerContext } from '@/context/PlayerContext';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
+import { useMusicAction } from '@/hooks/useMusicAction';
+import { usePlayerStore } from '@/store/playerStore';
 
 const playButtonStyle = [tw`flex items-center gap-2 text-sm`];
 
@@ -21,7 +24,10 @@ const PlayListPage = () => {
   const router = useRouter();
   const playlistId = useMemo(() => Number(router.query?.id), [router.query?.id]);
 
+  const { setMusic } = usePlayerContext();
+  // const { setPlaying } = usePlayerStore();
   const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
+  const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
   const { data: playlistDetail, isLoading: playlistDetailLoading } = useQuery({
     queryKey: [getPlaylistDetail.name, playlistId],
     queryFn: () => getPlaylistDetail({ id: playlistId! }),
@@ -40,6 +46,17 @@ const PlayListPage = () => {
     await updatePlaylistDetail(editedPlaylistDetail);
     setEditModalOpen(false);
   }, []);
+
+  // const handleClickMusic = useCallback(
+  //   (music: Model.MusicInfo) => {
+  //     setPlaying({
+  //       progress: 0,
+  //       paused: false,
+  //       musicInfo: music,
+  //     });
+  //   },
+  //   [setPlaying],
+  // );
 
   return (
     <MusicLayout css={[tw`flex flex-col`]}>
@@ -86,9 +103,12 @@ const PlayListPage = () => {
               data={playlistDetail.musicList}
               isLoading={playlistLoading || playlistDetailLoading}
               userPlaylist={userPlaylist}
+              onMusicAction={musicActionHandler}
+              onMusicClick={setMusic}
             />
           </div>
 
+          <MusicActionModalRenderer />
           {editModalOpen && (
             <PlaylistEditModal
               playlistDetail={playlistDetail}
