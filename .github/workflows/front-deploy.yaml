@@ -1,10 +1,10 @@
-name: Server Deploy # Github Action 페이지 좌측 리스트에 표시될 이름
+name: Front Deploy # Github Action 페이지 좌측 리스트에 표시될 이름
 on:
   push:
-    branches: [master]
+    branches: [develop]
 
 env:
-  DOCKER_IMAGE: ghcr.io/heavyrisem/music2-server # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름 test
+  DOCKER_IMAGE: ghcr.io/heavyrisem/music2-front # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름 test
 
 jobs:
   node-build-test:
@@ -47,16 +47,16 @@ jobs:
         run: pnpm install --frozen-lock
 
       - name: Build Node.js
-        run: pnpm build --filter server
+        run: pnpm build --filter front
 
-      - name: Check dist hash
-        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
+      - name: Check .next hash
+        run: echo ${{ hashFiles('./apps/front/.next/**/*') }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./apps/server/dist
+          path: ./apps/front/.next
 
   docker-build-and-push:
     name: Docker Build and Push
@@ -72,14 +72,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./apps/server/dist
+          path: ./apps/front/.next
 
-      - name: Check dist hash
-        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
+      - name: Check .next hash
+        run: echo ${{ hashFiles('./apps/front/.next/**/*') }}
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./apps/server/dist
+        working-directory: ./apps/front/.next
 
       # tonistiigi/binfmt 이미지를 이용해 qemu 설치
       - name: Set up QEMU
@@ -102,7 +102,7 @@ jobs:
       - name: Docker Build and Push
         uses: docker/build-push-action@v3
         with:
-          file: ./apps/server/Dockerfile
+          file: ./apps/front/Dockerfile
           context: .
           push: true # ghcr에 push
           tags: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},${{ env.DOCKER_IMAGE }}:latest # 이미지 버전 [이미지 고유 아이디, latest]
