@@ -47,7 +47,7 @@ jobs:
         run: pnpm install --frozen-lock
 
       - name: Build Node.js
-        run: pnpm build
+        run: pnpm build --filter server
 
       - name: Check dist hash
         run: echo ${{ hashFiles('dist/**/*') }}
