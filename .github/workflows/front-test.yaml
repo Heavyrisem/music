@@ -102,7 +102,7 @@ jobs:
       - name: Docker Build Test
         uses: docker/build-push-action@v3
         with:
-          file: ./apps/server/Dockerfile
+          file: ./apps/front/Dockerfile
           context: .
           push: false # ghcr에 push
           tags: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},${{ env.DOCKER_IMAGE }}:latest # 이미지 버전 [이미지 고유 아이디, latest]
