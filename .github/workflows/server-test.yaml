@@ -1,7 +1,7 @@
-name: Build Test # Github Action 페이지 좌측 리스트에 표시될 이름
+name: Server Build Test # Github Action 페이지 좌측 리스트에 표시될 이름
 on:
   push:
-    branches: [master, develop]
+    branches: [develop]
 
 env:
   DOCKER_IMAGE: ghcr.io/heavyrisem/music2-server # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름 test
@@ -104,7 +104,7 @@ jobs:
         with:
           file: ./apps/server/Dockerfile
           context: .
-          push: false # ghcr에 push
+          push: true # ghcr에 push
           tags: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},${{ env.DOCKER_IMAGE }}:latest # 이미지 버전 [이미지 고유 아이디, latest]
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
