@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import ytdl from 'ytdl-core';
 
 import { ObjectStorageService } from '../object-storage/object-storage.service';
-import { GetSearchMusicDto } from './dto/GetSearchMusic.dto';
+import { GetSearchMusicDto } from './dto/getSearchMusic.dto';
 import { MusicMeta } from './entity/musicMeta.entity';
 
 @Injectable()

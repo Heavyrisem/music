@@ -5,8 +5,8 @@ import { BaseResponse } from 'src/libs/common/dto/response.dto';
 
 import { LoggedInGuard } from '../auth/guard/logged-in.guard';
 import { ObjectStorageService } from '../object-storage/object-storage.service';
-import { GetSearchMusicDto } from './dto/GetSearchMusic.dto';
 import { GetMusicDataParamDto } from './dto/getMusicData.dto';
+import { GetSearchMusicDto } from './dto/getSearchMusic.dto';
 import { MusicService } from './music.service';
 
 @Controller('/api/music')

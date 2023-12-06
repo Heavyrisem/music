@@ -2,7 +2,7 @@ FROM node:18-alpine AS base
 WORKDIR /app
 RUN npm i -g turbo
 COPY . .
-RUN turbo prune --scope=server --docker
+RUN turbo prune --scope=front --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:18-alpine AS installer
@@ -21,12 +21,12 @@ FROM node:18-alpine AS sourcer
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=base /app/out/full/ .
-COPY ./apps/server/dist ./apps/server/dist
+COPY ./apps/front/.next ./apps/front/.next
 
 FROM node:18-alpine as runner
 WORKDIR /app
 RUN corepack enable
 COPY --from=sourcer /app/ .
 
-WORKDIR /app/apps/server
+WORKDIR /app/apps/front
 CMD ["pnpm", "start"]

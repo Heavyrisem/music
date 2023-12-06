@@ -1,7 +1,7 @@
-name: Build Test # Github Action 페이지 좌측 리스트에 표시될 이름
+name: Server Build Test # Github Action 페이지 좌측 리스트에 표시될 이름
 on:
   push:
-    branches: [master, develop]
+    branches: [develop]
 
 env:
   DOCKER_IMAGE: ghcr.io/heavyrisem/music2-server # ghcr에 업로드될 이미지 이름, format: ghcr.io/깃허브유저이름/이미지이름 test
@@ -50,13 +50,13 @@ jobs:
         run: pnpm build --filter server
 
       - name: Check dist hash
-        run: echo ${{ hashFiles('dist/**/*') }}
+        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./dist
+          path: ./apps/server/dist
 
   docker-build-test:
     name: Docker Build Test
@@ -72,14 +72,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-build-artifact-${{ github.ref_name }}
-          path: ./dist
+          path: ./apps/server/dist
 
       - name: Check dist hash
-        run: echo ${{ hashFiles('dist/**/*') }}
+        run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./dist
+        working-directory: ./apps/server/dist
 
       # tonistiigi/binfmt 이미지를 이용해 qemu 설치
       - name: Set up QEMU
