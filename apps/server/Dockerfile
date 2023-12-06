@@ -22,9 +22,7 @@ WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=base /app/out/full/ .
 COPY ./apps/server/dist ./apps/server/dist
-
 RUN pnpm build --filter types
-COPY ./packages/types/dist ./packages/types/dist
 
 FROM node:18-alpine as runner
 WORKDIR /app
