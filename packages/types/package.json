@@ -1,0 +1,15 @@
+{
+  "name": "@music/types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./index.ts",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
