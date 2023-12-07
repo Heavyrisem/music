@@ -9,7 +9,7 @@ FROM node:18-alpine AS installer
 ARG NPM_TOKEN
 
 WORKDIR /app
-RUN npm i -g pnpm
+RUN corepack enable
 COPY --from=base /app/out/json/ .
 COPY --from=base /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=base /app/turbo.json ./turbo.json
@@ -19,9 +19,11 @@ RUN pnpm install --frozen-lockfile
 
 FROM node:18-alpine AS sourcer
 WORKDIR /app
+RUN corepack enable
 COPY --from=installer /app/ .
 COPY --from=base /app/out/full/ .
 COPY ./apps/front/.next ./apps/front/.next
+RUN pnpm build --filter types
 
 FROM node:18-alpine as runner
 WORKDIR /app
