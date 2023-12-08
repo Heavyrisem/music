@@ -64,7 +64,8 @@ const SearchPage: React.FC = () => {
           isLoading={searchLoading || playlistLoading}
           userPlaylist={userPlaylist}
           onMusicAction={musicActionHandler}
-          onMusicClick={setMusic}
+          onMusicPlayClick={setMusic}
+          onDoubleClickRow={setMusic}
         />
       </div>
       <MusicActionModalRenderer />
