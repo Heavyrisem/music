@@ -8,15 +8,15 @@ import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
 import { uploadImage } from '@/api/image';
-import { getPlaylistDetail, updatePlaylistDetail } from '@/api/playlist';
+import { getPlaylistDetail } from '@/api/playlist';
 import { Button } from '@/components/atoms/Button';
-import { Image } from '@/components/organisms/Image';
+import { Image } from '@/components/atoms/Image';
 import { MusicListTable } from '@/components/templates/MusicListTable';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
+import { useUpdatePlaylistMutation } from '@/hooks/api/useUpdatePlaylistMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
-import { usePlayerStore } from '@/store/playerStore';
 
 const playButtonStyle = [tw`flex items-center gap-2 text-sm`];
 
@@ -25,9 +25,14 @@ const PlayListPage = () => {
   const playlistId = useMemo(() => Number(router.query?.id), [router.query?.id]);
 
   const { setMusic } = usePlayerContext();
-  // const { setPlaying } = usePlayerStore();
+
   const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
   const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
+
+  const { mutate: updatePlaylisltMutation } = useUpdatePlaylistMutation({
+    onSuccess: () => setEditModalOpen(false),
+  });
+
   const { data: playlistDetail, isLoading: playlistDetailLoading } = useQuery({
     queryKey: [getPlaylistDetail.name, playlistId],
     queryFn: () => getPlaylistDetail({ id: playlistId! }),
@@ -36,27 +41,18 @@ const PlayListPage = () => {
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const handleSubmitEdit = useCallback(async (editData: Model.PlaylistInfo, image?: File) => {
-    const editedPlaylistDetail = { ...editData };
-    if (image) {
-      const thumbnail = await uploadImage({ file: image });
-      editedPlaylistDetail.thumbnail = thumbnail.url;
-    }
+  const handleSubmitEdit = useCallback(
+    async (editData: Model.PlaylistInfo, image?: File) => {
+      const editedPlaylistDetail = { ...editData };
+      if (image) {
+        const thumbnail = await uploadImage({ file: image });
+        editedPlaylistDetail.thumbnail = thumbnail.url;
+      }
 
-    await updatePlaylistDetail(editedPlaylistDetail);
-    setEditModalOpen(false);
-  }, []);
-
-  // const handleClickMusic = useCallback(
-  //   (music: Model.MusicInfo) => {
-  //     setPlaying({
-  //       progress: 0,
-  //       paused: false,
-  //       musicInfo: music,
-  //     });
-  //   },
-  //   [setPlaying],
-  // );
+      updatePlaylisltMutation(editedPlaylistDetail);
+    },
+    [updatePlaylisltMutation],
+  );
 
   return (
     <MusicLayout css={[tw`flex flex-col`]}>
@@ -104,7 +100,8 @@ const PlayListPage = () => {
               isLoading={playlistLoading || playlistDetailLoading}
               userPlaylist={userPlaylist}
               onMusicAction={musicActionHandler}
-              onMusicClick={setMusic}
+              onMusicPlayClick={setMusic}
+              onDoubleClickRow={setMusic}
             />
           </div>
 
