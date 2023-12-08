@@ -29,7 +29,7 @@ export class LoggedInGuard implements CanActivate {
     const isValid = await this.authService.verifyToken(accessToken);
     if (!isValid) throw new UnauthorizedException('TokenExpired');
 
-    this.logger.debug(request[REQUEST_USER]);
+    this.logger.debug(request[REQUEST_USER].displayName);
 
     if (!request[REQUEST_USER]) throw new UnauthorizedException('Not Logged In');
     return true;
