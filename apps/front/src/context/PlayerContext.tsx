@@ -89,10 +89,10 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
         if (!audioRef.current) return;
 
         audioRef.current.src = src;
-        if (autoPlay) audioRef.current.play();
-        //   if (autoPlay) {
-        //       audioRef.current.addEventListener('onloa')
-        //   }
+        if (autoPlay) {
+          setPaused(false);
+          audioRef.current.play();
+        }
       });
     },
     [],
