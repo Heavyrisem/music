@@ -2,6 +2,14 @@ name: Front Build Test # Github Action 페이지 좌측 리스트에 표시될 �
 on:
   push:
     branches: [develop]
+    paths:
+      - apps/front/**
+      - packages/**
+      - .github/workflows/**
+      - package.json
+      - pnpm-lock.yaml
+      - turbo.json
+      - tsconfig.json
   pull_request:
     branches:
       - "*"
