@@ -38,7 +38,6 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
       doubleClickTimer.current = now;
 
       if (diff < 300) {
-        console.log('double click');
         onDoubleClickRow?.(rowData);
       } else {
         onRowClick?.(rowData);
