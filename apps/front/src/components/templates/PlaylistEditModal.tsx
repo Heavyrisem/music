@@ -6,7 +6,7 @@ import tw from 'twin.macro';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Textarea } from '../atoms/Textarea';
-import { Image } from '../organisms/Image';
+import { EditableImage } from '../organisms/EditableImage';
 import { Modal } from '../organisms/Modal';
 import { ModalRootProps } from '../organisms/Modal/components/Modal';
 
@@ -51,14 +51,14 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
           </Modal.CloseButton>
         </div>
         <div css={[tw`flex gap-4`]}>
-          <Image
-            editable
+          <EditableImage
             src={playlistDetail.thumbnail}
             width={200}
             height={200}
             alt=""
             css={[tw`rounded-md w-48 h-48`]}
             onImageChange={setCoverImage}
+            unoptimized
           />
           <div css={[tw`flex-1 flex flex-col justify-between gap-4`]}>
             <Input defaultValue={playlistDetail.name} onChange={handleInputName} css={[tw`py-1`]} />

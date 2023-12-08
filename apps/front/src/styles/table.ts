@@ -48,7 +48,7 @@ export const tableBgStyle = [
         ${tw`bg-transparent`}
       }
 
-      .rs-table-row:nth-child(odd) {
+      .rs-table-row:nth-of-type(odd) {
         ${tw`bg-gray-100 bg-opacity-5`}
       }
     }

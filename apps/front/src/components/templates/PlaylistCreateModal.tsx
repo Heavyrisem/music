@@ -6,7 +6,7 @@ import tw from 'twin.macro';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Textarea } from '../atoms/Textarea';
-import { Image } from '../organisms/Image';
+import { EditableImage } from '../organisms/EditableImage';
 import { Modal } from '../organisms/Modal';
 import { ModalRootProps } from '../organisms/Modal/components/Modal';
 
@@ -51,8 +51,7 @@ export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubm
           </Modal.CloseButton>
         </div>
         <div css={[tw`flex gap-4`]}>
-          <Image
-            editable
+          <EditableImage
             src={coverImage && URL.createObjectURL(coverImage)}
             width={200}
             height={200}

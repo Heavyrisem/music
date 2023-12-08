@@ -1,12 +1,13 @@
+import { PlayIcon } from '@heroicons/react/24/solid';
 import { Model } from '@music/types';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
 
-import { Image } from '../organisms/Image';
+import { Image } from '../atoms/Image';
 import { MusicAction } from './MusicAction';
 
 interface MusicListTableProps {
@@ -14,7 +15,9 @@ interface MusicListTableProps {
   userPlaylist?: Model.PlaylistInfo[];
   isLoading?: boolean;
   onMusicAction?: (musicInfo: Model.MusicInfo, action: MusicAction) => void;
-  onMusicClick?: (musicInfo: Model.MusicInfo) => void;
+  onMusicPlayClick?: (musicInfo: Model.MusicInfo) => void;
+  onRowClick?: (musicInfo: Model.MusicInfo) => void;
+  onDoubleClickRow?: (musicInfo: Model.MusicInfo) => void;
 }
 
 export const MusicListTable: React.FC<MusicListTableProps> = ({
@@ -22,8 +25,27 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
   isLoading,
   userPlaylist,
   onMusicAction,
-  onMusicClick,
+  onMusicPlayClick,
+  onRowClick,
+  onDoubleClickRow,
 }) => {
+  const doubleClickTimer = useRef<Date>(new Date());
+
+  const handleRowClick = useCallback(
+    (rowData: Model.MusicInfo) => {
+      const now = new Date();
+      const diff = now.getTime() - doubleClickTimer.current.getTime();
+      doubleClickTimer.current = now;
+
+      if (diff < 300) {
+        onDoubleClickRow?.(rowData);
+      } else {
+        onRowClick?.(rowData);
+      }
+    },
+    [onRowClick, onDoubleClickRow],
+  );
+
   return (
     <>
       <Table
@@ -31,6 +53,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
         css={[tableDefaultStyle, tableBgStyle, tw`text-sm`]}
         rowHeight={60}
         loading={isLoading}
+        onRowClick={handleRowClick}
         fillHeight
       >
         <Column flexGrow={0.4}>
@@ -42,8 +65,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
                 <div
                   css={[tw`flex justify-center items-center gap-2`]}
                   onClick={() => {
-                    console.log(data);
-                    onMusicClick?.(data);
+                    onMusicPlayClick?.(data);
                   }}
                 >
                   <Image
@@ -52,6 +74,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
                     height={42}
                     alt=""
                     css={[tw`rounded-md`]}
+                    hoverIcon={<PlayIcon css={[tw`h-6 w-6`]} />}
                   />
                   <div>{data.title}</div>
                 </div>
