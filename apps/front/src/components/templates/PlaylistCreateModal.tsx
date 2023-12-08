@@ -52,7 +52,6 @@ export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubm
         </div>
         <div css={[tw`flex gap-4`]}>
           <EditableImage
-            editable
             src={coverImage && URL.createObjectURL(coverImage)}
             width={200}
             height={200}
