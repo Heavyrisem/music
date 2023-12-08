@@ -1,6 +1,4 @@
-import { PresenceInfo, RP } from 'discord-rich-presence';
-
-const discordRichPresence = require('discord-rich-presence');
+import discordRichPresence, { PresenceInfo, RP } from 'discord-rich-presence';
 
 /**
  * Initializes a Discord Rich Presence client.

@@ -1,9 +1,11 @@
 import { Model } from '@music/types';
+import { RP } from 'discord-rich-presence';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 import { getMusicData } from '@/api/music';
 import useEffectOnce from '@/hooks/useEffectOnce';
+import { initializeDiscordRPC } from '@/utils/rpc';
 
 const SETTING_KEY = 'PLAYER_SETTING';
 export interface PlayerContextState {
@@ -46,6 +48,10 @@ interface PlayerSetting {
 
 export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // FIXME: Replace template to your actual client id.
+  const CLINET_ID: string = 'YOUR_CLIENT_ID';
+  const discordRPC: RP = initializeDiscordRPC(CLINET_ID);
 
   const [musicInfo, setMusicInfo] = useState<PlayerContextState['musicInfo']>(null);
   const [paused, setPaused] = useState(false);
