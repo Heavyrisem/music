@@ -56,7 +56,12 @@ export class PlaylistController {
   async updatePlaylist(
     @Param() updatePlaylistParamDto: UpdatePlaylistParamDto,
     @Body() updatePlaylistBodyDto: UpdatePlaylistBodyDto,
+    @GetUser() user: User,
   ) {
+    const existPlaylist = await this.playlistService.findPlaylistById(updatePlaylistParamDto.id);
+    if (existPlaylist.author.id !== user.id)
+      throw new ForbiddenException('플레이리스트 수정 권한이 없습니다.');
+
     const data = await this.playlistService.updatePlaylist({
       ...updatePlaylistParamDto,
       ...updatePlaylistBodyDto,
