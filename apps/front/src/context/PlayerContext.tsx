@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 import { getMusicData } from '@/api/music';
+import { savePlayHistory } from '@/api/playHistory';
 import useEffectOnce from '@/hooks/useEffectOnce';
 
 const SETTING_KEY = 'PLAYER_SETTING';
@@ -89,6 +90,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
         if (!audioRef.current) return;
 
         audioRef.current.src = src;
+        savePlayHistory({ id: musicInfo.id }).catch();
         if (autoPlay) {
           setPaused(false);
           audioRef.current.play();

@@ -4,7 +4,7 @@ import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
 import { Button } from '@/components/atoms/Button';
-import { Modal } from '@/components/organisms/Modal';
+import { Modal } from '@/components/molecules/Modal';
 
 const HomePage: React.FC = () => {
   const [open, setOpen] = useState(false);
