@@ -17,6 +17,7 @@ import { usePlayerContext } from '@/context/PlayerContext';
 import { useUpdatePlaylistMutation } from '@/hooks/api/useUpdatePlaylistMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
+import { useAuthStore } from '@/store/authStore';
 
 const playButtonStyle = [tw`flex items-center gap-2 text-sm`];
 
@@ -26,6 +27,7 @@ const PlayListPage = () => {
 
   const { setMusic } = usePlayerContext();
 
+  const { user } = useAuthStore();
   const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
   const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
 
@@ -88,9 +90,11 @@ const PlayListPage = () => {
                     셔플 재생
                   </Button>
                 </div>
-                <Button css={[playButtonStyle]} onClick={() => setEditModalOpen(true)} bgStyle>
-                  수정
-                </Button>
+                {playlistDetail.author.id === user?.id && (
+                  <Button css={[playButtonStyle]} onClick={() => setEditModalOpen(true)} bgStyle>
+                    수정
+                  </Button>
+                )}
               </div>
             </div>
           </div>
