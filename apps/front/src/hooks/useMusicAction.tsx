@@ -2,7 +2,7 @@ import { Model } from '@music/types';
 import React, { useCallback, useState } from 'react';
 
 import { uploadImage } from '@/api/image';
-import { MusicAction } from '@/components/templates/MusicAction';
+import { MusicAction } from '@/components/organisms/ActionMenu/MusicActionMenu';
 import {
   CreatePlaylistType,
   PlaylistCreateModal,

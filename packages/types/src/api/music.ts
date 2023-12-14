@@ -10,4 +10,10 @@ export namespace MusicService {
 
   export interface GetMusicDataRequest extends Pick<Model.MusicInfo, "id"> {}
   export interface GetMusicDataResponse extends IBaseResponse<{}> {}
+
+  export interface GetTopPlayedMusicRequest {
+    maxCount?: number;
+  }
+  export interface GetTopPlayedMusicResponse
+    extends IBaseResponse<Model.MusicInfo[]> {}
 }

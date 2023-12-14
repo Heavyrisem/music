@@ -3,8 +3,8 @@ import React from 'react';
 import tw from 'twin.macro';
 
 import { Button } from '../atoms/Button';
-import { Modal } from '../organisms/Modal';
-import { ModalRootProps } from '../organisms/Modal/components/Modal';
+import { Modal } from '../molecules/Modal';
+import { ModalRootProps } from '../molecules/Modal/components/Modal';
 
 export type LoginType = 'google';
 

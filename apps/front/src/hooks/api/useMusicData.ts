@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { getMusicData } from '@/api/music';
 import { usePlayerStore } from '@/store/playerStore';
 
-interface UseMusicDataArgs {}
+interface UseMusicData {}
 
 export const useMusicData = (id?: number): UseQueryResult<string, Error> => {
   return useQuery({
