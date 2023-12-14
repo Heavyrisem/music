@@ -8,7 +8,7 @@ import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
 
 import { Image } from '../atoms/Image';
-import { MusicAction } from './MusicAction';
+import { MusicAction, MusicActionMenu } from '../organisms/ActionMenu/MusicActionMenu';
 
 interface MusicListTableProps {
   data?: Model.MusicInfo[];
@@ -103,7 +103,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
               return (
                 <div css={[tw`flex gap-1 items-center`]}>
                   <div>{formatSecondsToTime(data.duration)}</div>
-                  <MusicAction
+                  <MusicActionMenu
                     playlist={userPlaylist}
                     onClick={(action) => onMusicAction?.(data, action)}
                   />

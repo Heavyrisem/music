@@ -1,23 +1,43 @@
+import { PlayIcon } from '@heroicons/react/24/solid';
+import React from 'react';
 import tw from 'twin.macro';
 
-import { Image } from '@/components/atoms/Image';
+import { Image, ImageProps } from '@/components/atoms/Image';
 
-interface PlayCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  imageUrl: string;
+interface PlayCardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    Pick<ImageProps, 'unoptimized'> {
+  imageUrl?: string | null;
   title: string;
   description: string;
+  actionButton?: React.ReactNode;
 }
 
-export const PlayCard: React.FC<PlayCardProps> = ({ imageUrl, title, description, ...rest }) => {
+export const PlayCard: React.FC<PlayCardProps> = ({
+  imageUrl,
+  title,
+  description,
+  unoptimized,
+  actionButton,
+  ...rest
+}) => {
   return (
-    <div css={[]} {...rest}>
-      <Image src={imageUrl} width={100} height={100} alt="" css={[tw`w-48 h-48`]} />
+    <div css={[tw`flex flex-col gap-2`]} {...rest}>
+      <Image
+        src={imageUrl}
+        width={200}
+        height={200}
+        alt=""
+        css={[tw`w-60 h-60`]}
+        unoptimized={unoptimized}
+        hoverIcon={<PlayIcon css={[tw`h-16 w-16`]} />}
+      />
       <div css={[tw`flex justify-between`]}>
-        <div>
+        <div css={[tw`text-xs`]}>
           <div>{title}</div>
-          <div>{description}</div>
+          <div css={[tw`text-gray-200 text-opacity-30`]}>{description}</div>
         </div>
-        <div>BTN</div>
+        <div>{actionButton}</div>
       </div>
     </div>
   );

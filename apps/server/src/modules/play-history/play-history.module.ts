@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
@@ -9,8 +9,14 @@ import { PlayHistoryController } from './play-history.controller';
 import { PlayHistoryService } from './play-history.service';
 
 @Module({
-  imports: [AuthModule, UserModule, MusicModule, TypeOrmModule.forFeature([PlayHistory])],
+  imports: [
+    AuthModule,
+    UserModule,
+    forwardRef(() => MusicModule),
+    TypeOrmModule.forFeature([PlayHistory]),
+  ],
   providers: [PlayHistoryService],
+  exports: [PlayHistoryService],
   controllers: [PlayHistoryController],
 })
 export class PlayHistoryModule {}

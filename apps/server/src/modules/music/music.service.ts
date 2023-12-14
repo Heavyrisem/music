@@ -7,8 +7,6 @@ import { Repository } from 'typeorm';
 import ytdl from 'ytdl-core';
 
 import { ObjectStorageService } from '../object-storage/object-storage.service';
-import { PlayHistory } from '../play-history/entity/playHistory.entity';
-import { UserService } from '../user/user.service';
 import { GetSearchMusicDto } from './dto/getSearchMusic.dto';
 import { MusicMeta } from './entity/musicMeta.entity';
 
@@ -16,9 +14,7 @@ import { MusicMeta } from './entity/musicMeta.entity';
 export class MusicService {
   constructor(
     @InjectRepository(MusicMeta) private readonly musicMetaRepository: Repository<MusicMeta>,
-    @InjectRepository(PlayHistory) private readonly playHistoryRepository: Repository<PlayHistory>,
     private readonly objectStorageService: ObjectStorageService,
-    private readonly userService: UserService,
   ) {}
 
   async searchMusic(getSearchMusicDto: GetSearchMusicDto): Promise<Model.MusicInfo[]> {

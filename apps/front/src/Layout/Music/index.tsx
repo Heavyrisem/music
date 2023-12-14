@@ -136,7 +136,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             </div>
           )}
         </Sidebar>
-        <div css={[tw`px-4 flex-1 overflow-hidden`]} {...rest}>
+        <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
           {children}
         </div>
       </Card>
