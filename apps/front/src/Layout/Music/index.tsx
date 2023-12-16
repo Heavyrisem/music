@@ -5,6 +5,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 
 import { getUserPlaylist } from '@/api/playlist';
+import { Image } from '@/components/atoms/Image';
+import { UserAction, UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
 import { UserPreferenceEditModal } from '@/components/templates/UserPreferenceEditModal';
 import { useEditUserPreferenceMutation } from '@/hooks/api/useEditUserPreferenceMutation';
@@ -63,6 +65,10 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
     [router],
   );
 
+  const handleUserAction = useCallback((action: UserAction) => {
+    if (action.type === 'editUserPreference') setModalType('userPreference');
+  }, []);
+
   return (
     <div css={[tw`flex flex-col gap-2`, tw`w-full h-full p-4`]}>
       <Card css={[tw`flex justify-between items-center`, tw`px-6 py-2`]}>
@@ -81,11 +87,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             </Button>
           )}
 
-          {user !== null && (
-            <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('userPreference')}>
-              {user.displayName}
-            </Button>
-          )}
+          {user !== null && <UserActionMenu user={user} onClick={handleUserAction} />}
         </div>
       </Card>
       <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0`]}>
