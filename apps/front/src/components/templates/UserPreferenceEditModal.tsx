@@ -5,8 +5,8 @@ import tw from 'twin.macro';
 
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
-import { Modal } from '../organisms/Modal';
-import { ModalRootProps } from '../organisms/Modal/components/Modal';
+import { Modal } from '../molecules/Modal';
+import { ModalRootProps } from '../molecules/Modal/components/Modal';
 
 export interface UserPreferenceEditModalProps extends ModalRootProps {
   userPreference: Model.UserPreference;

@@ -10,30 +10,13 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import React from 'react';
-import {
-  HiBarsArrowDown,
-  HiBarsArrowUp,
-  HiListBullet,
-  HiMinus,
-  HiOutlineHeart,
-} from 'react-icons/hi2';
+import { HiBarsArrowDown, HiBarsArrowUp, HiListBullet, HiOutlineHeart } from 'react-icons/hi2';
 import tw from 'twin.macro';
 
+import { Button } from '@/components/atoms/Button';
 import { OptionIcon } from '@/icons/OptionIcon';
 
-import { Button } from '../atoms/Button';
-
-// export type ActionType =
-//   | 'removeFromPlaylist'
-//   | 'addToPlaylist'
-//   | 'createPlaylist'
-//   | 'prependQueue'
-//   | 'appendQueue'
-//   | 'like';
-
-// export type ActionBaseInfo = {
-//   type: ActionType;
-// };
+import { buttonStyle, contentStyle } from './style';
 
 type RemoveFromPlaylistAction = {
   type: 'removeFromPlaylist';
@@ -68,21 +51,13 @@ export type MusicAction =
   | AppendQueueAction
   | LikeAction;
 
-export interface MusicActionProps {
+export interface MusicActionMenuProps {
   showRemoveFromPlaylist?: boolean;
   playlist?: Model.PlaylistInfo[];
   onClick?: (action: MusicAction) => void;
 }
 
-const buttonStyle = [tw`flex gap-4 justify-between items-center text-left`, tw`rounded-sm`];
-const contentStyle = [
-  tw`bg-gray-200 bg-opacity-20 backdrop-blur`,
-  tw`rounded-md border-2 border-gray-200 border-opacity-10`,
-  tw`flex flex-col`,
-  tw`text-sm text-gray-200 text-opacity-75 text-left`,
-];
-
-export const MusicAction: React.FC<MusicActionProps> = ({
+export const MusicActionMenu: React.FC<MusicActionMenuProps> = ({
   showRemoveFromPlaylist = false,
   playlist,
   onClick,

@@ -17,7 +17,7 @@ import { createQueryParameter } from '@/utils/url';
 import { Button } from '../../components/atoms/Button';
 import { Card } from '../../components/atoms/Card';
 import { Input } from '../../components/atoms/Input';
-import { Sidebar } from '../../components/organisms/Sidebar';
+import { Sidebar } from '../../components/molecules/Sidebar';
 import { MusicPlayer } from './MusicPlayer';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -136,7 +136,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             </div>
           )}
         </Sidebar>
-        <div css={[tw`px-4 flex-1`]} {...rest}>
+        <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
           {children}
         </div>
       </Card>

@@ -5,8 +5,10 @@ import { BaseResponse } from 'src/libs/common/dto/response.dto';
 
 import { LoggedInGuard } from '../auth/guard/logged-in.guard';
 import { ObjectStorageService } from '../object-storage/object-storage.service';
+import { PlayHistoryService } from '../play-history/play-history.service';
 import { GetMusicDataParamDto } from './dto/getMusicData.dto';
 import { GetSearchMusicDto } from './dto/getSearchMusic.dto';
+import { GetTopPlayedMusicQueryDto } from './dto/getTopPlayedMusic.dto';
 import { MusicService } from './music.service';
 
 @Controller('/api/music')
@@ -16,12 +18,21 @@ export class MusicController {
   constructor(
     private readonly musicService: MusicService,
     private readonly objectStorageService: ObjectStorageService,
+    private readonly playHistoryService: PlayHistoryService,
   ) {}
 
   @Get('/search')
-  @UseGuards(LoggedInGuard)
   async searchMusic(@Query() getSearchMusicDto: GetSearchMusicDto) {
     const data = await this.musicService.searchMusic(getSearchMusicDto);
+    return BaseResponse.of(data);
+  }
+
+  @Get('/top')
+  async getTopPlayedMusic(@Query() getTopPlayedMusicQueryDto: GetTopPlayedMusicQueryDto) {
+    const data = await this.playHistoryService.findTopPlayedMusic(
+      getTopPlayedMusicQueryDto.maxCount,
+    );
+
     return BaseResponse.of(data);
   }
 
