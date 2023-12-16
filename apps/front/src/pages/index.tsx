@@ -27,60 +27,62 @@ const HomePage: React.FC = () => {
 
   return (
     <MusicLayout css={[tw`flex flex-col gap-4`]}>
-      <div css={[tw`text-2xl font-bold`, tw`text-gray-200 text-opacity-60`]}>홈</div>
-      <div>가장 많이 재생된 음악</div>
-      <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
-        {topPlayedMusic?.map((item) => (
-          <PlayCard
-            key={item.youtubeId}
-            title={`${item.title} - ${item.album}`}
-            description={item.artist.join(' ')}
-            imageUrl={item.thumbnailUrl.replaceAll('120', '256')}
-            actionButton={
-              <MusicActionMenu
-                playlist={userPlaylist}
-                onClick={(action) => musicActionHandler(item, action)}
-              />
-            }
-          />
-        ))}
-      </div>
-      {user ? (
-        <div css={[tw`flex-1 flex flex-col gap-6`]}>
-          <div>최근 재생한 음악</div>
-          <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
-            {userPlayHistory?.map((item) => (
-              <PlayCard
-                key={item.youtubeId}
-                title={`${item.title} - ${item.album}`}
-                description={item.artist.join(' ')}
-                imageUrl={item.thumbnailUrl.replaceAll('120', '256')}
-                actionButton={
-                  <MusicActionMenu
-                    playlist={userPlaylist}
-                    onClick={(action) => musicActionHandler(item, action)}
-                  />
-                }
-              />
-            ))}
-          </div>
-          <div>내 플레이리스트</div>
-          <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
-            {userPlaylist?.map((playlist) => (
-              <PlayCard
-                key={playlist.id}
-                title={`${playlist.name}`}
-                description={playlist.description}
-                imageUrl={playlist.thumbnail}
-                actionButton={<PlaylistActionMenu />}
-                unoptimized
-              />
-            ))}
-          </div>
+      <div css={[tw`flex-1 flex flex-col gap-6`]}>
+        <div css={[tw`text-2xl font-bold`, tw`text-gray-200 text-opacity-60`]}>홈</div>
+        <div>가장 많이 재생된 음악</div>
+        <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
+          {topPlayedMusic?.map((item) => (
+            <PlayCard
+              key={item.youtubeId}
+              title={`${item.title} - ${item.album}`}
+              description={item.artist.join(' ')}
+              imageUrl={item.thumbnailUrl.replaceAll('120', '256')}
+              actionButton={
+                <MusicActionMenu
+                  playlist={userPlaylist}
+                  onClick={(action) => musicActionHandler(item, action)}
+                />
+              }
+            />
+          ))}
         </div>
-      ) : (
-        <div css={[tw`w-full flex-1`, tw`flex items-center justify-center`]}></div>
-      )}
+        {user ? (
+          <>
+            <div>최근 재생한 음악</div>
+            <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
+              {userPlayHistory?.map((item) => (
+                <PlayCard
+                  key={item.youtubeId}
+                  title={`${item.title} - ${item.album}`}
+                  description={item.artist.join(' ')}
+                  imageUrl={item.thumbnailUrl.replaceAll('120', '256')}
+                  actionButton={
+                    <MusicActionMenu
+                      playlist={userPlaylist}
+                      onClick={(action) => musicActionHandler(item, action)}
+                    />
+                  }
+                />
+              ))}
+            </div>
+            <div>내 플레이리스트</div>
+            <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
+              {userPlaylist?.map((playlist) => (
+                <PlayCard
+                  key={playlist.id}
+                  title={`${playlist.name}`}
+                  description={playlist.description}
+                  imageUrl={playlist.thumbnail}
+                  actionButton={<PlaylistActionMenu />}
+                  unoptimized
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div css={[tw`w-full flex-1`, tw`flex items-center justify-center`]}></div>
+        )}
+      </div>
       <MusicActionModalRenderer />
     </MusicLayout>
   );
