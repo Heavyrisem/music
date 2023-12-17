@@ -6,9 +6,12 @@ import tw from 'twin.macro';
 
 import { getUserPlaylist } from '@/api/playlist';
 import { Image } from '@/components/atoms/Image';
+import { QueueMusicAction } from '@/components/organisms/ActionMenu/QueueMusicActionMenu';
 import { UserAction, UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
+import { PlayQueueList } from '@/components/organisms/PlayQueueList';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
 import { UserPreferenceEditModal } from '@/components/templates/UserPreferenceEditModal';
+import { QueuedMusicInfo, usePlayerContext } from '@/context/PlayerContext';
 import { useEditUserPreferenceMutation } from '@/hooks/api/useEditUserPreferenceMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { MusicIcon } from '@/icons/MusicIcon';
@@ -33,6 +36,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   const [searchInput, setSearchInput] = useState<string>();
 
   const { user } = useAuthStore();
+  const { queue, removeFromQueue } = usePlayerContext();
   const { data: userPlaylist } = useUserPlaylist();
   const { mutate: editUserPreferenceMutation } = useEditUserPreferenceMutation({
     onSuccess: () => setModalType('none'),
@@ -69,6 +73,13 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
     if (action.type === 'editUserPreference') setModalType('userPreference');
   }, []);
 
+  const handleQueueAction = useCallback(
+    (music: QueuedMusicInfo, action: QueueMusicAction) => {
+      if (action.type === 'removeFromQueue') removeFromQueue([music.queueID]);
+    },
+    [removeFromQueue],
+  );
+
   return (
     <div css={[tw`flex flex-col gap-2`, tw`w-full h-full p-4`]}>
       <Card css={[tw`flex justify-between items-center`, tw`px-6 py-2`]}>
@@ -80,13 +91,13 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           <span css={[tw`font-bold text-xl`]}>Music</span>
         </div>
         <MusicPlayer />
-        <div>
+        <div css={[tw`flex gap-2`]}>
+          <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
           {!user && (
             <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('login')}>
               로그인
             </Button>
           )}
-
           {user !== null && <UserActionMenu user={user} onClick={handleUserAction} />}
         </div>
       </Card>

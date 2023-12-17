@@ -22,7 +22,7 @@ export const PlayCard: React.FC<PlayCardProps> = ({
   ...rest
 }) => {
   return (
-    <div css={[tw`flex flex-col gap-2`]} {...rest}>
+    <div css={[tw`flex flex-col gap-2`, tw`max-w-[15rem]`]} {...rest}>
       <Image
         src={imageUrl}
         width={200}

@@ -7,21 +7,30 @@ import { savePlayHistory } from '@/api/playHistory';
 import useEffectOnce from '@/hooks/useEffectOnce';
 
 const SETTING_KEY = 'PLAYER_SETTING';
+
+const generateQueueID = () => Math.floor(Math.random() * 1000000000).toString(16);
+
+export interface QueuedMusicInfo extends Model.MusicInfo {
+  queueID: string;
+}
+
 export interface PlayerContextState {
-  musicInfo: Model.MusicInfo | null;
+  musicInfo: QueuedMusicInfo | null;
   paused: boolean;
   volume: number;
   progress: number;
-  replay: 'none' | 'shuffle' | 'single';
-  playList: Model.MusicInfo[] | null;
-  setMusic: (musicInfo: PlayerContextState['musicInfo'], autoPlay?: boolean) => void;
+  playType: 'none' | 'shuffle' | 'single' | 'loop';
+  queue: QueuedMusicInfo[];
+  setMusic: (musicInfo: Model.MusicInfo | null, autoPlay?: boolean) => void;
   setPaused: (paused: PlayerContextState['paused']) => void;
   setVolume: (volume: PlayerContextState['volume']) => void;
   setProgress: (progress: PlayerContextState['progress']) => void;
-  setReplay: (replay: PlayerContextState['replay']) => void;
-  prependPlaylist: (musicInfo: Model.MusicInfo) => void;
-  appendPlaylist: (musicInfo: Model.MusicInfo) => void;
-  removePlaylist: (index: number) => void;
+  setPlayType: (replay: PlayerContextState['playType']) => void;
+  prependQueue: (musicInfo: Model.MusicInfo[]) => void;
+  appendQueue: (musicInfo: Model.MusicInfo[]) => void;
+  removeFromQueue: (queueIDs: string[]) => void;
+  clearQueue: () => void;
+  skipMusic: (playQueueID?: string) => void;
 }
 
 export const PlayerContext = React.createContext<PlayerContextState>({
@@ -29,16 +38,18 @@ export const PlayerContext = React.createContext<PlayerContextState>({
   paused: false,
   volume: 0,
   progress: 0,
-  replay: 'none',
-  playList: null,
+  playType: 'none',
+  queue: [],
   setMusic: () => {},
   setPaused: () => {},
   setVolume: () => {},
-  setReplay: () => {},
+  setPlayType: () => {},
   setProgress: () => {},
-  prependPlaylist: () => {},
-  appendPlaylist: () => {},
-  removePlaylist: () => {},
+  prependQueue: () => {},
+  appendQueue: () => {},
+  removeFromQueue: () => {},
+  clearQueue: () => {},
+  skipMusic: () => {},
 });
 
 interface PlayerSetting {
@@ -52,8 +63,9 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(0);
-  const [replay, setReplay] = useState<PlayerContextState['replay']>('none');
-  const [playList, setPlaylist] = useState<PlayerContextState['playList']>(null);
+  const [playType, setPlayType] = useState<PlayerContextState['playType']>('none');
+  const [originQueue, setOriginQueue] = useState<PlayerContextState['queue']>([]);
+  const [queue, setQueue] = useState<PlayerContextState['queue']>([]);
 
   const getSetting = useCallback(() => {
     const rawValue = localStorage.getItem(SETTING_KEY);
@@ -81,7 +93,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
 
   const handleSetMusic = useCallback<PlayerContextState['setMusic']>(
     async (musicInfo, autoPlay = true) => {
-      setMusicInfo(musicInfo);
+      setMusicInfo(musicInfo ? { ...musicInfo, queueID: generateQueueID() } : musicInfo);
       setProgress(0);
 
       if (!musicInfo) return;
@@ -129,12 +141,74 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
     setProgress(progress);
   }, []);
 
-  const handlePrependPlaylist = useCallback<PlayerContextState['prependPlaylist']>(
-    (music) => {},
+  const handlePrependQueue = useCallback<PlayerContextState['prependQueue']>(
+    (musics) => {
+      const [first, ...rest] = musics;
+
+      if (musicInfo) {
+        setOriginQueue((prev) => [
+          ...musics.map((music) => ({ ...music, queueID: generateQueueID() })),
+          ...prev,
+        ]);
+        setQueue((prev) => [
+          ...musics.map((music) => ({ ...music, queueID: generateQueueID() })),
+          ...prev,
+        ]);
+      } else {
+        setOriginQueue((prev) => [
+          ...rest.map((music) => ({ ...music, queueID: generateQueueID() })),
+          ...prev,
+        ]);
+        setQueue((prev) => [
+          ...rest.map((music) => ({ ...music, queueID: generateQueueID() })),
+          ...prev,
+        ]);
+        handleSetMusic(first);
+      }
+    },
+    [handleSetMusic, musicInfo],
+  );
+
+  const handleAppendQueue = useCallback<PlayerContextState['appendQueue']>(
+    (musics) => {
+      const [first, ...rest] = musics;
+
+      if (musicInfo) {
+        setOriginQueue((prev) => [
+          ...prev,
+          ...musics.map((music) => ({ ...music, queueID: generateQueueID() })),
+        ]);
+        setQueue((prev) => [
+          ...prev,
+          ...musics.map((music) => ({ ...music, queueID: generateQueueID() })),
+        ]);
+      } else {
+        setOriginQueue((prev) => [
+          ...prev,
+          ...rest.map((music) => ({ ...music, queueID: generateQueueID() })),
+        ]);
+        setQueue((prev) => [
+          ...prev,
+          ...rest.map((music) => ({ ...music, queueID: generateQueueID() })),
+        ]);
+        handleSetMusic(first);
+      }
+    },
+    [handleSetMusic, musicInfo],
+  );
+
+  const handleRemoveFromQueue = useCallback<PlayerContextState['removeFromQueue']>(
+    (deleteQueueIDs) => {
+      setQueue((prev) => prev.filter(({ queueID }) => !deleteQueueIDs.includes(queueID)));
+      setOriginQueue((prev) => prev.filter(({ queueID }) => !deleteQueueIDs.includes(queueID)));
+    },
     [],
   );
-  const handleAppendPlaylist = useCallback<PlayerContextState['appendPlaylist']>((music) => {}, []);
-  const handleRemovePlaylist = useCallback<PlayerContextState['removePlaylist']>((music) => {}, []);
+
+  const handleClearQueue = useCallback<PlayerContextState['clearQueue']>(() => {
+    setQueue([]);
+    setOriginQueue([]);
+  }, []);
 
   const handleUpdateAudioTime = useCallback(() => {
     if (!audioRef.current) return;
@@ -143,9 +217,82 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
   }, []);
 
   const handleMusicEnd = useCallback(() => {
-    handleSetMusic(null);
-    handleSetPaused(true);
-  }, [handleSetMusic, handleSetPaused]);
+    const nextMusic = queue.at(0);
+    if (!nextMusic) {
+      handleSetMusic(null);
+      handleSetPaused(true);
+      return;
+    }
+
+    switch (playType) {
+      case 'none':
+        if (!nextMusic) {
+          handleSetMusic(null);
+          handleSetPaused(true);
+          return;
+        }
+        setQueue((prev) => prev.filter(({ queueID }) => queueID !== nextMusic.queueID));
+        setOriginQueue((prev) => prev.filter(({ queueID }) => queueID !== nextMusic.queueID));
+        handleSetMusic(nextMusic);
+        return;
+      case 'loop':
+        if (!nextMusic) {
+          setQueue(originQueue);
+          const originNextMusic = originQueue.at(0);
+          if (!originNextMusic) {
+            handleSetMusic(null);
+            handleSetPaused(true);
+            return;
+          }
+          handleSetMusic(originNextMusic);
+          return;
+        }
+        setQueue((prev) => prev.filter(({ queueID }) => queueID !== nextMusic.queueID));
+        return;
+      case 'single':
+        if (!nextMusic) {
+          handleSetMusic(null);
+          handleSetPaused(true);
+          return;
+        }
+        handleSetMusic(nextMusic);
+    }
+  }, [handleSetMusic, handleSetPaused, originQueue, playType, queue]);
+
+  const handleSetPlayType = useCallback<PlayerContextState['setPlayType']>(
+    (type) => {
+      switch (type) {
+        case 'none':
+        case 'loop':
+        case 'single':
+          setQueue(originQueue);
+          break;
+        case 'shuffle':
+          setQueue(originQueue.sort(() => Math.random() - 0.5));
+      }
+
+      setPlayType(type);
+    },
+    [originQueue],
+  );
+
+  const handleSkipMusic = useCallback<PlayerContextState['skipMusic']>(
+    (playQueueID) => {
+      if (playQueueID) {
+        const index = queue.findIndex(({ queueID }) => queueID === playQueueID) ?? 0;
+        const newQueue = queue.slice(index);
+
+        const nextMusic = newQueue.at(0);
+        if (nextMusic) {
+          handleSetMusic(nextMusic);
+          setQueue(newQueue);
+        }
+      } else {
+        handleMusicEnd();
+      }
+    },
+    [handleMusicEnd, handleSetMusic, queue],
+  );
 
   useEffectOnce(() => {
     const playerSetting = getSetting();
@@ -165,17 +312,19 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
         musicInfo,
         paused,
         volume,
-        replay,
-        playList,
+        playType,
+        queue,
         progress,
-        setReplay,
+        setPlayType: handleSetPlayType,
         setMusic: handleSetMusic,
         setPaused: handleSetPaused,
         setVolume: handleSetVolume,
         setProgress: handleSetProgress,
-        prependPlaylist: handlePrependPlaylist,
-        appendPlaylist: handleAppendPlaylist,
-        removePlaylist: handleRemovePlaylist,
+        prependQueue: handlePrependQueue,
+        appendQueue: handleAppendQueue,
+        removeFromQueue: handleRemoveFromQueue,
+        clearQueue: handleClearQueue,
+        skipMusic: handleSkipMusic,
       }}
     >
       {children}

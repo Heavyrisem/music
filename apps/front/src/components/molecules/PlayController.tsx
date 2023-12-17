@@ -35,7 +35,7 @@ export const PlayController: React.FC<PlayController> = ({
   return (
     <div css={[tw`flex justify-between items-center`]} {...rest}>
       <Button css={[buttonStyle]}>
-        <BackwardIcon css={[iconStyle]} onClick={onPrev} />
+        <BackwardIcon css={[iconStyle]} onClick={() => onPrev?.()} />
       </Button>
 
       <Button css={[buttonStyle]}>
@@ -47,7 +47,7 @@ export const PlayController: React.FC<PlayController> = ({
       </Button>
 
       <Button css={[buttonStyle]}>
-        <ForwardIcon css={[iconStyle]} onClick={onNext} />
+        <ForwardIcon css={[iconStyle]} onClick={() => onNext?.()} />
       </Button>
     </div>
   );
