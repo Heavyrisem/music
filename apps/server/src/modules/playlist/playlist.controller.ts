@@ -36,7 +36,6 @@ export class PlaylistController {
   @Get('/:id')
   // @UseGuards(LoggedInGuard)
   async getPlaylistById(@Param() getPlaylistParamDto: GetPlaylistParamDto) {
-    this.logger.debug(getPlaylistParamDto);
     const data = await this.playlistService.findPlaylistById(getPlaylistParamDto.id);
     return BaseResponse.of(data);
   }

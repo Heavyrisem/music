@@ -1,3 +1,5 @@
+import { UserInfo } from "./user";
+
 export interface MusicInfo {
   id: number;
   youtubeId: string;

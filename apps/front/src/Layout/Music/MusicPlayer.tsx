@@ -2,33 +2,16 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
-import { PlayController } from '@/components/organisms/PlayController';
-import { SliderInput } from '@/components/organisms/SliderInput';
+import { SliderInput } from '@/components/atoms/SliderInput';
+import { PlayController } from '@/components/molecules/PlayController';
 import { usePlayerContext } from '@/context/PlayerContext';
 import { useMusicData } from '@/hooks/api/useMusicData';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { usePlayerStore } from '@/store/playerStore';
 
 export const MusicPlayer: React.FC = () => {
-  const { musicInfo, paused, volume, progress, setVolume, setProgress, setPaused } =
+  const { musicInfo, paused, volume, progress, setVolume, setProgress, setPaused, skipMusic } =
     usePlayerContext();
-  // const audioRef = useRef<HTMLAudioElement>(null);
-  // const { playing, volume, setProgress, setVolume, setPaused, setPlaying } = usePlayerStore();
-  // const { data: source } = useMusicData(playing?.musicInfo.id);
-
-  // useEffect(() => {
-  //   const { current: audio } = audioRef;
-  //   if (!audio || !playing) return;
-
-  // if (audio.src !== playing.musicInfo.source) audio.src = playing.musicInfo.source;
-  // }, [playing, playing?.musicInfo.source]);
-
-  // useEffect(() => {
-  //   const { current: audio } = audioRef;
-  //   if (!audio) return;
-
-  //   audio.volume = volume * 0.01;
-  // }, [volume]);
 
   const handlePlayStateChange = useCallback(
     (playing: boolean) => {
@@ -38,36 +21,13 @@ export const MusicPlayer: React.FC = () => {
     [setPaused],
   );
 
-  // const handleChangeTime = useCallback<React.ReactEventHandler<HTMLAudioElement>>(() => {
-  //   const { current: audio } = audioRef;
-  //   if (!audio) return;
-
-  //   setProgress(audio.currentTime);
-  // }, [setProgress]);
-
-  // const handlePlayEnd = useCallback(() => {
-  //   const { current: audio } = audioRef;
-  //   if (!audio) return;
-
-  //   audio.pause();
-  //   setPlaying(null);
-  // }, [setPlaying]);
-
   return (
     <div css={[tw`flex justify-between items-center gap-[8rem]`]}>
-      {/* <audio
-        ref={audioRef}
-        css={[tw`invisible`]}
-        autoPlay={false}
-        loop={false}
-        src={source}
-        onTimeUpdateCapture={handleChangeTime}
-        onEnded={handlePlayEnd}
-      /> */}
       <PlayController
         css={[tw`w-24`]}
         playing={musicInfo !== null && !paused}
         onStateChange={handlePlayStateChange}
+        onNext={skipMusic}
       />
       <div css={[tw`w-[34rem] h-[3rem] bg-gray-200 bg-opacity-10 overflow-hidden`, tw`rounded-md`]}>
         {!musicInfo && (

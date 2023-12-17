@@ -6,9 +6,9 @@ import tw from 'twin.macro';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Textarea } from '../atoms/Textarea';
-import { EditableImage } from '../organisms/EditableImage';
-import { Modal } from '../organisms/Modal';
-import { ModalRootProps } from '../organisms/Modal/components/Modal';
+import { EditableImage } from '../molecules/EditableImage';
+import { Modal } from '../molecules/Modal';
+import { ModalRootProps } from '../molecules/Modal/components/Modal';
 
 export type CreatePlaylistType = Pick<Model.PlaylistInfo, 'name' | 'description'>;
 
