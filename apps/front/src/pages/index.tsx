@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
         <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
           {topPlayedMusic?.map((item) => (
             <PlayCard
-              key={item.youtubeId}
+              key={item.id}
               title={`${item.title} - ${item.album}`}
               description={item.artist.join(' ')}
               imageUrl={item.thumbnailUrl.replaceAll('120', '256')}
@@ -50,9 +50,9 @@ const HomePage: React.FC = () => {
           <>
             <div>최근 재생한 음악</div>
             <div css={[tw`flex gap-8 w-full overflow-y-scroll`]}>
-              {userPlayHistory?.map((item) => (
+              {userPlayHistory?.map((item, idx) => (
                 <PlayCard
-                  key={item.youtubeId}
+                  key={idx}
                   title={`${item.title} - ${item.album}`}
                   description={item.artist.join(' ')}
                   imageUrl={item.thumbnailUrl.replaceAll('120', '256')}

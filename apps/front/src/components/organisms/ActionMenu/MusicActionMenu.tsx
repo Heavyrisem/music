@@ -4,6 +4,7 @@ import {
   Item,
   Portal,
   Root,
+  Separator,
   Sub,
   SubContent,
   SubTrigger,
@@ -16,7 +17,7 @@ import tw from 'twin.macro';
 import { Button } from '@/components/atoms/Button';
 import { OptionIcon } from '@/icons/OptionIcon';
 
-import { buttonStyle, contentStyle } from './style';
+import { buttonStyle, contentStyle, separatorStyle } from './style';
 
 type RemoveFromPlaylistAction = {
   type: 'removeFromPlaylist';
@@ -93,6 +94,7 @@ export const MusicActionMenu: React.FC<MusicActionMenuProps> = ({
                     새 플레이리스트 생성
                   </Button>
                 </Item>
+                {playlist && <Separator css={[separatorStyle]} />}
                 {playlist?.map((item) => (
                   <Item key={item.id} asChild>
                     <Button

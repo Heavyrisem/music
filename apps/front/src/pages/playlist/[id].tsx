@@ -25,7 +25,7 @@ const PlayListPage = () => {
   const router = useRouter();
   const playlistId = useMemo(() => Number(router.query?.id), [router.query?.id]);
 
-  const { setMusic } = usePlayerContext();
+  const { setMusic, clearQueue, appendQueue } = usePlayerContext();
 
   const { user } = useAuthStore();
   const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
@@ -56,6 +56,13 @@ const PlayListPage = () => {
     [updatePlaylisltMutation],
   );
 
+  const handleClickPlay = useCallback(() => {
+    if (playlistDetail) {
+      clearQueue();
+      appendQueue(playlistDetail.musicList);
+    }
+  }, [appendQueue, clearQueue, playlistDetail]);
+
   return (
     <MusicLayout css={[tw`flex flex-col`]}>
       {playlistDetail && (
@@ -81,7 +88,7 @@ const PlayListPage = () => {
               <div>{playlistDetail.description}</div>
               <div css={[tw`flex justify-between`]}>
                 <div css={[tw`flex gap-2`]}>
-                  <Button css={[playButtonStyle]} bgStyle>
+                  <Button css={[playButtonStyle]} bgStyle onClick={handleClickPlay}>
                     <PlayIcon css={[tw`h-4 w-4`]} />
                     재생
                   </Button>

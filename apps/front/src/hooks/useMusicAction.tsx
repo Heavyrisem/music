@@ -7,6 +7,7 @@ import {
   CreatePlaylistType,
   PlaylistCreateModal,
 } from '@/components/templates/PlaylistCreateModal';
+import { usePlayerContext } from '@/context/PlayerContext';
 
 import { useAddMusicToPlaylistMutation } from './api/useAddMusicToPlaylistMutation';
 import { useCreatePlaylistMutation } from './api/useCreatePlaylistMutation';
@@ -14,6 +15,7 @@ import { useCreatePlaylistMutation } from './api/useCreatePlaylistMutation';
 type ModalType = 'none' | 'createPlaylist';
 
 export const useMusicAction = () => {
+  const { appendQueue, prependQueue } = usePlayerContext();
   const [modalType, setModalType] = useState<ModalType>('none');
 
   const closeModal = useCallback(() => {
@@ -31,8 +33,14 @@ export const useMusicAction = () => {
       if (action.type === 'addToPlaylist') {
         addMusicToPlaylistMutation({ musicId: musicInfo.id, playlistId: action.playlistId });
       }
+      if (action.type === 'appendQueue') {
+        appendQueue([musicInfo]);
+      }
+      if (action.type === 'prependQueue') {
+        prependQueue([musicInfo]);
+      }
     },
-    [addMusicToPlaylistMutation],
+    [addMusicToPlaylistMutation, appendQueue, prependQueue],
   );
 
   const handleCreatePlaylistSubmit = useCallback(

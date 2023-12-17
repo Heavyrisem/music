@@ -35,7 +35,7 @@ export const Modal: React.FC<ModalPortalProps> = ({ children, ...rest }) => {
               tw`z-50`,
               tw`p-4`,
               tw`inline-block min-w-[10rem]`,
-              tw`backdrop-blur bg-gray-200 bg-opacity-20`,
+              tw`backdrop-blur-2xl bg-gray-200 bg-opacity-20`,
               tw`rounded-lg`,
               tw`text-gray-200 text-opacity-70`,
             ]}
