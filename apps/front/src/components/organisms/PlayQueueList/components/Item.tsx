@@ -34,10 +34,19 @@ export const Item = ({ music, selected = false, onClick, onAction }: ItemProps) 
         css={[tw`w-10 h-10`]}
         // hoverIcon={<PlayIcon css={[tw`h-6 w-6`]} />}
       />
-      <div css={[tw`min-w-[10rem]`, tw`flex justify-between`]}>
-        <div>
-          <div css={[tw`text-sm`]}>{music.title}</div>
-          <div css={[tw`text-xs`, transparentTextStyle]}>{music.artist.join(' ')}</div>
+      <div css={[tw`w-[10rem]`, tw`flex justify-between`]}>
+        <div css={[tw`max-w-[7rem]`]}>
+          <div css={[tw`text-sm whitespace-nowrap text-ellipsis overflow-hidden`]}>
+            {music.title}
+          </div>
+          <div
+            css={[
+              tw`text-xs whitespace-nowrap text-ellipsis overflow-hidden`,
+              transparentTextStyle,
+            ]}
+          >
+            {music.artist.join(' ')}
+          </div>
         </div>
         <div css={[tw`flex items-center px-2`, tw`text-xs`]}>
           {selected || isHover || actionMenuOpen ? (

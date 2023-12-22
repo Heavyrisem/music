@@ -3,6 +3,7 @@ import tw from 'twin.macro';
 export const buttonStyle = [tw`flex gap-4 justify-between items-center text-left`, tw`rounded-sm`];
 
 export const contentStyle = [
+  tw`z-10`,
   tw`bg-gray-200 bg-opacity-10 backdrop-blur-2xl`,
   tw`rounded-md border-2 border-gray-200 border-opacity-10`,
   tw`flex flex-col`,
