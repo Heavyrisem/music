@@ -8,6 +8,7 @@ import { MusicService } from '../music/music.service';
 import { User } from '../user/entity/user.entity';
 import { AddMusicBodyDto, AddMusicParamDto } from './dto/addMusic.dto';
 import { CreatePlaylistBodyDto } from './dto/createPlaylist.dto';
+import { DeletePlaylistParamDto } from './dto/deletePlaylist.dto';
 import { UpdatePlaylistBodyDto, UpdatePlaylistParamDto } from './dto/updatePlaylist.dto';
 import { Playlist } from './entity/playlist.entity';
 
@@ -25,6 +26,13 @@ export class PlaylistService {
     });
 
     return await this.playlistRepository.save(playlist);
+  }
+
+  async deletePlaylist(deletePlaylistParamDto: DeletePlaylistParamDto) {
+    const playlist = await this.findPlaylistById(deletePlaylistParamDto.id);
+    if (!playlist) throw new NotFoundException('존재하지 않는 플레이리스트입니다.');
+
+    return await this.playlistRepository.remove(playlist);
   }
 
   async updatePlaylist(updatePlaylistDto: UpdatePlaylistParamDto & UpdatePlaylistBodyDto) {

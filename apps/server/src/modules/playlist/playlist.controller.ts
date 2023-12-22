@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Logger,
@@ -17,6 +18,7 @@ import { LoggedInGuard } from '../auth/guard/logged-in.guard';
 import { User } from '../user/entity/user.entity';
 import { AddMusicBodyDto, AddMusicParamDto } from './dto/addMusic.dto';
 import { CreatePlaylistBodyDto } from './dto/createPlaylist.dto';
+import { DeletePlaylistParamDto } from './dto/deletePlaylist.dto';
 import { GetPlaylistParamDto } from './dto/getPlaylist.dto';
 import { UpdatePlaylistBodyDto, UpdatePlaylistParamDto } from './dto/updatePlaylist.dto';
 import { PlaylistService } from './playlist.service';
@@ -47,6 +49,20 @@ export class PlaylistController {
     @GetUser() user: User,
   ) {
     const data = await this.playlistService.createPlaylist(user, createPlaylistBodyDto);
+    return BaseResponse.of(data);
+  }
+
+  @Delete('/:id')
+  @UseGuards(LoggedInGuard)
+  async deletePlaylist(
+    @Param() deleteplaylistParamDto: DeletePlaylistParamDto,
+    @GetUser() user: User,
+  ) {
+    const existPlaylist = await this.playlistService.findPlaylistById(deleteplaylistParamDto.id);
+    if (existPlaylist.author.id !== user.id)
+      throw new ForbiddenException('플레이리스트 삭제 권한이 없습니다.');
+
+    const data = await this.playlistService.deletePlaylist(deleteplaylistParamDto);
     return BaseResponse.of(data);
   }
 
