@@ -11,12 +11,14 @@ import { uploadImage } from '@/api/image';
 import { getPlaylistDetail } from '@/api/playlist';
 import { Button } from '@/components/atoms/Button';
 import { Image } from '@/components/atoms/Image';
+import { PlaylistActionMenu } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { MusicListTable } from '@/components/templates/MusicListTable';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
 import { useUpdatePlaylistMutation } from '@/hooks/api/useUpdatePlaylistMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
+import { usePlaylistAction } from '@/hooks/usePlaylistAction';
 import { useAuthStore } from '@/store/authStore';
 
 const playButtonStyle = [tw`flex items-center gap-2 text-sm`];
@@ -30,6 +32,7 @@ const PlayListPage = () => {
   const { user } = useAuthStore();
   const { data: userPlaylist, isLoading: playlistLoading } = useUserPlaylist();
   const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
+  const { playlistActionHandler, PlaylistActionModalRenderer } = usePlaylistAction();
 
   const { mutate: updatePlaylisltMutation } = useUpdatePlaylistMutation({
     onSuccess: () => setEditModalOpen(false),
@@ -98,9 +101,11 @@ const PlayListPage = () => {
                   </Button>
                 </div>
                 {playlistDetail.author.id === user?.id && (
-                  <Button css={[playButtonStyle]} onClick={() => setEditModalOpen(true)} bgStyle>
-                    수정
-                  </Button>
+                  <PlaylistActionMenu
+                    onClick={(action) => {
+                      playlistActionHandler(playlistDetail, action);
+                    }}
+                  />
                 )}
               </div>
             </div>
@@ -117,6 +122,7 @@ const PlayListPage = () => {
           </div>
 
           <MusicActionModalRenderer />
+          <PlaylistActionModalRenderer />
           {editModalOpen && (
             <PlaylistEditModal
               playlistDetail={playlistDetail}
