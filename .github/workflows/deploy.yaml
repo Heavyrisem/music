@@ -1,0 +1,25 @@
+name: Deploy # Github Action 페이지 좌측 리스트에 표시될 이름
+on:
+  push:
+    branches: [master]
+    paths:
+      - apps/front/**
+      - packages/**
+      - .github/workflows/**
+      - package.json
+      - pnpm-lock.yaml
+      - turbo.json
+      - tsconfig.json
+
+jobs:
+  build-front:
+    uses: ./.github/workflows/build-reuseable.yaml
+    with:
+      type: front
+      push: true
+
+  build-server:
+    uses: ./.github/workflows/build-reuseable.yaml
+    with:
+      type: server
+      push: true

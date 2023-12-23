@@ -1,0 +1,28 @@
+name: Build Test # Github Action 페이지 좌측 리스트에 표시될 이름
+on:
+  push:
+    branches: [develop, feature/**]
+    paths:
+      - apps/front/**
+      - packages/**
+      - .github/workflows/**
+      - package.json
+      - pnpm-lock.yaml
+      - turbo.json
+      - tsconfig.json
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build-test-front:
+    uses: ./.github/workflows/build-reuseable.yaml
+    with:
+      type: front
+      push: false
+
+  build-test-server:
+    uses: ./.github/workflows/build-reuseable.yaml
+    with:
+      type: server
+      push: false
