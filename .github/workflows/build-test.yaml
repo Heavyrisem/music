@@ -15,21 +15,22 @@ on:
       - "*"
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
+  node-build-test:
+    name: Node Build Test
     strategy:
       matrix:
         type: ["front", "server"]
-    steps:
-      # Checkout Repository
-      - name: Check out source code
-        uses: actions/checkout@v2.1.0
+    uses: ./.github/workflows/node-build-reuseable.yaml
+    with:
+      type: ${{ matrix.type }}
 
-      - uses: ./.github/workflows/node-build-reuseable.yaml
-        with:
-          type: ${{ matrix.type }}
-
-      - uses: ./.github/workflows/docker-build-reuseable.yaml
-        with:
-          type: ${{ matrix.type }}
-          push: false
+  docker-build-test:
+    name: Docker Build Test
+    needs: [node-build-test]
+    strategy:
+      matrix:
+        type: ["front", "server"]
+    uses: ./.github/workflows/docker-build-reuseable.yaml
+    with:
+      type: ${{ matrix.type }}
+      push: false

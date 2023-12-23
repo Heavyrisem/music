@@ -12,14 +12,22 @@ on:
       - tsconfig.json
 
 jobs:
-  build-front:
-    uses: ./.github/workflows/build-reuseable.yaml
+  node-build:
+    name: Node Build
+    strategy:
+      matrix:
+        type: ["front", "server"]
+    uses: ./.github/workflows/node-build-reuseable.yaml
     with:
-      type: front
-      push: true
+      type: ${{ matrix.type }}
 
-  build-server:
-    uses: ./.github/workflows/build-reuseable.yaml
+  docker-build:
+    name: Docker Build
+    needs: [node-build]
+    strategy:
+      matrix:
+        type: ["front", "server"]
+    uses: ./.github/workflows/docker-build-reuseable.yaml
     with:
-      type: server
-      push: true
+      type: ${{ matrix.type }}
+      push: push
