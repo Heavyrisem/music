@@ -4,7 +4,7 @@ on:
     inputs:
       env:
         type: string
-        required: true
+        required: false
       type:
         type: string
         required: true
