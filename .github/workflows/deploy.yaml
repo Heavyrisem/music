@@ -12,26 +12,40 @@ on:
       - tsconfig.json
 
 jobs:
-  node-build:
-    name: Node Build
+  # Build Apps
+  front-build:
+    name: Front Build
     secrets: inherit
     uses: ./.github/workflows/node-build-reuseable.yaml
-    strategy:
-      matrix:
-        type: ["front", "server"]
     with:
-      type: ${{ matrix.type }}
+      type: front
       env: production
 
-  docker-build:
-    name: Docker Build
-    needs: [node-build]
+  server-build:
+    name: Server Build
+    secrets: inherit
+    uses: ./.github/workflows/node-build-reuseable.yaml
+    with:
+      type: server
+      env: production
+
+  # Deploy Apps
+  front-docker-build:
+    name: Front Docker Build
+    needs: [front-build]
     secrets: inherit
     uses: ./.github/workflows/docker-build-reuseable.yaml
-    strategy:
-      matrix:
-        type: ["front", "server"]
     with:
-      type: ${{ matrix.type }}
-      push: true
+      type: front
       env: production
+      push: true
+
+  server-docker-build:
+    name: Server Docker Build
+    needs: [server-build]
+    secrets: inherit
+    uses: ./.github/workflows/docker-build-reuseable.yaml
+    with:
+      type: server
+      env: production
+      push: true

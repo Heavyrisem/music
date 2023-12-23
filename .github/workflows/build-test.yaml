@@ -15,26 +15,40 @@ on:
       - "*"
 
 jobs:
-  node-build-test:
-    name: Node Build Test
+  # Build Apps
+  front-build-test:
+    name: Front Build Test
     secrets: inherit
     uses: ./.github/workflows/node-build-reuseable.yaml
-    strategy:
-      matrix:
-        type: ["front", "server"]
     with:
-      type: ${{ matrix.type }}
-      env: test
+      type: front
+      env: production
 
-  docker-build-test:
-    name: Docker Build Test
-    needs: [node-build-test]
+  server-build-test:
+    name: Server Build Test
+    secrets: inherit
+    uses: ./.github/workflows/node-build-reuseable.yaml
+    with:
+      type: server
+      env: production
+
+  # Deploy Apps
+  front-docker-build:
+    name: Front Docker Build Test
+    needs: [front-build-test]
     secrets: inherit
     uses: ./.github/workflows/docker-build-reuseable.yaml
-    strategy:
-      matrix:
-        type: ["front", "server"]
     with:
-      type: ${{ matrix.type }}
-      push: false
-      env: test
+      type: front
+      env: production
+      push: true
+
+  server-docker-build:
+    name: Server Docker Build Test
+    needs: [server-build-test]
+    secrets: inherit
+    uses: ./.github/workflows/docker-build-reuseable.yaml
+    with:
+      type: server
+      env: production
+      push: true
