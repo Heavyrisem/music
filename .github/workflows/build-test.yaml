@@ -16,12 +16,14 @@ on:
 
 jobs:
   build-test-front:
+    name: Front Build Test
     uses: ./.github/workflows/build-reuseable.yaml
     with:
       type: front
       push: false
 
   build-test-server:
+    name: Server Build Test
     uses: ./.github/workflows/build-reuseable.yaml
     with:
       type: server
