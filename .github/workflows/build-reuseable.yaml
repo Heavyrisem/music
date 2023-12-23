@@ -2,9 +2,6 @@ name: Build # Github Action 페이지 좌측 리스트에 표시될 이름
 on:
   workflow_call:
     inputs:
-      env:
-        type: string
-        required: false
       type:
         type: string
         required: true
@@ -127,7 +124,7 @@ jobs:
         with:
           registry: ghcr.io
           username: heavyrisem
-          password: ${{ secrets.GHCR_PAT }} # Settings > Secrets > Actions 의 GHCR_PAT 값을 불러옴
+          password: ${{  github.o }} # Settings > Secrets > Actions 의 GHCR_PAT 값을 불러옴
 
       # Docker Build
       - name: Docker Build
