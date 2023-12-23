@@ -62,7 +62,7 @@ export const PlayQueueList = ({ queue, onDoubleClickMusic, onQueueAction }: Play
           sideOffset={5}
           align="end"
           css={[
-            tw`min-w-[10rem]`,
+            tw`min-w-[10rem] z-10`,
             tw`bg-gray-200 bg-opacity-10 backdrop-blur`,
             tw`rounded-md border-2 border-gray-200 border-opacity-10`,
             tw`overflow-hidden select-none`,
