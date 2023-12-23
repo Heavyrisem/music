@@ -56,7 +56,7 @@ jobs:
         run: pnpm build --filter ${{ inputs.type }}
 
       - name: Check .next hash
-        if: ${{ inputs.type == 'front '}}
+        if: ${{ inputs.type == 'front'}}
         run: echo ${{ hashFiles('./apps/front/.next/**/*') }}
 
       - name: Check dist hash
@@ -89,24 +89,24 @@ jobs:
 
       - name: Download Build Artifact
         uses: actions/download-artifact@v3
-        if: ${{ inputs.type == 'front '}}
+        if: ${{ inputs.type == 'front'}}
         with:
           name: node-build-artifact-${{ hashFiles(format('./apps/{0}/**/*', inputs.type)) }}
           path: ./apps/front/.next
 
       - name: Download Build Artifact
         uses: actions/download-artifact@v3
-        if: ${{ inputs.type == 'server '}}
+        if: ${{ inputs.type == 'server'}}
         with:
           name: node-build-artifact-${{ hashFiles(format('./apps/{0}/**/*', inputs.type)) }}
           path: ./apps/server/dist
 
       - name: Check .next hash
-        if: ${{ inputs.type == 'front '}}
+        if: ${{ inputs.type == 'front'}}
         run: echo ${{ hashFiles('./apps/front/.next/**/*') }}
 
       - name: Check dist hash
-        if: ${{ inputs.type == 'server '}}
+        if: ${{ inputs.type == 'server'}}
         run: echo ${{ hashFiles('./apps/server/dist/**/*') }}
 
       # tonistiigi/binfmt 이미지를 이용해 qemu 설치
@@ -124,7 +124,7 @@ jobs:
         with:
           registry: ghcr.io
           username: heavyrisem
-          password: ${{  github.o }} # Settings > Secrets > Actions 의 GHCR_PAT 값을 불러옴
+          password: ${{ secrets.GHCR_PAT }} # Settings > Secrets > Actions 의 GHCR_PAT 값을 불러옴
 
       # Docker Build
       - name: Docker Build
