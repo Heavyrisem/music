@@ -126,7 +126,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: heavyrisem
           password: ${{ secrets.GHCR_PAT }} # Settings > Secrets > Actions 의 GHCR_PAT 값을 불러옴
 
       # Docker Build
