@@ -15,16 +15,11 @@ on:
       - "*"
 
 jobs:
-  build-test-front:
-    name: Front Build Test
+  build-test-matrix:
+    strategy:
+      matrix:
+        type: ["front", "server"]
     uses: ./.github/workflows/build-reuseable.yaml
     with:
-      type: front
-      push: false
-
-  build-test-server:
-    name: Server Build Test
-    uses: ./.github/workflows/build-reuseable.yaml
-    with:
-      type: server
+      type: ${{ matrix.type }}
       push: false
