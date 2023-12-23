@@ -19,6 +19,7 @@ jobs:
     uses: ./.github/workflows/node-build-reuseable.yaml
     with:
       type: front
+      env: production
 
   server-build:
     name: Server Build
@@ -26,6 +27,7 @@ jobs:
     uses: ./.github/workflows/node-build-reuseable.yaml
     with:
       type: server
+      env: production
 
   # Deploy Apps
   front-docker-build:
