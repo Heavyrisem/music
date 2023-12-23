@@ -17,20 +17,22 @@ on:
 jobs:
   node-build-test:
     name: Node Build Test
+    secrets: inherit
+    uses: ./.github/workflows/node-build-reuseable.yaml
     strategy:
       matrix:
         type: ["front", "server"]
-    uses: ./.github/workflows/node-build-reuseable.yaml
     with:
       type: ${{ matrix.type }}
 
   docker-build-test:
     name: Docker Build Test
     needs: [node-build-test]
+    secrets: inherit
+    uses: ./.github/workflows/docker-build-reuseable.yaml
     strategy:
       matrix:
         type: ["front", "server"]
-    uses: ./.github/workflows/docker-build-reuseable.yaml
     with:
       type: ${{ matrix.type }}
       push: false
