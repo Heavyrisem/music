@@ -2,6 +2,9 @@ name: Docker Build # Github Action 페이지 좌측 리스트에 표시될 이�
 on:
   workflow_call:
     inputs:
+      env:
+        type: string
+        required: true
       type:
         type: string
         required: true
@@ -15,7 +18,7 @@ env:
 jobs:
   docker-build:
     name: Docker Build
-    # runs-on: [self-hosted, build]
+    environment: ${{ inputs.env }}
     runs-on: ubuntu-latest
     steps:
       # Checkout Repository

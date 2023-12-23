@@ -21,6 +21,7 @@ jobs:
         type: ["front", "server"]
     with:
       type: ${{ matrix.type }}
+      env: production
 
   docker-build:
     name: Docker Build
@@ -33,3 +34,4 @@ jobs:
     with:
       type: ${{ matrix.type }}
       push: true
+      env: production

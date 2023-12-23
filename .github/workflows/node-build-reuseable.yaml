@@ -2,6 +2,9 @@ name: Node Build # Github Action 페이지 좌측 리스트에 표시될 이름
 on:
   workflow_call:
     inputs:
+      env:
+        type: string
+        required: true
       type:
         type: string
         required: true
@@ -9,6 +12,7 @@ on:
 jobs:
   node-build:
     name: Node Build
+    environment: ${{ inputs.env }}
     runs-on: ubuntu-latest
     steps:
       # Checkout Repository
