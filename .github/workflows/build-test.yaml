@@ -16,10 +16,16 @@ on:
 
 jobs:
   build-test:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         type: ["front", "server"]
-    uses: ./.github/workflows/build-reuseable.yaml
-    with:
-      type: ${{ matrix.type }}
-      push: false
+    steps:
+      - uses: ./.github/workflows/node-build-reuseable.yaml
+        with:
+          type: ${{ matrix.type }}
+
+      - uses: ./.github/workflows/docker-build-reuseable.yaml
+        with:
+          type: ${{ matrix.type }}
+          push: false
