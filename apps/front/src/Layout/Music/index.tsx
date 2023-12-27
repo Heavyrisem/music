@@ -1,4 +1,10 @@
-import { FireIcon, HomeIcon, ListBulletIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowLeftIcon,
+  Bars3Icon,
+  FireIcon,
+  HomeIcon,
+  ListBulletIcon,
+} from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -34,7 +40,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
 
   const [modalType, setModalType] = useState<ModalType>('none');
   const [searchInput, setSearchInput] = useState<string>();
-
+  const [sidebarOpened, setSidebarOpened] = useState<Boolean>(false);
   const { user } = useAuthStore();
   const { queue, removeFromQueue } = usePlayerContext();
   const { data: userPlaylist } = useUserPlaylist();
@@ -88,7 +94,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           onClick={() => router.push('/')}
         >
           <MusicIcon css={[tw`w-9 h-9 fill-gray-200 opacity-75`]} />
-          <span css={[tw`font-bold text-xl`]}>Music</span>
+          <span css={[tw`font-bold text-xl hidden sm:block`]}>Music</span>
         </div>
         <MusicPlayer />
         <div css={[tw`flex gap-2`]}>
@@ -96,7 +102,11 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
           </div>
           {!user && (
-            <Button bgStyle css={[tw`py-2 text-sm whitespace-nowrap`]} onClick={() => setModalType('login')}>
+            <Button
+              bgStyle
+              css={[tw`py-2 text-sm whitespace-nowrap`]}
+              onClick={() => setModalType('login')}
+            >
               로그인
             </Button>
           )}
@@ -105,7 +115,11 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
       </Card>
       <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0`]}>
         <Sidebar
-          css={[tw`gap-8`, tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`]}
+          css={[
+            tw`gap-8`,
+            tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`,
+            sidebarOpened ? tw`flex` : tw`hidden sm:flex`,
+          ]}
           onClickItem={(value) => router.push(value)}
         >
           <div>
@@ -151,6 +165,17 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             </div>
           )}
         </Sidebar>
+        {sidebarOpened ? (
+          <ArrowLeftIcon
+            css={tw`w-8 h-8 block cursor-pointer sm:hidden`}
+            onClick={() => setSidebarOpened(false)}
+          />
+        ) : (
+          <Bars3Icon
+            css={tw`w-8 h-8 block cursor-pointer sm:hidden`}
+            onClick={() => setSidebarOpened(true)}
+          />
+        )}
         <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
           {children}
         </div>
