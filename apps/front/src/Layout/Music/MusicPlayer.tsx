@@ -22,14 +22,14 @@ export const MusicPlayer: React.FC = () => {
   );
 
   return (
-    <div css={[tw`flex justify-between items-center gap-[8rem]`]}>
+    <div css={[tw`flex w-full justify-between items-center mx-2 gap-2`]}>
       <PlayController
         css={[tw`w-24`]}
         playing={musicInfo !== null && !paused}
         onStateChange={handlePlayStateChange}
         onNext={skipMusic}
       />
-      <div css={[tw`w-[34rem] h-[3rem] bg-gray-200 bg-opacity-10 overflow-hidden`, tw`rounded-md`]}>
+      <div css={[tw`grow max-w-[34rem] h-[3rem] bg-gray-200 bg-opacity-10 overflow-hidden`, tw`rounded-md`]}>
         {!musicInfo && (
           <div css={[tw`w-full h-full flex justify-center items-center`]}>
             <MusicIcon css={[tw`w-8 h-8 fill-gray-200 opacity-75`]} />
@@ -55,7 +55,7 @@ export const MusicPlayer: React.FC = () => {
           </div>
         )}
       </div>
-      <div css={[tw`w-24 flex items-center`]}>
+      <div css={[tw`w-24 hidden md:flex items-center`]}>
         <SliderInput
           value={volume}
           onChange={setVolume}

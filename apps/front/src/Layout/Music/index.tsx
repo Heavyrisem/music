@@ -92,9 +92,11 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
         </div>
         <MusicPlayer />
         <div css={[tw`flex gap-2`]}>
-          <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
+          <div css={tw`hidden md:flex items-center`}>
+            <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
+          </div>
           {!user && (
-            <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('login')}>
+            <Button bgStyle css={[tw`py-2 text-sm whitespace-nowrap`]} onClick={() => setModalType('login')}>
               로그인
             </Button>
           )}

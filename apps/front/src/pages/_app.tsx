@@ -12,6 +12,7 @@ import { useBgColorStore } from '@/store/bgColorStore';
 import { useTheme } from '@/store/themeStore';
 import '@/styles/globals.css';
 import { darkenHexColor } from '@/utils/color';
+import Head from 'next/head';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,23 +36,29 @@ function App({ Component, pageProps }: AppProps) {
   if (isAuthLoading) return null;
 
   return (
-    <DefaultLayout>
-      {gradation && (
-        <DynamicGradient
-          colors={colors.map((color) => (theme === 'light' ? color : darkenHexColor(color, 80)))}
-          css={[tw`w-full h-full`, tw`flex items-center justify-center`]}
-          speed={1}
-        >
-          <Component {...pageProps} />
-        </DynamicGradient>
-      )}
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      </Head>
+      <DefaultLayout>
+        {gradation && (
+          <DynamicGradient
+            colors={colors.map((color) => (theme === 'light' ? color : darkenHexColor(color, 80)))}
+            css={[tw`w-full h-full`, tw`flex items-center justify-center`]}
+            speed={1}
+          >
+            <Component {...pageProps} />
+          </DynamicGradient>
+        )}
 
-      {!gradation && (
-        <div css={[tw`w-full h-full`, tw`flex items-center justify-center`, tw`bg-zinc-800`]}>
-          <Component {...pageProps} />
-        </div>
-      )}
-    </DefaultLayout>
+        {!gradation && (
+          <div css={[tw`w-full h-full`, tw`flex items-center justify-center`, tw`bg-zinc-800`]}>
+            <Component {...pageProps} />
+          </div>
+        )}
+      </DefaultLayout>
+    </>
+   
   );
 }
 
