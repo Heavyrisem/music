@@ -127,7 +127,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
     (volume) => {
       if (!audioRef.current) return;
 
-      audioRef.current.volume = volume * 0.01;
+      audioRef.current.volume = volume * 0.001;
       setVolume(volume);
       updateSetting({ volume });
     },
