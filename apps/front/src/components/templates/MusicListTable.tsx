@@ -8,7 +8,9 @@ import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
 
 import { Image } from '../atoms/Image';
+import { LoadingSpinner } from '../atoms/LoadingSpinner';
 import { MusicAction, MusicActionMenu } from '../organisms/ActionMenu/MusicActionMenu';
+import { TableLoadingSpinner } from '../organisms/TableLoadingSpinner';
 
 interface MusicListTableProps {
   data?: Model.MusicInfo[];
@@ -53,6 +55,12 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
         css={[tableDefaultStyle, tableBgStyle, tw`text-sm`]}
         rowHeight={60}
         loading={isLoading}
+        renderLoading={() => <TableLoadingSpinner />}
+        renderEmpty={() => (
+          <div css={[tw`w-full h-full`, tw`flex justify-center items-center`]}>
+            노래가 없습니다.
+          </div>
+        )}
         onRowClick={handleRowClick}
         fillHeight
       >

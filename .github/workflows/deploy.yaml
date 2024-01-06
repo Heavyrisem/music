@@ -1,0 +1,49 @@
+name: Deploy # Github Action 페이지 좌측 리스트에 표시될 이름
+on:
+  push:
+    branches: [master]
+    paths:
+      - apps/front/**
+      - packages/**
+      - .github/workflows/**
+      - package.json
+      - pnpm-lock.yaml
+      - turbo.json
+      - tsconfig.json
+
+jobs:
+  # Build Apps
+  front-build:
+    name: Front Build
+    secrets: inherit
+    uses: ./.github/workflows/node-build-reuseable.yaml
+    with:
+      type: front
+      env: production
+
+  server-build:
+    name: Server Build
+    secrets: inherit
+    uses: ./.github/workflows/node-build-reuseable.yaml
+    with:
+      type: server
+      env: production
+
+  # Deploy Apps
+  front-docker-build:
+    name: Front Docker Build
+    needs: [front-build]
+    secrets: inherit
+    uses: ./.github/workflows/docker-build-reuseable.yaml
+    with:
+      type: front
+      env: production
+
+  server-docker-build:
+    name: Server Docker Build
+    needs: [server-build]
+    secrets: inherit
+    uses: ./.github/workflows/docker-build-reuseable.yaml
+    with:
+      type: server
+      env: production

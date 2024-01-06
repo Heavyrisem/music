@@ -4,9 +4,9 @@ import { Button, ButtonProps } from '@/components/atoms/Button';
 
 import { useModalContext } from '../hooks/useModalContext';
 
-export interface CloseButton extends ButtonProps {}
+export interface CloseButtonProps extends ButtonProps {}
 
-export const CloseButton: React.FC<CloseButton> = ({ onClick, ...props }) => {
+export const CloseButton = ({ onClick, ...props }: CloseButtonProps) => {
   const { closeModal } = useModalContext();
 
   const handleClickButton = useCallback<React.MouseEventHandler<HTMLButtonElement>>(

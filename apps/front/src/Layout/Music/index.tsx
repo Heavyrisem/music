@@ -35,7 +35,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   const [modalType, setModalType] = useState<ModalType>('none');
   const [searchInput, setSearchInput] = useState<string>();
 
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const { queue, removeFromQueue } = usePlayerContext();
   const { data: userPlaylist } = useUserPlaylist();
   const { mutate: editUserPreferenceMutation } = useEditUserPreferenceMutation({
@@ -62,16 +62,20 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   const handleLoginClick = useCallback(
     (type: LoginType) => {
       const params = {
-        redirect: location.origin,
+        redirect: location.href,
       };
       router.push(`${location.origin}/api/auth/oauth/${type}?${createQueryParameter(params)}`);
     },
     [router],
   );
 
-  const handleUserAction = useCallback((action: UserAction) => {
-    if (action.type === 'editUserPreference') setModalType('userPreference');
-  }, []);
+  const handleUserAction = useCallback(
+    (action: UserAction) => {
+      if (action.type === 'editUserPreference') setModalType('userPreference');
+      if (action.type === 'logout') logout();
+    },
+    [logout],
+  );
 
   const handleQueueAction = useCallback(
     (music: QueuedMusicInfo, action: QueueMusicAction) => {

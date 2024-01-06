@@ -36,7 +36,7 @@ export interface PlayerContextState {
 export const PlayerContext = React.createContext<PlayerContextState>({
   musicInfo: null,
   paused: false,
-  volume: 0,
+  volume: 50,
   progress: 0,
   playType: 'none',
   queue: [],
@@ -62,7 +62,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
   const [musicInfo, setMusicInfo] = useState<PlayerContextState['musicInfo']>(null);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState(50);
   const [playType, setPlayType] = useState<PlayerContextState['playType']>('none');
   const [originQueue, setOriginQueue] = useState<PlayerContextState['queue']>([]);
   const [queue, setQueue] = useState<PlayerContextState['queue']>([]);
@@ -127,7 +127,7 @@ export const PlayerContextProvider: React.FC<React.PropsWithChildren> = ({ child
     (volume) => {
       if (!audioRef.current) return;
 
-      audioRef.current.volume = volume * 0.01;
+      audioRef.current.volume = volume * 0.001;
       setVolume(volume);
       updateSetting({ volume });
     },

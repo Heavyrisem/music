@@ -43,14 +43,14 @@ export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubm
 
   return (
     <Modal closeOnBackdropClick={false} {...rest}>
-      <div css={[tw`flex flex-col gap-4`]}>
-        <div css={[tw`font-bold`, tw`flex justify-between items-center`, tw`min-w-[34rem]`]}>
+      <Modal.Content>
+        <Modal.Header>
           플레이리스트 생성
           <Modal.CloseButton css={[tw`p-0`]} hoverStyle={false}>
             <XMarkIcon css={[tw`w-4 h-4`]} />
           </Modal.CloseButton>
-        </div>
-        <div css={[tw`flex gap-4`]}>
+        </Modal.Header>
+        <Modal.Body>
           <EditableImage
             src={coverImage && URL.createObjectURL(coverImage)}
             width={200}
@@ -61,15 +61,15 @@ export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubm
           />
           <div css={[tw`flex-1 flex flex-col justify-between gap-4`]}>
             <Input onChange={handleInputName} css={[tw`py-1`]} />
-            <Textarea css={[tw`flex-1 p-1`]} onChange={handleInputDescription} />
+            <Textarea css={[tw`flex-1 p-1 px-2`]} onChange={handleInputDescription} />
           </div>
-        </div>
-        <div css={[tw`flex justify-end gap-2`]}>
+        </Modal.Body>
+        <Modal.Footer>
           <Button onClick={handleClickSubmit} bgStyle>
             확인
           </Button>
-        </div>
-      </div>
+        </Modal.Footer>
+      </Modal.Content>
     </Modal>
   );
 };
