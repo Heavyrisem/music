@@ -33,27 +33,27 @@ export const UserPreferenceEditModal: React.FC<UserPreferenceEditModalProps> = (
 
   return (
     <Modal closeOnBackdropClick={false} {...rest}>
-      <div css={[tw`flex flex-col gap-4`]}>
-        <div css={[tw`font-bold`, tw`flex justify-between items-center`, tw`min-w-[34rem]`]}>
+      <Modal.Content>
+        <Modal.Header>
           사용자 정보 편집
           <Modal.CloseButton css={[tw`p-0`]} hoverStyle={false}>
             <XMarkIcon css={[tw`w-4 h-4`]} />
           </Modal.CloseButton>
-        </div>
-        <div css={[tw`flex flex-col gap-4 flex-1`]}>
+        </Modal.Header>
+        <Modal.Body css={[tw`flex flex-col flex-1`]}>
           <Input
             description="닉네임"
             value={data.displayName}
             onChange={handleInputDisplayName}
             css={[tw`flex-1`]}
           />
-        </div>
-        <div css={[tw`flex justify-end gap-2`]}>
+        </Modal.Body>
+        <Modal.Footer>
           <Button onClick={handleClickSubmit} bgStyle>
             확인
           </Button>
-        </div>
-      </div>
+        </Modal.Footer>
+      </Modal.Content>
     </Modal>
   );
 };

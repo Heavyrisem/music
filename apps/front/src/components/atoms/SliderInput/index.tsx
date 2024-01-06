@@ -11,6 +11,7 @@ interface SliderInputProps
   cursorType?: 'bar' | 'circle';
   debounceDelayMils?: number;
   onChange?: (value: number) => void;
+  onDebounceChange?: (value: number) => void;
 }
 
 export const SliderInput: React.FC<SliderInputProps> = ({
@@ -22,6 +23,7 @@ export const SliderInput: React.FC<SliderInputProps> = ({
   cursorType = 'bar',
   debounceDelayMils = 100,
   onChange,
+  onDebounceChange,
   ...rest
 }) => {
   const [hover, setHover] = useState<boolean>(false);
@@ -80,9 +82,10 @@ export const SliderInput: React.FC<SliderInputProps> = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(e.target.value);
       setActualValue(value);
-      debouncedOnChange(onChange, value);
+      if (onChange) onChange(value);
+      if (onDebounceChange) debouncedOnChange(onDebounceChange, value);
     },
-    [debouncedOnChange, onChange],
+    [debouncedOnChange, onChange, onDebounceChange],
   );
 
   useEffect(() => {
