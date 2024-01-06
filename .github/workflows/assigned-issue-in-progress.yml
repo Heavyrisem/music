@@ -2,9 +2,7 @@ name: Project automations (organization)
 
 on:
   issues:
-    types: [opened, reopened]
   pull_request:
-    types: [opened, closed, reopened, ready_for_review, review_requested]
 
 env:
   gh_project_token: ${{ secrets.PAC_TOKEN }}
