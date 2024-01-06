@@ -46,7 +46,7 @@ export const MusicPlayer: React.FC = () => {
               <SliderInput
                 css={[tw`mb-0`]}
                 value={progress}
-                onChange={setProgress}
+                onDebounceChange={setProgress}
                 min={0}
                 max={musicInfo.duration}
                 debounceDelayMils={10}
@@ -58,9 +58,10 @@ export const MusicPlayer: React.FC = () => {
       <div css={[tw`w-24 flex items-center`]}>
         <SliderInput
           value={volume}
-          onChange={setVolume}
+          onDebounceChange={setVolume}
           min={0}
           max={100}
+          debounceDelayMils={50}
           cursorType="circle"
           showCursor
         />

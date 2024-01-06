@@ -1,28 +1,27 @@
 import { Model, PlaylistService } from '@music/types';
 import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { getPlaylistDetail, getUserPlaylist, updatePlaylistDetail } from '@/api/playlist';
+import { deletePlaylist, getUserPlaylist } from '@/api/playlist';
 
-interface UseUpdatePlaylistMutation {
+interface UseDeletePlaylistMutation {
   onSuccess?: (data: Model.PlaylistInfo) => void;
 }
 
-export const useUpdatePlaylistMutation = ({
+export const useDeletePlaylistMutation = ({
   onSuccess,
-}: UseUpdatePlaylistMutation): UseMutationResult<
+}: UseDeletePlaylistMutation): UseMutationResult<
   Model.PlaylistInfo,
   Error,
-  PlaylistService.UpdatePlaylistInfoRequest,
+  PlaylistService.DeletePlaylistRequest,
   unknown
 > => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [updatePlaylistDetail.name],
-    mutationFn: updatePlaylistDetail,
+    mutationKey: [deletePlaylist.name],
+    mutationFn: deletePlaylist,
     onSuccess: (data) => {
       onSuccess?.(data);
-      queryClient.invalidateQueries({ queryKey: [getPlaylistDetail.name, data.id] });
       queryClient.invalidateQueries({ queryKey: [getUserPlaylist.name] });
     },
   });
