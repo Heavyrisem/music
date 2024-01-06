@@ -18,8 +18,7 @@ export const createPlaylist = async (
 
 export const deletePlaylist = async ({
   id,
-}: PlaylistService.DeletePlaylistRequest): Promise<Model.PlaylistInfo | undefined> => {
-  if (!confirm('정말 이 플레이리스트를 삭제하시겠습니까? 되돌릴 수 없습니다.')) return;
+}: PlaylistService.DeletePlaylistRequest): Promise<Model.PlaylistInfo> => {
   return axiosInstance
     .delete<PlaylistService.DeletePlaylistResponse>(`/api/playlist/${id}`)
     .then((res) => res.data.data);

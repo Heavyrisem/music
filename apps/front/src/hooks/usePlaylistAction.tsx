@@ -2,10 +2,11 @@ import { Model } from '@music/types';
 import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 
-import { deletePlaylist } from '@/api/playlist';
 import { PlaylistAction } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
+
+import { useDeletePlaylistMutation } from './api/useDeletePlaylistMutation';
 
 type ModalType = 'none' | 'editPlaylist';
 
@@ -16,6 +17,11 @@ export const usePlaylistAction = () => {
   const [edittingPlaylist, setEdittingPlaylist] = useState<Model.PlaylistInfo>();
 
   const router = useRouter();
+  const { mutate: deletePlaylistMutation } = useDeletePlaylistMutation({
+    onSuccess: () => {
+      router.push('/');
+    },
+  });
 
   const closeModal = useCallback(() => {
     setModalType('none');
@@ -34,13 +40,11 @@ export const usePlaylistAction = () => {
         setModalType('editPlaylist');
       }
       if (action.type == 'deletePlaylist') {
-        const deletedPlaylist = await deletePlaylist(playlistInfo);
-        if (deletedPlaylist) {
-          router.push('/');
-        }
+        if (!confirm('정말 이 플레이리스트를 삭제하시겠습니까? 되돌릴 수 없습니다.')) return;
+        deletePlaylistMutation({ id: playlistInfo.id });
       }
     },
-    [appendQueue, prependQueue, router],
+    [appendQueue, deletePlaylistMutation, prependQueue],
   );
 
   const PlaylistActionModalRenderer = useCallback(
