@@ -69,7 +69,7 @@ jobs:
           status_value: ${{ env.status_todo }}
 
   pr_request_review:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: |
       github.event_name == 'pull_request' &&
       (github.event.action == 'ready_for_review' || github.event.action == 'review_requested')
@@ -82,8 +82,25 @@ jobs:
           gh_token: ${{ env.gh_project_token }}
           organization: ${{ env.gh_organization }}
           project_id: ${{ env.project_id }}
-          resource_node_id: ${{ github.event.issue.node_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.status_in_review }}
+
+  pr_converted_draft:
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'converted_to_draft' || github.event.action == 'review_request_removed')
+    steps:
+      - name: "Move issue to ${{ env.status_in_progress }}"
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        env:
+          DEBUG_LOG: "true"
+        with:
+          gh_token: ${{ env.gh_project_token }}
+          organization: ${{ env.gh_organization }}
+          project_id: ${{ env.project_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          status_value: ${{ env.status_in_progress }}
 
   pr_opened_or_reopened:
     name: pr_opened_or_reopened
