@@ -43,3 +43,5 @@ export const updatePlaylistDetail = async ({
     .put<PlaylistService.UpdatePlaylistInfoResponse>(`/api/playlist/${id}`, rest)
     .then((res) => res.data.data);
 };
+
+//TODO: DELETE /api/playlist/${id}
