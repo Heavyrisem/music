@@ -28,6 +28,11 @@ export namespace PlaylistService {
   export interface CreatePlaylistResponse
     extends IBaseResponse<Model.PlaylistInfo> {}
 
+  export interface DeletePlaylistRequest
+    extends Pick<Model.PlaylistInfo, "id"> {}
+  export interface DeletePlaylistResponse
+    extends IBaseResponse<Model.PlaylistInfo> {}
+
   export interface AddMusicToPlaylistRequest {
     playlistId: Model.PlaylistInfo["id"];
     musicId: Model.MusicInfo["id"];
