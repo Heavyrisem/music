@@ -16,6 +16,14 @@ export const createPlaylist = async (
     .then((res) => res.data.data);
 };
 
+export const deletePlaylist = async ({
+  id,
+}: PlaylistService.DeletePlaylistRequest): Promise<Model.PlaylistInfo> => {
+  return axiosInstance
+    .delete<PlaylistService.DeletePlaylistResponse>(`/api/playlist/${id}`)
+    .then((res) => res.data.data);
+};
+
 export const getPlaylistDetail = async ({
   id,
 }: PlaylistService.GetPlaylistInfoRequest): Promise<Model.PlaylistInfo> => {
