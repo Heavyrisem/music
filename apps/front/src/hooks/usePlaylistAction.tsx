@@ -1,6 +1,8 @@
 import { Model } from '@music/types';
+import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 
+import { deletePlaylist } from '@/api/playlist';
 import { PlaylistAction } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
@@ -13,12 +15,14 @@ export const usePlaylistAction = () => {
 
   const [edittingPlaylist, setEdittingPlaylist] = useState<Model.PlaylistInfo>();
 
+  const router = useRouter();
+
   const closeModal = useCallback(() => {
     setModalType('none');
   }, []);
 
   const playlistActionHandler = useCallback(
-    (playlistInfo: Model.PlaylistInfo, action: PlaylistAction) => {
+    async (playlistInfo: Model.PlaylistInfo, action: PlaylistAction) => {
       if (action.type == 'prependQueue') {
         prependQueue(playlistInfo.musicList);
       }
@@ -30,11 +34,13 @@ export const usePlaylistAction = () => {
         setModalType('editPlaylist');
       }
       if (action.type == 'deletePlaylist') {
-        // FIXME: deletePlaylist
-        console.log('FIXME: deletePlaylist');
+        const deletedPlaylist = await deletePlaylist(playlistInfo);
+        if (deletedPlaylist) {
+          router.push('/');
+        }
       }
     },
-    [appendQueue, prependQueue],
+    [appendQueue, prependQueue, router],
   );
 
   const PlaylistActionModalRenderer = useCallback(
