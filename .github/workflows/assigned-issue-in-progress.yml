@@ -30,7 +30,43 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.status_todo }}
 
-  pr-request-review:
+  issue_assigned:
+    name: issue_assinged
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'issues' &&
+      github.event.action == 'assigned'
+    steps:
+      - name: "Move issue to ${{ env.status_in_progress }}"
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        env:
+          DEBUG_LOG: "true"
+        with:
+          gh_token: ${{ env.gh_project_token }}
+          organization: ${{ env.gh_organization }}
+          project_id: ${{ env.project_id }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.status_in_progress }}
+
+  issue_unassigned:
+    name: issue_unassigned
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'issues' &&
+      github.event.action == 'unassigned'
+    steps:
+      - name: "Move issue to ${{ env.status_todo }}"
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        env:
+          DEBUG_LOG: "true"
+        with:
+          gh_token: ${{ env.gh_project_token }}
+          organization: ${{ env.gh_organization }}
+          project_id: ${{ env.project_id }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.status_todo }}
+
+  pr_request_review:
     runs-on: ubuntu-20.04
     if: |
       github.event_name == 'pull_request_target' &&
