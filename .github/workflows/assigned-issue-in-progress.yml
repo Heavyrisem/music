@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: alex-page/github-project-automation-plus@v0.8.3
         with:
-          project: Status Board
+          project: Music Project
           column: In Progress
-          repo-token: ${{ secrets.GHPROJECT_TOKEN  }}
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
