@@ -2,7 +2,7 @@ name: Project automations (organization)
 
 on:
   issues:
-    types: [opened, reopened]
+    types: [opened, reopened, assigned, unassigned]
   pull_request:
     types:
       [
