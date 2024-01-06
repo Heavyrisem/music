@@ -2,11 +2,13 @@ import { Model } from '@music/types';
 import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 
+import { uploadImage } from '@/api/image';
 import { PlaylistAction } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
 
 import { useDeletePlaylistMutation } from './api/useDeletePlaylistMutation';
+import { useUpdatePlaylistMutation } from './api/useUpdatePlaylistMutation';
 
 type ModalType = 'none' | 'editPlaylist';
 
@@ -16,6 +18,10 @@ export const usePlaylistAction = () => {
 
   const [edittingPlaylist, setEdittingPlaylist] = useState<Model.PlaylistInfo>();
 
+  const closeModal = useCallback(() => {
+    setModalType('none');
+  }, []);
+
   const router = useRouter();
   const { mutate: deletePlaylistMutation } = useDeletePlaylistMutation({
     onSuccess: () => {
@@ -23,9 +29,9 @@ export const usePlaylistAction = () => {
     },
   });
 
-  const closeModal = useCallback(() => {
-    setModalType('none');
-  }, []);
+  const { mutate: updatePlaylisltMutation } = useUpdatePlaylistMutation({
+    onSuccess: closeModal,
+  });
 
   const playlistActionHandler = useCallback(
     async (playlistInfo: Model.PlaylistInfo, action: PlaylistAction) => {
@@ -47,6 +53,19 @@ export const usePlaylistAction = () => {
     [appendQueue, deletePlaylistMutation, prependQueue],
   );
 
+  const handleSubmitEdit = useCallback(
+    async (editData: Model.PlaylistInfo, image?: File) => {
+      const editedPlaylistDetail = { ...editData };
+      if (image) {
+        const thumbnail = await uploadImage({ file: image });
+        editedPlaylistDetail.thumbnail = thumbnail.url;
+      }
+
+      updatePlaylisltMutation(editedPlaylistDetail);
+    },
+    [updatePlaylisltMutation],
+  );
+
   const PlaylistActionModalRenderer = useCallback(
     () => (
       <React.Fragment>
@@ -54,13 +73,13 @@ export const usePlaylistAction = () => {
           <PlaylistEditModal
             open={true}
             playlistDetail={edittingPlaylist}
-            onSubmit={console.log}
+            onSubmit={handleSubmitEdit}
             onClose={closeModal}
           />
         )}
       </React.Fragment>
     ),
-    [closeModal, edittingPlaylist, modalType],
+    [closeModal, edittingPlaylist, handleSubmitEdit, modalType],
   );
 
   return { playlistActionHandler, PlaylistActionModalRenderer };
