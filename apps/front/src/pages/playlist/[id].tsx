@@ -1,21 +1,17 @@
 import { PlayIcon } from '@heroicons/react/24/solid';
-import { Model } from '@music/types';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FaShuffle } from 'react-icons/fa6';
 import tw from 'twin.macro';
 
 import { MusicLayout } from '@/Layout/Music';
-import { uploadImage } from '@/api/image';
 import { getPlaylistDetail } from '@/api/playlist';
 import { Button } from '@/components/atoms/Button';
 import { Image } from '@/components/atoms/Image';
 import { PlaylistActionMenu } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { MusicListTable } from '@/components/templates/MusicListTable';
-import { PlaylistEditModal } from '@/components/templates/PlaylistEditModal';
 import { usePlayerContext } from '@/context/PlayerContext';
-import { useUpdatePlaylistMutation } from '@/hooks/api/useUpdatePlaylistMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
 import { useMusicAction } from '@/hooks/useMusicAction';
 import { usePlaylistAction } from '@/hooks/usePlaylistAction';
@@ -34,30 +30,11 @@ const PlayListPage = () => {
   const { musicActionHandler, MusicActionModalRenderer } = useMusicAction();
   const { playlistActionHandler, PlaylistActionModalRenderer } = usePlaylistAction();
 
-  const { mutate: updatePlaylisltMutation } = useUpdatePlaylistMutation({
-    onSuccess: () => setEditModalOpen(false),
-  });
-
   const { data: playlistDetail, isLoading: playlistDetailLoading } = useQuery({
     queryKey: [getPlaylistDetail.name, playlistId],
     queryFn: () => getPlaylistDetail({ id: playlistId! }),
     enabled: typeof playlistId === 'number' && !isNaN(playlistId),
   });
-
-  const [editModalOpen, setEditModalOpen] = useState(false);
-
-  const handleSubmitEdit = useCallback(
-    async (editData: Model.PlaylistInfo, image?: File) => {
-      const editedPlaylistDetail = { ...editData };
-      if (image) {
-        const thumbnail = await uploadImage({ file: image });
-        editedPlaylistDetail.thumbnail = thumbnail.url;
-      }
-
-      updatePlaylisltMutation(editedPlaylistDetail);
-    },
-    [updatePlaylisltMutation],
-  );
 
   const handleClickPlay = useCallback(() => {
     if (playlistDetail) {
@@ -123,14 +100,14 @@ const PlayListPage = () => {
 
           <MusicActionModalRenderer />
           <PlaylistActionModalRenderer />
-          {editModalOpen && (
+          {/* {editModalOpen && (
             <PlaylistEditModal
               playlistDetail={playlistDetail}
               open={editModalOpen}
               onClose={() => setEditModalOpen(false)}
               onSubmit={handleSubmitEdit}
             />
-          )}
+          )} */}
         </>
       )}
     </MusicLayout>
