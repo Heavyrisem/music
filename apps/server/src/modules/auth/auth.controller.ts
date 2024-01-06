@@ -100,6 +100,14 @@ export class AuthController {
     return BaseResponse.of(user);
   }
 
+  @Get('/logout')
+  logout(@Res() res: Response) {
+    res.clearCookie(ACCESS_TOKEN_KEY);
+    res.clearCookie(REFRESH_TOKEN_KEY);
+
+    return res.send();
+  }
+
   private stringToProvider(providerString: string): Model.Provider {
     switch (providerString) {
       case Model.Provider.GOOGLE:
