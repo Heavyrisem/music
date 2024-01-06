@@ -3,7 +3,7 @@ name: Project automations (organization)
 on:
   issues:
     types: [opened, reopened]
-  pull_request_target:
+  pull_request:
     types: [opened, closed, reopened, ready_for_review, review_requested]
 
 env:
@@ -71,7 +71,7 @@ jobs:
   pr_request_review:
     runs-on: ubuntu-20.04
     if: |
-      github.event_name == 'pull_request_target' &&
+      github.event_name == 'pull_request' &&
       (github.event.action == 'ready_for_review' || github.event.action == 'review_requested')
     steps:
       - name: "Move issue to ${{ env.status_in_review }}"
