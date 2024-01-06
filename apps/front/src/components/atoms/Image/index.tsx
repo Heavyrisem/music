@@ -9,11 +9,13 @@ export interface ImageProps extends Omit<NextImageProps, 'src'> {
 }
 
 export const Image: React.FC<ImageProps> = ({ src, className, hoverIcon, onClick, ...rest }) => {
+  const [isLoading, setLoading] = useState(true);
   const [isHover, setHover] = useState(false);
 
   return (
     <div
       className={className}
+      onLoad={() => setLoading(false)}
       css={[tw`relative overflow-hidden rounded-md`]}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -25,7 +27,7 @@ export const Image: React.FC<ImageProps> = ({ src, className, hoverIcon, onClick
           tw`bg-black bg-opacity-50`,
           tw`cursor-pointer`,
           tw`invisible opacity-0 transition-opacity`,
-          isHover && hoverIcon && tw`visible opacity-100`,
+          isHover && hoverIcon && !isLoading && tw`visible opacity-100`,
         ]}
         onClick={onClick}
       >
@@ -34,7 +36,12 @@ export const Image: React.FC<ImageProps> = ({ src, className, hoverIcon, onClick
 
       {src ? (
         <NextImage
-          css={[tw`object-cover object-center`, tw`h-full w-full`]}
+          onLoad={() => setLoading(false)}
+          css={[
+            tw`object-cover object-center`,
+            tw`h-full w-full invisible absolute top-0`,
+            !isLoading && tw`visible static`,
+          ]}
           onClick={onClick}
           src={src}
           {...rest}
@@ -42,6 +49,15 @@ export const Image: React.FC<ImageProps> = ({ src, className, hoverIcon, onClick
       ) : (
         <div css={[tw`h-full w-full`, tw`bg-gray-200 bg-opacity-70`]} onClick={onClick} />
       )}
+
+      <div
+        css={[
+          tw`h-full w-full visible`,
+          tw`bg-gray-200 bg-opacity-20`,
+          tw`animate-pulse`,
+          isLoading === false && tw`invisible`,
+        ]}
+      />
     </div>
   );
 };

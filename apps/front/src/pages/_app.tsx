@@ -6,6 +6,7 @@ import tw from 'twin.macro';
 
 import { DefaultLayout } from '@/Layout/DefaultLayout';
 import { DynamicGradient } from '@/components/atoms/DynamicGradient';
+import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { PlayerContextProvider } from '@/context/PlayerContext';
 import { useAuthStore } from '@/store/authStore';
 import { useBgColorStore } from '@/store/bgColorStore';
@@ -32,7 +33,12 @@ function App({ Component, pageProps }: AppProps) {
     queryFn: () => fetchUser(),
   });
 
-  if (isAuthLoading) return null;
+  if (isAuthLoading)
+    return (
+      <DefaultLayout css={[tw`flex justify-center items-center`]}>
+        <LoadingSpinner />
+      </DefaultLayout>
+    );
 
   return (
     <DefaultLayout>

@@ -10,7 +10,7 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = (props) => {
   return (
     <div
       css={[
-        tw`w-screen h-screen`,
+        tw`w-screen h-screen bg-zinc-800`,
         tw`text-gray-200 text-opacity-75 selection:(bg-gray-200 bg-opacity-30)`,
       ]}
       className={notoSansKR.className}

@@ -62,7 +62,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   const handleLoginClick = useCallback(
     (type: LoginType) => {
       const params = {
-        redirect: location.origin,
+        redirect: location.href,
       };
       router.push(`${location.origin}/api/auth/oauth/${type}?${createQueryParameter(params)}`);
     },
