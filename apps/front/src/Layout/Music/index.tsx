@@ -10,6 +10,8 @@ import { QueueMusicAction } from '@/components/organisms/ActionMenu/QueueMusicAc
 import { UserAction, UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
 import { PlayQueueList } from '@/components/organisms/PlayQueueList';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
+import { DesktopMusicPlayer } from '@/components/templates/MusicPlayer/DesktopMusicPlayer';
+import { MobileMusicPlayer } from '@/components/templates/MusicPlayer/MobileMusicPlayer';
 import { UserPreferenceEditModal } from '@/components/templates/UserPreferenceEditModal';
 import { QueuedMusicInfo, usePlayerContext } from '@/context/PlayerContext';
 import { useEditUserPreferenceMutation } from '@/hooks/api/useEditUserPreferenceMutation';
@@ -23,7 +25,6 @@ import { Button } from '../../components/atoms/Button';
 import { Card } from '../../components/atoms/Card';
 import { Input } from '../../components/atoms/Input';
 import { Sidebar } from '../../components/molecules/Sidebar';
-import { MusicPlayer } from './MusicPlayer';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -94,7 +95,8 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           <MusicIcon css={[tw`w-9 h-9 fill-gray-200 opacity-75`]} />
           <span css={[tw`font-bold text-xl`]}>Music</span>
         </div>
-        <MusicPlayer />
+        <DesktopMusicPlayer />
+        <MobileMusicPlayer />
         <div css={[tw`flex gap-2`]}>
           <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
           {!user && (
@@ -105,7 +107,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           {user !== null && <UserActionMenu user={user} onClick={handleUserAction} />}
         </div>
       </Card>
-      <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0`]}>
+      <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0 pb-20`]}>
         <Sidebar
           css={[tw`gap-8`, tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`]}
           onClickItem={(value) => router.push(value)}
