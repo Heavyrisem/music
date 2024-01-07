@@ -22,7 +22,7 @@ export const MobileMusicPlayer: React.FC = () => {
 
   return (
     <div css={[tw`block lg:hidden`, tw`absolute left-0 bottom-0 w-full z-30 backdrop-blur-sm`]}>
-      <div css={[tw`flex m-2 p-2 bg-gray-200 bg-opacity-10 rounded-xl overflow-hidden`]}>
+      <div css={[tw`flex m-2 mt-0 p-2 bg-gray-200 bg-opacity-10 rounded-xl overflow-hidden`]}>
         {!musicInfo && (
           <div css={[tw`w-full h-full flex`]}>
             <MusicIcon css={[tw`w-8 h-8 fill-gray-200 opacity-75`]} />

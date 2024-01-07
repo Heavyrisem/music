@@ -32,7 +32,7 @@ export const UserActionMenu = ({ user, onClick }: UserActionMenuProps) => {
             src={user.profileImage}
             width={32}
             height={32}
-            css={[tw`h-8 w-8 rounded-full`]}
+            css={[tw`rounded-full`, tw`w-6 h-6 lg:(h-8 w-8)`]}
             alt="profile"
           />
         </Button>
