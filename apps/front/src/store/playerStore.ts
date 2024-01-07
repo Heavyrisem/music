@@ -8,8 +8,8 @@ export interface AudioData {
   album: string;
   artist: string;
   source: string;
-  thumbnailURL: string;
   duration: number;
+  thumbnailURL: string;
 }
 
 interface playingState {
