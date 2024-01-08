@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
-import { HiMiniBars4 } from 'react-icons/hi2';
+import { HiOutlineViewGrid } from 'react-icons/hi';
 import tw from 'twin.macro';
-import { useWindowSize } from 'usehooks-ts';
 
 import { QueueMusicAction } from '@/components/organisms/ActionMenu/QueueMusicActionMenu';
 import { UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
@@ -13,6 +12,7 @@ import { PlayQueueList } from '@/components/organisms/PlayQueueList';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
 import { QueuedMusicInfo, usePlayerContext } from '@/context/PlayerContext';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useUserAction } from '@/hooks/useUserAction';
 import { MusicIcon } from '@/icons/MusicIcon';
 import { useAuthStore } from '@/store/authStore';
@@ -27,7 +27,7 @@ type ModalType = 'none' | 'login' | 'userPreference';
 
 export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) => {
   const router = useRouter();
-  const { width } = useWindowSize();
+  const { isMobile } = useIsMobile();
 
   const [modalType, setModalType] = useState<ModalType>('none');
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -67,7 +67,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             css={[tw`m-auto p-2 block lg:(hidden)`]}
             onClick={() => setOpenSidebar(!openSidebar)}
           >
-            <HiMiniBars4 />
+            <HiOutlineViewGrid />
           </Button>
         </div>
         <DesktopMusicPlayer />
@@ -100,7 +100,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           router={router}
         />
         <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
-          {(!openSidebar || width >= 1024) && (
+          {(!openSidebar || !isMobile) && (
             <div css={[tw`w-full h-full flex flex-col lg:(block)`]}>{children}</div>
           )}
         </div>
