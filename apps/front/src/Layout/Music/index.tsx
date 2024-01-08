@@ -1,29 +1,25 @@
-import { FireIcon, HomeIcon, ListBulletIcon } from '@heroicons/react/24/solid';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { HiOutlineViewGrid } from 'react-icons/hi';
 import tw from 'twin.macro';
 
-import { getUserPlaylist } from '@/api/playlist';
-import { Image } from '@/components/atoms/Image';
 import { QueueMusicAction } from '@/components/organisms/ActionMenu/QueueMusicActionMenu';
-import { UserAction, UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
+import { UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
+import { AppSidebar } from '@/components/organisms/AppSidebar';
+import { DesktopMusicPlayer } from '@/components/organisms/MusicPlayer/DesktopMusicPlayer';
+import { MobileMusicPlayer } from '@/components/organisms/MusicPlayer/MobileMusicPlayer';
 import { PlayQueueList } from '@/components/organisms/PlayQueueList';
 import { LoginModal, LoginType } from '@/components/templates/LoginModal';
-import { UserPreferenceEditModal } from '@/components/templates/UserPreferenceEditModal';
 import { QueuedMusicInfo, usePlayerContext } from '@/context/PlayerContext';
-import { useEditUserPreferenceMutation } from '@/hooks/api/useEditUserPreferenceMutation';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useUserAction } from '@/hooks/useUserAction';
 import { MusicIcon } from '@/icons/MusicIcon';
-import { SearchIcon } from '@/icons/SearchIcon';
 import { useAuthStore } from '@/store/authStore';
 import { createQueryParameter } from '@/utils/url';
 
 import { Button } from '../../components/atoms/Button';
 import { Card } from '../../components/atoms/Card';
-import { Input } from '../../components/atoms/Input';
-import { Sidebar } from '../../components/molecules/Sidebar';
-import { MusicPlayer } from './MusicPlayer';
 
 interface MusicLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,33 +27,16 @@ type ModalType = 'none' | 'login' | 'userPreference';
 
 export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) => {
   const router = useRouter();
+  const { isMobile } = useIsMobile();
 
   const [modalType, setModalType] = useState<ModalType>('none');
-  const [searchInput, setSearchInput] = useState<string>();
+  const [openSidebar, setOpenSidebar] = useState(false);
 
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { queue, removeFromQueue } = usePlayerContext();
-  const { data: userPlaylist } = useUserPlaylist();
-  const { mutate: editUserPreferenceMutation } = useEditUserPreferenceMutation({
-    onSuccess: () => setModalType('none'),
-  });
+  const { handleUserAction, UserActionModalRenderer } = useUserAction();
 
-  const sidebarMenu = useMemo(() => {
-    return [
-      { value: '/', label: 'Home', icon: <HomeIcon /> },
-      { value: '/community', label: 'Community', icon: <FireIcon /> },
-    ];
-  }, []);
-
-  const handleSearchKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
-    (e) => {
-      if (!searchInput) return;
-      if (e.key !== 'Enter') return;
-
-      router.push(`/search?q=${searchInput}`);
-    },
-    [router, searchInput],
-  );
+  const { data: userPlaylist, isLoading: isUserPlaylistLoading } = useUserPlaylist();
 
   const handleLoginClick = useCallback(
     (type: LoginType) => {
@@ -69,14 +48,6 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
     [router],
   );
 
-  const handleUserAction = useCallback(
-    (action: UserAction) => {
-      if (action.type === 'editUserPreference') setModalType('userPreference');
-      if (action.type === 'logout') logout();
-    },
-    [logout],
-  );
-
   const handleQueueAction = useCallback(
     (music: QueuedMusicInfo, action: QueueMusicAction) => {
       if (action.type === 'removeFromQueue') removeFromQueue([music.queueID]);
@@ -85,76 +56,57 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
   );
 
   return (
-    <div css={[tw`flex flex-col gap-2`, tw`w-full h-full p-4`]}>
+    <div css={[tw`flex flex-col gap-2`, tw`w-full h-full p-2 lg:p-4`]}>
       <Card css={[tw`flex justify-between items-center`, tw`px-6 py-2`]}>
-        <div
-          css={[tw`flex gap-1 items-center justify-start`, tw`cursor-pointer`]}
-          onClick={() => router.push('/')}
-        >
-          <MusicIcon css={[tw`w-9 h-9 fill-gray-200 opacity-75`]} />
-          <span css={[tw`font-bold text-xl`]}>Music</span>
+        <div css={[tw`flex gap-1 items-center justify-start`, tw`cursor-pointer`]}>
+          <MusicIcon css={[tw`fill-gray-200 opacity-75`, tw`hidden lg:(w-9 h-9 block)`]} />
+          <span css={[tw`font-bold text-xl`, tw`hidden lg:block`]} onClick={() => router.push('/')}>
+            Music
+          </span>
+          <Button
+            css={[tw`m-auto p-2 block lg:(hidden)`]}
+            onClick={() => setOpenSidebar(!openSidebar)}
+          >
+            <HiOutlineViewGrid />
+          </Button>
         </div>
-        <MusicPlayer />
+        <DesktopMusicPlayer />
+        <MobileMusicPlayer />
         <div css={[tw`flex gap-2`]}>
           <PlayQueueList queue={queue} onQueueAction={handleQueueAction} />
           {!user && (
-            <Button bgStyle css={[tw`py-2 text-sm`]} onClick={() => setModalType('login')}>
+            <Button
+              bgStyle
+              css={[tw`py-2 text-sm whitespace-nowrap`]}
+              onClick={() => setModalType('login')}
+            >
               로그인
             </Button>
           )}
           {user !== null && <UserActionMenu user={user} onClick={handleUserAction} />}
         </div>
       </Card>
-      <Card css={[tw`flex w-full flex-1 overflow-y-hidden`, tw`p-8 pr-0`]}>
-        <Sidebar
-          css={[tw`gap-8`, tw`w-60 pr-4 border-r-2 border-gray-200 border-opacity-10`]}
-          onClickItem={(value) => router.push(value)}
-        >
-          <div>
-            <Input
-              css={[tw`w-fit px-2 py-1`, tw`text-sm`]}
-              icon={<SearchIcon width={18} height={18} />}
-              onKeyDown={handleSearchKeyDown}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="검색"
-              autoComplete="off"
-            />
-          </div>
-          <div css={[tw`flex flex-col gap-1`]}>
-            <div css={[tw`text-xs font-bold text-gray-200 text-opacity-40`]}>탐색</div>
-            {sidebarMenu.map(({ value, label, icon }) => (
-              <Sidebar.Item
-                key={value}
-                value={value}
-                active={value === router.pathname}
-                css={[tw`flex gap-2 items-center`]}
-              >
-                <span css={[tw`w-4 h-4`]}>{icon}</span>
-                {label}
-              </Sidebar.Item>
-            ))}
-          </div>
-          {userPlaylist && (
-            <div css={[tw`flex flex-col gap-1`]}>
-              <div css={[tw`text-xs font-bold text-gray-200 text-opacity-40`]}>플레이리스트</div>
-              {userPlaylist.map(({ id, name }) => (
-                <Sidebar.Item
-                  key={id}
-                  value={`/playlist/${id.toString()}`}
-                  active={`/playlist/${id.toString()}` === router.asPath}
-                  css={[tw`flex gap-2 items-center`]}
-                >
-                  <span css={[tw`w-4 h-4`]}>
-                    <ListBulletIcon />
-                  </span>
-                  {name}
-                </Sidebar.Item>
-              ))}
-            </div>
-          )}
-        </Sidebar>
+      <Card
+        css={[
+          tw`flex flex-col lg:(flex-row) w-full flex-1 overflow-y-hidden`,
+          tw`p-2 pb-16 lg:(pb-0 pr-0 p-8)`,
+        ]}
+      >
+        <AppSidebar
+          css={[tw`hidden lg:(flex)`, openSidebar && tw`flex`]}
+          onClickItem={(value) => {
+            router.push(value);
+            setOpenSidebar(false);
+          }}
+          onSearch={(query) => router.push(`/search?q=${query}`)}
+          userPlaylist={userPlaylist}
+          isUserPlaylistLoading={isUserPlaylistLoading}
+          router={router}
+        />
         <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
-          {children}
+          {(!openSidebar || !isMobile) && (
+            <div css={[tw`w-full h-full flex flex-col lg:(block)`]}>{children}</div>
+          )}
         </div>
       </Card>
 
@@ -165,14 +117,7 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
           onLoginClick={handleLoginClick}
         />
       )}
-      {modalType === 'userPreference' && user && (
-        <UserPreferenceEditModal
-          open={modalType === 'userPreference'}
-          userPreference={user}
-          onSubmit={editUserPreferenceMutation}
-          onClose={() => setModalType('none')}
-        />
-      )}
+      <UserActionModalRenderer />
     </div>
   );
 };
