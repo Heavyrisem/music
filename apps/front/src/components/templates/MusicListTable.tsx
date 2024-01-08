@@ -4,6 +4,7 @@ import React, { useCallback, useRef } from 'react';
 import { Cell, Column, HeaderCell, Table } from 'rsuite-table';
 import tw from 'twin.macro';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { tableBgStyle, tableDefaultStyle } from '@/styles/table';
 import { formatSecondsToTime } from '@/utils/time';
 
@@ -31,6 +32,7 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
   onRowClick,
   onDoubleClickRow,
 }) => {
+  const { isMobile } = useIsMobile();
   const doubleClickTimer = useRef<Date>(new Date());
 
   const handleRowClick = useCallback(
@@ -78,48 +80,68 @@ export const MusicListTable: React.FC<MusicListTableProps> = ({
                 >
                   <Image
                     src={data.thumbnailUrl}
-                    width={42}
-                    height={42}
+                    width={isMobile ? 32 : 42}
+                    height={isMobile ? 32 : 42}
                     alt=""
                     css={[tw`rounded-md`]}
-                    hoverIcon={<PlayIcon css={[tw`h-6 w-6`]} />}
+                    hoverIcon={<PlayIcon css={[tw`h-8 w-8 lg:(h-10 w-10)`]} />}
                   />
-                  <div>{data.title}</div>
+                  <div css={[tw`whitespace-nowrap text-ellipsis overflow-hidden`]}>
+                    {data.title}
+                  </div>
                 </div>
               );
             }}
           </Cell>
         </Column>
-        <Column flexGrow={0.3}>
-          <HeaderCell>아티스트</HeaderCell>
-          <Cell dataKey="artist">
-            {(rowData) => {
-              const data = rowData as Model.MusicInfo;
-              return data.artist.join(', ');
-            }}
-          </Cell>
-        </Column>
-        <Column flexGrow={0.2}>
-          <HeaderCell>앨범</HeaderCell>
-          <Cell dataKey="album" />
-        </Column>
-        <Column flexGrow={0.1}>
-          <HeaderCell>시간</HeaderCell>
-          <Cell dataKey="duration">
+        {!isMobile && (
+          <Column flexGrow={0.3}>
+            <HeaderCell>아티스트</HeaderCell>
+            <Cell dataKey="artist">
+              {(rowData) => {
+                const data = rowData as Model.MusicInfo;
+                return (
+                  <div css={[tw`whitespace-nowrap text-ellipsis overflow-hidden`]}>
+                    {data.artist.join(', ')}
+                  </div>
+                );
+              }}
+            </Cell>
+          </Column>
+        )}
+        {!isMobile && (
+          <Column flexGrow={0.2}>
+            <HeaderCell>앨범</HeaderCell>
+            <Cell dataKey="album" />
+          </Column>
+        )}
+        {!isMobile && (
+          <Column flexGrow={0.1}>
+            <HeaderCell>시간</HeaderCell>
+            <Cell dataKey="duration">
+              {(rowData) => {
+                const data = rowData as Model.MusicInfo;
+                return formatSecondsToTime(data.duration);
+              }}
+            </Cell>
+          </Column>
+        )}
+        (
+        <Column>
+          <HeaderCell>동작</HeaderCell>
+          <Cell>
             {(rowData) => {
               const data = rowData as Model.MusicInfo;
               return (
-                <div css={[tw`flex gap-1 items-center`]}>
-                  <div>{formatSecondsToTime(data.duration)}</div>
-                  <MusicActionMenu
-                    playlist={userPlaylist}
-                    onClick={(action) => onMusicAction?.(data, action)}
-                  />
-                </div>
+                <MusicActionMenu
+                  playlist={userPlaylist}
+                  onClick={(action) => onMusicAction?.(data, action)}
+                />
               );
             }}
           </Cell>
         </Column>
+        )
       </Table>
     </>
   );

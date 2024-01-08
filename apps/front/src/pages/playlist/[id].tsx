@@ -47,26 +47,30 @@ const PlayListPage = () => {
     <MusicLayout css={[tw`flex flex-col`]}>
       {playlistDetail && (
         <>
-          <div css={[tw`flex w-full`]}>
+          <div css={[tw`flex w-full flex-col items-center lg:(flex-row items-stretch)`]}>
             <Image
               src={playlistDetail.thumbnail}
               width={256}
               height={256}
               alt=""
-              css={[tw`rounded-lg`, tw`w-64 h-64`]}
+              css={[tw`rounded-lg`, tw`w-64 h-64 m-auto`]}
               unoptimized
             />
-            <div css={[tw`flex flex-col justify-between p-4 flex-1`]}>
+            <div
+              css={[
+                tw`flex flex-col justify-between p-4 flex-1 gap-2 text-center lg:(gap-0 text-start)`,
+              ]}
+            >
               <div>
-                <div css={[tw`text-gray-200 text-opacity-60 font-bold text-3xl`]}>
+                <div css={[tw`text-gray-200 text-opacity-60 font-bold text-2xl lg:text-3xl`]}>
                   {playlistDetail.name}
                 </div>
-                <div css={[[tw`text-gray-200 text-opacity-40 text-2xl`]]}>
+                <div css={[[tw`text-gray-200 text-opacity-40 text-base lg:text-2xl`]]}>
                   {playlistDetail.author.displayName}
                 </div>
               </div>
               <div>{playlistDetail.description}</div>
-              <div css={[tw`flex justify-between`]}>
+              <div css={[tw`flex gap-4 justify-center lg:(justify-between)`]}>
                 <div css={[tw`flex gap-2`]}>
                   <Button css={[playButtonStyle]} bgStyle onClick={handleClickPlay}>
                     <PlayIcon css={[tw`h-4 w-4`]} />
