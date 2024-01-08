@@ -88,7 +88,10 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
       >
         <AppSidebar
           css={[tw`hidden lg:(flex)`, openSidebar && tw`flex`]}
-          onClickItem={(value) => router.push(value)}
+          onClickItem={(value) => {
+            router.push(value);
+            setOpenSidebar(false);
+          }}
           userPlaylist={userPlaylist}
           isUserPlaylistLoading={isUserPlaylistLoading}
           router={router}
