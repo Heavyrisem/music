@@ -44,15 +44,13 @@ export const PlaylistEditModal: React.FC<PlaylistEditModalProps> = ({
   return (
     <Modal closeOnBackdropClick={false} {...rest}>
       <Modal.Content>
-        <div
-          css={[tw`text-lg font-bold`, tw`flex justify-between items-center`, tw`min-w-[34rem]`]}
-        >
+        <Modal.Header>
           플레이리스트 편집
           <Modal.CloseButton css={[tw`p-0`]} hoverStyle={false}>
             <XMarkIcon css={[tw`w-4 h-4`]} />
           </Modal.CloseButton>
-        </div>
-        <Modal.Body>
+        </Modal.Header>
+        <Modal.Body css={[tw`flex flex-col lg:(flex-row)`]}>
           <EditableImage
             src={playlistDetail.thumbnail}
             width={200}

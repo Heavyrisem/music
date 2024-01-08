@@ -50,7 +50,7 @@ export const PlaylistCreateModal: React.FC<PlaylistCreateModalProps> = ({ onSubm
             <XMarkIcon css={[tw`w-4 h-4`]} />
           </Modal.CloseButton>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body css={[tw`flex flex-col lg:(flex-row)`]}>
           <EditableImage
             src={coverImage && URL.createObjectURL(coverImage)}
             width={200}
