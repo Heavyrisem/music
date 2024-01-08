@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 import { HiMiniBars4 } from 'react-icons/hi2';
 import tw from 'twin.macro';
+import { useWindowSize } from 'usehooks-ts';
 
 import { QueueMusicAction } from '@/components/organisms/ActionMenu/QueueMusicActionMenu';
 import { UserActionMenu } from '@/components/organisms/ActionMenu/UserActionMenu';
@@ -26,6 +27,7 @@ type ModalType = 'none' | 'login' | 'userPreference';
 
 export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) => {
   const router = useRouter();
+  const { width } = useWindowSize();
 
   const [modalType, setModalType] = useState<ModalType>('none');
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -92,14 +94,15 @@ export const MusicLayout: React.FC<MusicLayoutProps> = ({ children, ...rest }) =
             router.push(value);
             setOpenSidebar(false);
           }}
+          onSearch={(query) => router.push(`/search?q=${query}`)}
           userPlaylist={userPlaylist}
           isUserPlaylistLoading={isUserPlaylistLoading}
           router={router}
         />
         <div css={[tw`px-4 flex-1 overflow-x-hidden overflow-y-auto`]} {...rest}>
-          <div css={[tw`w-full h-full block lg:(block)`, openSidebar && tw`hidden`]}>
-            {children}
-          </div>
+          {(!openSidebar || width >= 1024) && (
+            <div css={[tw`w-full h-full flex flex-col lg:(block)`]}>{children}</div>
+          )}
         </div>
       </Card>
 
