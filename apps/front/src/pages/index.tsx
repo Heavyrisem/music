@@ -8,6 +8,7 @@ import { Modal } from '@/components/molecules/Modal';
 import { MusicActionMenu } from '@/components/organisms/ActionMenu/MusicActionMenu';
 import { PlaylistActionMenu } from '@/components/organisms/ActionMenu/PlaylistActionMenu';
 import { PlayCard } from '@/components/organisms/PlayCard';
+import { usePlayerContext } from '@/context/PlayerContext';
 import { useTopPlayedMusic } from '@/hooks/api/useTopPlayedMusic';
 import { useUserPlayHistory } from '@/hooks/api/useUserPlayHistory';
 import { useUserPlaylist } from '@/hooks/api/useUserPlaylist';
@@ -19,6 +20,7 @@ const HomePage: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const { user } = useAuthStore();
+  const { appendQueue } = usePlayerContext();
   const { data: userPlayHistory } = useUserPlayHistory({ maxCount: 20 });
   const { data: userPlaylist } = useUserPlaylist();
   const { data: topPlayedMusic } = useTopPlayedMusic({});
@@ -43,6 +45,7 @@ const HomePage: React.FC = () => {
                   onClick={(action) => musicActionHandler(item, action)}
                 />
               }
+              onPlayClick={() => appendQueue([item])}
             />
           ))}
         </div>
@@ -62,6 +65,7 @@ const HomePage: React.FC = () => {
                       onClick={(action) => musicActionHandler(item, action)}
                     />
                   }
+                  onPlayClick={() => appendQueue([item])}
                 />
               ))}
             </div>
@@ -75,6 +79,10 @@ const HomePage: React.FC = () => {
                   imageUrl={playlist.thumbnail}
                   actionButton={<PlaylistActionMenu />}
                   unoptimized
+                  onPlayClick={() => {
+                    console.log(playlist);
+                    appendQueue(playlist.musicList);
+                  }}
                 />
               ))}
             </div>

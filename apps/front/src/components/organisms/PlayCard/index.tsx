@@ -10,6 +10,7 @@ interface PlayCardProps
   imageUrl?: string | null;
   title: string;
   description: string;
+  onPlayClick?: () => void;
   actionButton?: React.ReactNode;
 }
 
@@ -19,6 +20,7 @@ export const PlayCard: React.FC<PlayCardProps> = ({
   description,
   unoptimized,
   actionButton,
+  onPlayClick,
   ...rest
 }) => {
   return (
@@ -31,6 +33,7 @@ export const PlayCard: React.FC<PlayCardProps> = ({
         css={[tw`w-60 h-60`]}
         unoptimized={unoptimized}
         hoverIcon={<PlayIcon css={[tw`h-16 w-16`]} />}
+        onClick={onPlayClick}
       />
       <div css={[tw`flex justify-between`]}>
         <div css={[tw`text-xs`]}>

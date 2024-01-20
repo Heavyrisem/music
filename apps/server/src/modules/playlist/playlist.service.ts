@@ -70,9 +70,14 @@ export class PlaylistService {
   }
 
   async findPlaylistByAuthor(author: User) {
-    return await this.playlistRepository.findBy({
-      author: {
-        id: author.id,
+    return await this.playlistRepository.find({
+      where: {
+        author: {
+          id: author.id,
+        },
+      },
+      relations: {
+        musicList: true,
       },
     });
   }
