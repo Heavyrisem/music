@@ -5,10 +5,10 @@ interface UseControlledArgs<T> {
   defaultValue: T;
 }
 
-export const useControlled = <T = unknown>(
-  defaultValue: T,
-  valueProp?: T,
-): [T, Dispatch<SetStateAction<T>>] => {
+export const useControlled = <T = unknown>({
+  value: valueProp,
+  defaultValue,
+}: UseControlledArgs<T>): [T, Dispatch<SetStateAction<T>>] => {
   const { current: isControlled } = useRef(valueProp !== undefined);
 
   const [state, setState] = useState<T>(defaultValue);
